@@ -16,6 +16,7 @@
     "kohana/core": "3.3.*"
   },
   "require-dev": {
+    "kohana/koharness": "*@dev",
     "phpunit/phpunit": "^4.8"
   },
   "repositories": [
