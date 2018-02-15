@@ -13,7 +13,8 @@
   ],
   "require": {
     "php": "^5.5",
-    "kohana/core": "3.3.*"
+    "kohana/core": "3.3.*",
+    "zeelot/kohana-dependencies": "^0.7.0"
   },
   "require-dev": {
     "kohana/koharness": "*@dev",
@@ -26,6 +27,10 @@
     }
   ],
   "autoload": {
+    "psr-0": {
+      "Dependency_": "vendor/zeelot/kohana-dependencies/classes",
+      "Kohana_Dependency_": "vendor/zeelot/kohana-dependencies/classes"
+    },
     "psr-4": {
       "Ingenerator\\KohanaExtras\\": "src/"
     }
@@ -35,7 +40,9 @@
   },
   "extra": {
     "installer-paths": {
-      "vendor/{$vendor}/{$name}": ["type:kohana-module"]
+      "vendor/{$vendor}/{$name}": [
+        "type:kohana-module"
+      ]
     }
   }
 }
