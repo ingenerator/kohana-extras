@@ -8,6 +8,7 @@ namespace Ingenerator\KohanaExtras\DependencyFactory;
 
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Driver\PDOConnection;
 
 class DoctrineFactory extends OptionalDependencyFactory
 {
@@ -42,7 +43,7 @@ class DoctrineFactory extends OptionalDependencyFactory
 
     public static function buildEntityManager()
     {
-        $factory = new \Doctrine_EMFactory(Kohana::$config, Kohana::$environment);
+        $factory = new \Doctrine_EMFactory(\Kohana::$config, \Kohana::$environment);
 
         return $factory->entity_manager();
     }
