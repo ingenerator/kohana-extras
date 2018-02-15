@@ -7,19 +7,21 @@
 $_SERVER['KOHANA_ENV'] = 'DEVELOPMENT';
 require_once(__DIR__.'/../koharness_bootstrap.php');
 
-//use test\mock\Ingenerator\Warden\UI\Kohana\Session\MockSession;
-//
+// Hacky workaround to show a simple text exception on fatal errors
+// Otherwise Kohana's shutdown function catches it and shows a huge HTML trace that's horrible to follow
+file_put_contents(
+    APPPATH.'/views/text-error.php',
+    '<?php echo "\n\nUnhandled error: ".\Kohana_Exception::text($e)."\n";'
+);
+Kohana_Exception::$error_view = 'text-error';
 
-//require_once(__DIR__.'/../application/bootstrap.php');
-//
-//// Autoload mocks and test-support helpers that should not autoload in the main app
-//$mock_loader = new \Composer\Autoload\ClassLoader;
-//$mock_loader->addPsr4('test\\mock\\', [__DIR__.'/mock/']);
-//$mock_loader->addPsr4('test\\assert\\', [__DIR__.'/assert/']);
-//$mock_loader->addPsr4('test\\unit\\', [__DIR__.'/unit/']);
-//$mock_loader->register();
-//
-//
-//// To prevent errors accessing session data from the dependencies unit tests
-//\Session::$default           = 'mock';
-//\Session::$instances['mock'] = new MockSession();
+// Require fake session implementation from Koharness to avoid errors in unit tests
+require_once __DIR__.'/../vendor/kohana/koharness/helper_classes/Session/Fake.php';
+\Session::$default = 'fake';
+\Session::$instances['fake'] = new Session_Fake;
+
+// Autoload mocks and test-support helpers that should not autoload in the main app
+$mock_loader = new \Composer\Autoload\ClassLoader;
+$mock_loader->addPsr4('test\\mock\\Ingenerator\\KohanaExtras\\', [__DIR__.'/mock/']);
+$mock_loader->addPsr4('test\\unit\\Ingenerator\\KohanaExtras\\', [__DIR__.'/unit/']);
+$mock_loader->register();
