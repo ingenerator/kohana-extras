@@ -7,7 +7,7 @@
 namespace Ingenerator\KohanaExtras\DependencyContainer;
 
 
-class DependencyContainer extends \Kohana_Dependency_Container
+class DependencyContainer extends \Dependency_Container
 {
     /**
      * @var DependencyContainer

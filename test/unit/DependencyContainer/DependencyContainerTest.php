@@ -33,7 +33,7 @@ class DependencyContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->newSubjectWithConfigFile([]);
         $this->assertInstanceOf(DependencyContainer::class, $container);
-        $this->assertInstanceOf(\Kohana_Dependency_Container::class, $container);
+        $this->assertInstanceOf(\Dependency_Container::class, $container);
     }
 
     public function test_it_loads_config_directly_from_dependencies_config_file()
