@@ -27,12 +27,14 @@
     }
   ],
   "autoload": {
+    "psr-4": {
+      "Ingenerator\\KohanaExtras\\": "src/"
+    }
+  },
+  "autoload-dev": {
     "psr-0": {
       "Dependency_": "vendor/zeelot/kohana-dependencies/classes",
       "Kohana_Dependency_": "vendor/zeelot/kohana-dependencies/classes"
-    },
-    "psr-4": {
-      "Ingenerator\\KohanaExtras\\": "src/"
     }
   },
   "config": {
