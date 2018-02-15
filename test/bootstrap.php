@@ -7,19 +7,8 @@
 $_SERVER['KOHANA_ENV'] = 'DEVELOPMENT';
 require_once(__DIR__.'/../koharness_bootstrap.php');
 
-//use test\mock\Ingenerator\Warden\UI\Kohana\Session\MockSession;
-//
+// Require fake session implementation from Koharness to avoid errors in unit tests
+require_once __DIR__.'/../vendor/kohana/koharness/helper_classes/Session/Fake.php';
+\Session::$default = 'fake';
 
-//require_once(__DIR__.'/../application/bootstrap.php');
-//
-//// Autoload mocks and test-support helpers that should not autoload in the main app
-//$mock_loader = new \Composer\Autoload\ClassLoader;
-//$mock_loader->addPsr4('test\\mock\\', [__DIR__.'/mock/']);
-//$mock_loader->addPsr4('test\\assert\\', [__DIR__.'/assert/']);
-//$mock_loader->addPsr4('test\\unit\\', [__DIR__.'/unit/']);
-//$mock_loader->register();
-//
-//
-//// To prevent errors accessing session data from the dependencies unit tests
-//\Session::$default           = 'mock';
-//\Session::$instances['mock'] = new MockSession();
+\Session::$instances['fake'] = new Session_Fake;
