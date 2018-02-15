@@ -8,6 +8,7 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 
 use Ingenerator\KohanaExtras\DependencyFactory\KohanaCoreFactory;
+use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 
 class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
 {
@@ -33,6 +34,12 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
         } finally {
             \Request::$initial = $original_request;
         }
+    }
+
+    public function test_it_provides_kohana_message_provider()
+    {
+        $service = $this->assertDefinesService('kohana.message_provider', KohanaCoreFactory::definitions());
+        $this->assertInstanceOf(KohanaMessageProvider::class, $service);
     }
 
 }

@@ -6,6 +6,8 @@
 
 namespace Ingenerator\KohanaExtras\DependencyFactory;
 
+use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
+
 class KohanaCoreFactory
 {
     /**
@@ -20,6 +22,12 @@ class KohanaCoreFactory
                         'class'       => KohanaCoreFactory::class,
                         'constructor' => 'getLog',
                         'shared'      => TRUE,
+                    ],
+                ],
+                'message_provider' => [
+                    '_settings' => [
+                        'class'     => KohanaMessageProvider::class,
+                        'arguments' => ['%kohana.log%'],
                     ],
                 ],
                 'request' => [
