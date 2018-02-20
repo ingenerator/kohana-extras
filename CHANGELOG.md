@@ -1,5 +1,9 @@
 ### Unreleased
 
+## v0.2.0 (2018-02-20)
+
+* Update to use ingenerator/kohana-dependencies at 0.9 version
+
 ## v0.1.1 (2018-02-15)
 
 * Added customised DependencyContainer with explicit definition of included module configs.
