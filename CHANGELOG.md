@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Add common helpers / factory for maximebf/debugbar integration
+
 ## v0.2.0 (2018-02-20)
 
 * Update to use ingenerator/kohana-dependencies at 0.9 version
