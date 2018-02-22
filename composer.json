@@ -20,6 +20,9 @@
     "kohana/koharness": "*@dev",
     "phpunit/phpunit": "^4.8"
   },
+  "suggest": {
+    "maximebf/debugbar": "^1.14 to use the debug bar in development environments"
+  },
   "repositories": [
     {
       "type": "composer",

@@ -1,0 +1,9 @@
+/* Styles for the query trace in the debug bar */
+div.phpdebugbar-widgets-sqlqueries table.phpdebugbar-widgets-params td.phpdebugbar-widgets-value {
+    text-align: left;
+    padding: 3px 0;
+}
+
+div.phpdebugbar-widgets-sqlqueries table.phpdebugbar-widgets-params td.phpdebugbar-widgets-value small {
+    color: #666;
+}
