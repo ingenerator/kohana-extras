@@ -1,5 +1,9 @@
 ### Unreleased
 
+* Extract ImmutableKohanaValidation - simple wrapper for Kohana validation that
+  splits the interfaces for performing validation and getting the result, and makes
+  running the validation a one-time process that prevents subsequent changes to data,
+  values, errors, etc.
 * Add common helpers / factory for maximebf/debugbar integration
 
 ## v0.2.0 (2018-02-20)
