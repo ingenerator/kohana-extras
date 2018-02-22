@@ -1,5 +1,7 @@
 ### Unreleased
 
+## v0.2.1 (2018-02-22)
+
 * Extract ImmutableKohanaValidation - simple wrapper for Kohana validation that
   splits the interfaces for performing validation and getting the result, and makes
   running the validation a one-time process that prevents subsequent changes to data,
