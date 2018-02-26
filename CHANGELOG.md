@@ -1,5 +1,9 @@
 ### Unreleased
 
+## v0.2.2 (2018-02-26)
+
+* Add config options to the tokenista dependency factory 
+
 ## v0.2.1 (2018-02-22)
 
 * Extract ImmutableKohanaValidation - simple wrapper for Kohana validation that

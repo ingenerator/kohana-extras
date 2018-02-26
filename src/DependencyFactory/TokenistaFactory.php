@@ -23,6 +23,7 @@ class TokenistaFactory extends OptionalDependencyFactory
                         'constructor' => 'makeTokenista',
                         'arguments'   => [
                             '@tokenista.secret@',
+                            '@tokenista.options@'
                         ],
                     ],
                 ],
