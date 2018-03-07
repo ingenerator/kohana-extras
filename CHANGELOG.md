@@ -1,5 +1,9 @@
 ### Unreleased
 
+## v0.2.3 (2018-03-07)
+
+* Add service config options to the Doctrine dependency factory to enable adding event subscribers
+
 ## v0.2.2 (2018-02-26)
 
 * Add config options to the tokenista dependency factory 
