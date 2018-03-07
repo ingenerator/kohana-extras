@@ -1,6 +1,7 @@
 <?php
 /**
  * @author    Andrew Coulton <andrew@ingenerator.com>
+ * @author    Craig Gosman <craig@ingenerator.com>
  * @licence   proprietary
  */
 
@@ -9,11 +10,17 @@ namespace Ingenerator\KohanaExtras\DependencyFactory;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\Driver\PDOConnection;
+use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 
 class DoctrineFactory extends OptionalDependencyFactory
 {
 
-    public static function definitions()
+    /**
+     * @param array $services (optional) array of services
+     *
+     * @return array
+     */
+    public static function definitions($services = ['subscribers' => []])
     {
         static::requireClass(\Doctrine_EMFactory::class, 'ingenerator/kohana-doctrine2');
         static::requireClass(EntityManager::class, 'doctrine/orm');
@@ -24,6 +31,10 @@ class DoctrineFactory extends OptionalDependencyFactory
                     '_settings' => [
                         'class'       => static::class,
                         'constructor' => 'buildEntityManager',
+                        'arguments' => [
+                            '%dependencies%',
+                            $services['subscribers']
+                        ],
                         'shared'      => TRUE,
                     ],
                 ],
@@ -41,11 +52,16 @@ class DoctrineFactory extends OptionalDependencyFactory
         ];
     }
 
-    public static function buildEntityManager()
+    public static function buildEntityManager(DependencyContainer $dependencies, array $subscribers)
     {
         $factory = new \Doctrine_EMFactory(\Kohana::$config, \Kohana::$environment);
+        $em      = $factory->entity_manager();
 
-        return $factory->entity_manager();
+        foreach ($subscribers as $subscriber) {
+            $em->getEventManager()->addEventSubscriber($dependencies->get($subscriber));
+        }
+
+        return $em;
     }
 
     public static function getRawPDO(EntityManager $entityManager)
