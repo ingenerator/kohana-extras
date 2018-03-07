@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Now requires the inGenerator fork of Kohana
+
 ## v0.2.3 (2018-03-07)
 
 * Add service config options to the Doctrine dependency factory to enable adding event subscribers

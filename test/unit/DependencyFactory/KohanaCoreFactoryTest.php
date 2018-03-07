@@ -28,7 +28,7 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
     {
         $original_request = \Request::$initial;
         try {
-            \Request::$initial = new \Request('anything');
+            \Request::$initial = \Request::with(['uri' => 'anything']);
             $service           = $this->assertDefinesService('kohana.request', KohanaCoreFactory::definitions());
             $this->assertSame(\Request::initial(), $service);
         } finally {
