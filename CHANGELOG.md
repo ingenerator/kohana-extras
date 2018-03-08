@@ -1,5 +1,16 @@
 ### Unreleased
 
+* Add HttpMethodRoute::createExplicit shorthand for routes that don't take a controller param
+* Support class names ending Controller for HttpMethodRoute controllers (e.g. Any\Namespace\DoThingsController)
+* Add HttpMethodRoute for mapping requests to a single controller per URL with the action varying
+  by request method
+* Add RequestExecutorFactory for defining the request executor to use
+* Add service definition for \Route::all in KohanaCoreFactory
+* Add new ContainerAwareRequestExecutor with support for loading controllers defined
+  in the DI container.
+* Refactor DependencyContainer to support loading from an array again as well as from 
+  a config file (e.g. for use in unit tests etc).
+* Add `->has` support to DependencyContainer for checking if a service exists
 * Now requires the inGenerator fork of Kohana
 
 ## v0.2.3 (2018-03-07)

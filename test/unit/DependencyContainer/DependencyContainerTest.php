@@ -26,26 +26,27 @@ class DependencyContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function test_it_throws_on_initialise_if_no_config_file()
     {
-        new DependencyContainer('/no/file/here.php');
+        DependencyContainer::fromFile('/no/file/here.php');
     }
 
     public function test_it_is_initialisable_container_with_valid_config_path()
     {
-        $container = $this->newSubjectWithConfigFile([]);
+        $container= $this->withConfigFile([], function ($tmp_file) { return DependencyContainer::fromFile($tmp_file); });
         $this->assertInstanceOf(DependencyContainer::class, $container);
         $this->assertInstanceOf(\Dependency_Container::class, $container);
     }
 
     public function test_it_loads_config_directly_from_dependencies_config_file()
     {
-        $container = $this->newSubjectWithConfigFile(
+        $container = $this->withConfigFile(
             [
                 'date' => [
                     'time' => [
                         '_settings' => ['class' => '\DateTime', 'arguments' => ['2018-01-10  10:00:00']],
                     ],
                 ],
-            ]
+            ],
+            function ($tmp_file) { return DependencyContainer::fromFile($tmp_file); }
         );
         $date      = $container->get('date.time');
         $this->assertInstanceOf(\DateTime::class, $date);
@@ -54,7 +55,7 @@ class DependencyContainerTest extends \PHPUnit_Framework_TestCase
 
     public function test_it_incorporates_services_from_array_of_includes()
     {
-        $container = $this->newSubjectWithConfigFile(
+        $container = $this->newSubjectWithConfig(
             [
                 '_include' => [
                     [
@@ -79,7 +80,7 @@ class DependencyContainerTest extends \PHPUnit_Framework_TestCase
 
     public function test_it_provides_itself_as_dependencies_key()
     {
-        $container = $this->newSubjectWithConfigFile([]);
+        $container = $this->newSubjectWithConfig([]);
         $this->assertSame($container, $container->get('dependencies'));
     }
 
@@ -113,7 +114,7 @@ class DependencyContainerTest extends \PHPUnit_Framework_TestCase
 
     public function test_it_lists_all_defined_services()
     {
-        $container = $this->newSubjectWithConfigFile(
+        $container = $this->newSubjectWithConfig(
             [
                 '_include' => [
                     [
@@ -137,7 +138,35 @@ class DependencyContainerTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertEquals(['date.time', 'date.immutable', 'any.thing.else'], $container->listServices());
+        $this->assertEquals(
+            ['date.time', 'date.immutable', 'any.thing.else'],
+            $container->listServices()
+        );
+    }
+
+    /**
+     * @testWith ["dependencies", true]
+     *           ["included", true]
+     *           ["any.thing", true]
+     *           ["any.other.thing", false]
+     *           ["no.thing", false]
+     */
+    public function test_it_has_service_if_defined_or_cached($service, $expect)
+    {
+        $container = $this->newSubjectWithConfig(
+            [
+                '_include' => [
+                    [
+                        'included' => ['_settings' => ['class' => '\stdClass']],
+                    ]
+                ],
+                'any'      => [
+                    '_settings' => ['arguments' => ['foo']],
+                    'thing' => ['_settings' => ['class' => 'stdClass']],
+                ],
+            ]
+        );
+        $this->assertSame($expect, $container->has($service));
     }
 
     public function setUp()
@@ -174,9 +203,9 @@ class DependencyContainerTest extends \PHPUnit_Framework_TestCase
      *
      * @return DependencyContainer
      */
-    protected function newSubjectWithConfigFile(array $conf)
+    protected function newSubjectWithConfig(array $conf)
     {
-        return $this->withConfigFile($conf, function ($tmp_file) { return new DependencyContainer($tmp_file); });
+        return new DependencyContainer($conf);
     }
 
     protected function withConfigFile(array $conf, $callable)

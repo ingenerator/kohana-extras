@@ -42,4 +42,11 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
         $this->assertInstanceOf(KohanaMessageProvider::class, $service);
     }
 
+    public function test_it_provides_routes()
+    {
+        $route  = \Route::set('test-factory-route', '/path/to/factory/test/to/not/match/anything');
+        $routes = $this->assertDefinesService('kohana.routes', KohanaCoreFactory::definitions());
+        $this->assertSame($route, $routes['test-factory-route']);
+    }
+
 }
