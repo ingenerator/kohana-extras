@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Add HttpMethodRoute for mapping requests to a single controller per URL with the action varying
+  by request method
 * Add RequestExecutorFactory for defining the request executor to use
 * Add service definition for \Route::all in KohanaCoreFactory
 * Add new ContainerAwareRequestExecutor with support for loading controllers defined
