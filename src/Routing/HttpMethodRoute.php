@@ -92,11 +92,33 @@ class HttpMethodRoute extends \Route
      * @param string[] $action_classes fully qualified names of classes this should match
      * @param string[] $param_patterns custom regex patterns for extra url parameters
      *
-     * @return \Route
+     * @return static
      */
     public static function create($name, $uri, array $action_classes, array $param_patterns = [])
     {
         return Route::$_routes[$name] = new static($uri, $action_classes, $param_patterns);
+    }
+
+    /**
+     * Create a route that matches a single action class with an explicit URL (e.g. without a <controller> param
+     *
+     * For example:
+     *
+     *   HttpMethodRoute::createExplicit('custom', 'some/url/we/like/<with_any_param>', MyStrangelyNamedController::class);
+     *
+     * @param string   $name
+     * @param string   $uri
+     * @param string   $action_class
+     * @param string[] $param_patterns
+     *
+     * @return static
+     */
+    public static function createExplicit($name, $uri, $action_class, array $param_patterns = [])
+    {
+        $route = static::create($name, $uri, [$action_class], $param_patterns);
+        $route->defaults(['controller' => $route->getControllerNameFromClass($action_class)]);
+
+        return $route;
     }
 
     /**
@@ -144,7 +166,8 @@ class HttpMethodRoute extends \Route
             if ( ! isset($this->action_classes[$controller])) {
                 throw new \OutOfBoundsException(
                     'Undefined controller `'.$controller.'` specified for route URL'.json_encode(
-                        $this->action_classes)
+                        $this->action_classes
+                    )
                 );
             }
         }

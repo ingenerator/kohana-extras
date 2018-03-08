@@ -40,6 +40,17 @@ class HttpMethodRouteTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($instance, \Route::get($name));
     }
 
+    public function test_its_static_create_explicit_adds_route_matching_single_default_controller()
+    {
+        $name     = uniqid('http-method-route-test');
+        $instance = HttpMethodRoute::createExplicit($name, 'any-path/<any_param>', static::class);
+
+        $this->assertInstanceOf(HttpMethodRoute::class, $instance);
+        $this->assertSame($instance, \Route::get($name));
+        $match = $instance->matches(\Request::with(['uri' => 'any-path/this-param']));
+        $this->assertEquals('\\'.static::class, $match['controller']);
+        $this->assertEquals('this-param', $match['any_param']);
+    }
 
     /**
      * @expectedException \InvalidArgumentException
