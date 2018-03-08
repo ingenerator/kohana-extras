@@ -15,15 +15,11 @@ class DependencyContainer extends \Dependency_Container
     protected static $instance;
 
     /**
-     * @param \Dependency_Definition_List $config_file
+     * @param array $config
      */
-    public function __construct($config_file)
+    public function __construct(array $config)
     {
-        if ( ! is_readable($config_file)) {
-            throw new \InvalidArgumentException('No config file in '.$config_file);
-        }
-
-        $config = (new DependencyConfigParser)->parse(require($config_file));
+        $config = (new DependencyConfigParser)->parse($config);
 
         parent::__construct(\Dependency_Definition_List::factory()->from_array($config));
         $this->_cache('dependencies', $this);
@@ -52,9 +48,23 @@ class DependencyContainer extends \Dependency_Container
             throw new \LogicException(static::class.' has already been initialised');
         }
 
-        static::$instance = new static($config_file);
+        static::$instance = static::fromFile($config_file);
 
         return static::$instance;
+    }
+
+    /**
+     * @param string $config_file
+     *
+     * @return static
+     */
+    public static function fromFile($config_file)
+    {
+        if ( ! is_readable($config_file)) {
+            throw new \InvalidArgumentException('No config file in '.$config_file);
+        }
+
+        return new static(require $config_file);
     }
 
     /**

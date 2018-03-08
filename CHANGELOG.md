@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Refactor DependencyContainer to support loading from an array again as well as from 
+  a config file (e.g. for use in unit tests etc).
 * Add `->has` support to DependencyContainer for checking if a service exists
 * Now requires the inGenerator fork of Kohana
 
