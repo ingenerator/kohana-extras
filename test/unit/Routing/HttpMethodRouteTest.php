@@ -73,6 +73,7 @@ class HttpMethodRouteTest extends \PHPUnit_Framework_TestCase
      *           ["foo/<controller>", ["Action\\Entity\\DoThings"], "bar/do-things", false]
      *           ["foo/<controller>", ["Action\\Entity\\DoThings"], "foo/do-things", true]
      *           ["foo/<controller>", ["Action\\Entity\\DoThings"], "foo/do-things", true]
+     *           ["foo/<controller>", ["Action\\Entity\\DoThingsController"], "foo/do-things", true]
      *           ["foo/<controller>", ["Action\\Entity\\DoThingPDF"], "foo/do-thing-pdf", true]
      *           ["baz/<controller>", ["\\Entity\\DoThings", "\\Entity\\DoStuff"], "baz/do-stuff", true]
      *           ["web/stuff/<controller>", ["\\Entity\\DoThings", "\\Entity\\DoStuff"], "web/stuff/do-stuff", true]
@@ -103,6 +104,8 @@ class HttpMethodRouteTest extends \PHPUnit_Framework_TestCase
     /**
      * @testWith [["Action\\Entity\\DoThings"], "do-things", "\\Action\\Entity\\DoThings"]
      *           [["\\Action\\Entity\\DoThings"], "do-things", "\\Action\\Entity\\DoThings"]
+     *           [["\\Controller\\Entity\\DoThings"], "do-things", "\\Controller\\Entity\\DoThings"]
+     *           [["\\Action\\Entity\\DoThingsController"], "do-things", "\\Action\\Entity\\DoThingsController"]
      *           [["Action\\Entity\\DoThings", "Other\\ControllerAction"], "controller-action", "\\Other\\ControllerAction"]
      */
     public function test_it_returns_fully_qualified_controller_name_as_controller(
@@ -123,15 +126,15 @@ class HttpMethodRouteTest extends \PHPUnit_Framework_TestCase
      */
     public function test_it_returns_http_method_as_action($method, $expect)
     {
-        $route   = new HttpMethodRoute('<controller>', ['Some\\Controller']);
-        $request = \Request::with(['uri' => 'controller', 'method' => $method]);
+        $route   = new HttpMethodRoute('<controller>', ['Some\\ThingController']);
+        $request = \Request::with(['uri' => 'thing', 'method' => $method]);
         $this->assertSame($expect, $route->matches($request)['action']);
     }
 
     /**
-     * @testWith ["foo/<id>/<controller>", "foo/12/controller", true, "12"]
-     *           ["foo/<controller>/<id>", "foo/controller/93", true, "93"]
-     *           ["foo/<controller>/<id>", "foo/controller/abc", false, null]
+     * @testWith ["foo/<id>/<controller>", "foo/12/thing", true, "12"]
+     *           ["foo/<controller>/<id>", "foo/thing/93", true, "93"]
+     *           ["foo/<controller>/<id>", "foo/thing/abc", false, null]
      */
     public function test_it_optionally_matches_id_param_as_decimal_string_by_default(
         $uri_pattern,
@@ -139,7 +142,7 @@ class HttpMethodRouteTest extends \PHPUnit_Framework_TestCase
         $expect_match,
         $expect_id
     ) {
-        $route   = new HttpMethodRoute($uri_pattern, ['Some\\Controller']);
+        $route   = new HttpMethodRoute($uri_pattern, ['Some\\ThingController']);
         $matches = $route->matches(\Request::with(['uri' => $url]));
 
         if ($expect_match) {
@@ -152,15 +155,16 @@ class HttpMethodRouteTest extends \PHPUnit_Framework_TestCase
     public function test_it_optionally_accepts_custom_id_format()
     {
         $route   = new HttpMethodRoute(
-            'foo/<id>/<controller>', ['Some\\Controller'], ['id' => '.+']
+            'foo/<id>/<controller>', ['Some\\ThingController'], ['id' => '.+']
         );
-        $matches = $route->matches(\Request::with(['uri' => 'foo/an/id/controller']));
+        $matches = $route->matches(\Request::with(['uri' => 'foo/an/id/thing']));
         $this->assertSame('an/id', $matches['id']);
     }
 
     /**
      * @testWith ["foo/<controller>/bar", ["Some\\ActionClass"], {"controller" : "action-class"}, "foo/action-class/bar"]
      *           ["foo/<controller>/<id>", ["Some\\ActionClass"], {"controller" : "action-class", "id": "12"}, "foo/action-class/12"]
+     *           ["foo/<controller>/<id>", ["Some\\ActionClassController"], {"controller" : "action-class", "id": "12"}, "foo/action-class/12"]
      *           ["foo/<controller>/<id>", ["Some\\ActionPDF"], {"controller" : "action-pdf", "id": "12"}, "foo/action-pdf/12"]
      */
     public function test_it_generates_correct_uri_with_valid_controller_url_part(

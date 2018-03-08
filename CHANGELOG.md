@@ -1,5 +1,6 @@
 ### Unreleased
 
+* Support class names ending Controller for HttpMethodRoute controllers (e.g. Any\Namespace\DoThingsController)
 * Add HttpMethodRoute for mapping requests to a single controller per URL with the action varying
   by request method
 * Add RequestExecutorFactory for defining the request executor to use

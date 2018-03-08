@@ -74,6 +74,7 @@ class HttpMethodRoute extends \Route
      */
     protected function getControllerNameFromClass($classname)
     {
+        $classname  = preg_replace('/Controller$/', '', $classname);
         $parts      = explode('\\', $classname);
         $class      = array_pop($parts);
         $controller = strtolower(
