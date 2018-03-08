@@ -1,5 +1,9 @@
 ### Unreleased
 
+* Add RequestExecutorFactory for defining the request executor to use
+* Add service definition for \Route::all in KohanaCoreFactory
+* Add new ContainerAwareRequestExecutor with support for loading controllers defined
+  in the DI container.
 * Refactor DependencyContainer to support loading from an array again as well as from 
   a config file (e.g. for use in unit tests etc).
 * Add `->has` support to DependencyContainer for checking if a service exists

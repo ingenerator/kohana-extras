@@ -37,6 +37,13 @@ class KohanaCoreFactory
                         'shared'      => TRUE,
                     ],
                 ],
+                'routes' => [
+                    '_settings' => [
+                        'class'       => \Route::class,
+                        'constructor' => 'all',
+                        'shared'      => FALSE,
+                    ],
+                ],
                 'session' => [
                     '_settings' => [
                         'class'       => \Session::class,
