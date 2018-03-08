@@ -1,5 +1,6 @@
 ### Unreleased
 
+* Add `->has` support to DependencyContainer for checking if a service exists
 * Now requires the inGenerator fork of Kohana
 
 ## v0.2.3 (2018-03-07)

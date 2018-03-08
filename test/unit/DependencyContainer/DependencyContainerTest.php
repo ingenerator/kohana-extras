@@ -137,7 +137,35 @@ class DependencyContainerTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertEquals(['date.time', 'date.immutable', 'any.thing.else'], $container->listServices());
+        $this->assertEquals(
+            ['date.time', 'date.immutable', 'any.thing.else'],
+            $container->listServices()
+        );
+    }
+
+    /**
+     * @testWith ["dependencies", TRUE]
+     *           ["included", TRUE]
+     *           ["any.thing", TRUE]
+     *           ["any.other.thing", FALSE]
+     *           ["no.thing", FALSE]
+     */
+    public function test_it_has_service_if_defined_or_cached($service, $expect)
+    {
+        $container = $this->newSubjectWithConfigFile(
+            [
+                '_include' => [
+                    [
+                        'included' => ['_settings' => ['class' => '\stdClass']],
+                    ]
+                ],
+                'any'      => [
+                    '_settings' => ['arguments' => ['foo']],
+                    'thing' => ['_settings' => ['class' => 'stdClass']],
+                ],
+            ]
+        );
+        $this->assertSame($expect, $container->has($service));
     }
 
     public function setUp()

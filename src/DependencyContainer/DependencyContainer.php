@@ -58,6 +58,20 @@ class DependencyContainer extends \Dependency_Container
     }
 
     /**
+     * @param string $service
+     *
+     * @return bool
+     */
+    public function has($service)
+    {
+        return (
+            isset($this->_cache[$service])
+            OR
+            isset($this->_definitions[$service])
+        );
+    }
+
+    /**
      * @return array
      */
     public function listServices()
