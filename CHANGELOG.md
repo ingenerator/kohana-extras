@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Add RequestExceptionDispatcher and default handler for dealing with exceptions / errors during execution
+  and logging / sending friendly responses.
 * Add HttpMethodRoute::createExplicit shorthand for routes that don't take a controller param
 * Support class names ending Controller for HttpMethodRoute controllers (e.g. Any\Namespace\DoThingsController)
 * Add HttpMethodRoute for mapping requests to a single controller per URL with the action varying
