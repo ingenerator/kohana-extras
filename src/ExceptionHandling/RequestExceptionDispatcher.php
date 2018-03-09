@@ -50,7 +50,7 @@ class RequestExceptionDispatcher
         $exception,
         $container_class = 'Dependencies',
         $container_method = 'instance',
-        $service_key = 'kohana.request_exception_dispatcher'
+        $service_key = 'exception_handler.dispatcher'
     ) {
         static::send(
             static::factory($container_class, $container_method, $service_key)
