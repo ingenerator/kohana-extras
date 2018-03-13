@@ -1,5 +1,7 @@
 ### Unreleased
 
+## v0.3.0 (2018-03-13)
+
 * Add RequestExceptionDispatcher and default handler for dealing with exceptions / errors during execution
   and logging / sending friendly responses.
 * Add HttpMethodRoute::createExplicit shorthand for routes that don't take a controller param
