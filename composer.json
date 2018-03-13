@@ -18,7 +18,8 @@
   },
   "require-dev": {
     "kohana/koharness": "*@dev",
-    "phpunit/phpunit": "^4.8"
+    "phpunit/phpunit": "^4.8",
+    "symfony/process": "^3.4"
   },
   "suggest": {
     "maximebf/debugbar": "^1.14 to use the debug bar in development environments"
