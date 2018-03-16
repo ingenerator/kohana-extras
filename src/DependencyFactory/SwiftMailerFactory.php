@@ -1,6 +1,7 @@
 <?php
 /**
  * @author    Andrew Coulton <andrew@ingenerator.com>
+ * @author    Craig Gosman <craig@ingenerator.com>
  * @licence   proprietary
  */
 
@@ -17,6 +18,9 @@ use Symfony\Component\Validator\Validation;
 class SwiftMailerFactory extends OptionalDependencyFactory
 {
 
+    /**
+     * @return array
+     */
     public static function definitions()
     {
         static::requireClass(\Swift_Mailer::class, 'swiftmailer/swiftmailer');
@@ -33,13 +37,33 @@ class SwiftMailerFactory extends OptionalDependencyFactory
                 ],
                 'transport' => [
                     '_settings' => [
-                        'class'       => \Swift_SendmailTransport::class,
-                        'constructor' => 'newInstance',
-                        'arguments'   => [],
+                        'class'       => static::class,
+                        'constructor' => 'buildSmtpTransport',
+                        'arguments'   => ['@email.relay@'],
                         'shared'      => TRUE,
                     ],
                 ],
             ],
         ];
+    }
+
+    public static function buildSmtpTransport(array $relay)
+    {
+        $config = array_merge(
+            [
+                'host'     => 'localhost',
+                'port'     => 25,
+                'security' => NULL,
+                'username' => NULL,
+                'password' => NULL,
+            ],
+            $relay
+        );
+
+        $transport = new \Swift_SmtpTransport($config['host'], $config['port'], $config['security']);
+        $transport->setUsername($config['username']);
+        $transport->setPassword($config['password']);
+
+        return $transport;
     }
 }
