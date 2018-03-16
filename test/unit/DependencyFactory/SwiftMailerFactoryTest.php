@@ -14,7 +14,7 @@ use Ingenerator\KohanaExtras\DependencyFactory\SwiftMailerFactory;
 class SwiftMailerFactoryTest extends AbstractDependencyFactoryTest
 {
 
-    public function test_it_defines_entity_manager()
+    public function test_it_defines_swiftmailer_mailer()
     {
         $this->assertOptionalService(
             function () {
@@ -26,12 +26,12 @@ class SwiftMailerFactoryTest extends AbstractDependencyFactoryTest
         );
     }
 
-    public function test_it_defines_raw_pdo_connection()
+    public function test_it_defines_swiftmailer_transport()
     {
         $this->assertOptionalService(
             function () {
                 $this->assertInstanceOf(
-                    \Swift_SendmailTransport::class,
+                    \Swift_SmtpTransport::class,
                     $this->assertDefinesService('swiftmailer.transport', SwiftMailerFactory::definitions())
                 );
             }
