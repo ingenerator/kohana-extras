@@ -1,9 +1,6 @@
 <?php
 /**
  * Defines Route\HttpMethodRoute
- *
- * @copyright  2014 Red61 Ltd
- * @licence    proprietary
  */
 
 namespace Ingenerator\KohanaExtras\Routing;
