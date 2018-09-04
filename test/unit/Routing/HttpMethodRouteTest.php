@@ -11,7 +11,7 @@ use test\mock\Kohana\Request\HtmlRequestStub;
 use test\unit\BaseTestCase;
 use Ingenerator\KohanaExtras\Routing\HttpMethodRoute;
 
-class HttpMethodRouteTest extends \PHPUnit_Framework_TestCase
+class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
 {
     public function test_it_is_initialisable()
     {

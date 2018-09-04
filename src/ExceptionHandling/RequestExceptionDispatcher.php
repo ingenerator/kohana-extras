@@ -109,7 +109,7 @@ class RequestExceptionDispatcher
     {
         // Discard all previous output but ONLY if we're not running in phpunit
         // This is because phpunit needs to use output buffering to capture output for testing
-        if ( ! class_exists(\PHPUnit_Framework_TestCase::class, FALSE)) {
+        if ( ! class_exists(\PHPUnit\Framework\TestCase::class, FALSE)) {
             while (ob_get_level()) {
                 ob_end_clean();
             }

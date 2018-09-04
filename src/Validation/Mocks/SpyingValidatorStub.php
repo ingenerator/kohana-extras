@@ -22,7 +22,7 @@ class SpyingValidatorStub extends AlwaysOKValidatorStub
 
     public function assertValidated($data)
     {
-        \PHPUnit_Framework_Assert::assertSame($data, $this->data);
+        \PHPUnit\Framework\Assert::assertSame($data, $this->data);
     }
 
 

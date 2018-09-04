@@ -26,12 +26,12 @@ class SpyingLoggerStub extends \Log
 
     public function assertNothingLogged()
     {
-        \PHPUnit_Framework_Assert::assertSame([], $this->log);
+        \PHPUnit\Framework\Assert::assertSame([], $this->log);
     }
 
     public function assertOneLog($level, $message, array $values = NULL, array $additional = NULL)
     {
-        \PHPUnit_Framework_Assert::assertSame(
+        \PHPUnit\Framework\Assert::assertSame(
             [
                 [
                     'level'      => $level,
@@ -46,14 +46,14 @@ class SpyingLoggerStub extends \Log
 
     public function assertLogsMatching(array $patterns)
     {
-        \PHPUnit_Framework_Assert::assertCount(
+        \PHPUnit\Framework\Assert::assertCount(
             count($patterns),
             $this->log,
             'Expected correct number of messages'
         );
 
         foreach ($patterns as $index => $pattern) {
-            \PHPUnit_Framework_Assert::assertRegExp(
+            \PHPUnit\Framework\Assert::assertRegExp(
                 $pattern,
                 $this->log[$index]['message'],
                 'Expect match at index '.$index

@@ -9,7 +9,7 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyContainer;
 
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyConfigParser;
 
-class DependencyConfigParserTest extends \PHPUnit_Framework_TestCase
+class DependencyConfigParserTest extends \PHPUnit\Framework\TestCase
 {
     public function test_it_is_initialisable()
     {

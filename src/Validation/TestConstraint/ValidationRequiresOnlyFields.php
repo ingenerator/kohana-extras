@@ -60,7 +60,7 @@ class ValidationRequiresOnlyFields extends BaseValidationConstraint
         try {
             $this->assertArraysEqual($this->expect_required, $required);
         } catch (\SebastianBergmann\Comparator\ComparisonFailure $failure) {
-            throw new \PHPUnit_Framework_ExpectationFailedException(
+            throw new \PHPUnit\Framework\ExpectationFailedException(
                 trim($description."\n".$this->failureDescription($other)),
                 $failure
             );

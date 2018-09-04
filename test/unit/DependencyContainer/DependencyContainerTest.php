@@ -9,7 +9,7 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyContainer;
 
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 
-class DependencyContainerTest extends \PHPUnit_Framework_TestCase
+class DependencyContainerTest extends \PHPUnit\Framework\TestCase
 {
     protected $old_instance;
 

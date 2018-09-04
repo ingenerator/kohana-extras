@@ -52,7 +52,7 @@ class ValidationFieldRulesMatch extends BaseValidationConstraint
         try {
             $this->assertArraysEqual($this->expect_rules, $rule_list);
         } catch (\SebastianBergmann\Comparator\ComparisonFailure $failure) {
-            throw new \PHPUnit_Framework_ExpectationFailedException(
+            throw new \PHPUnit\Framework\ExpectationFailedException(
                 trim($description."\n".$this->failureDescription($other)),
                 $failure
             );

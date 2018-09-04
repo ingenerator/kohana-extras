@@ -11,7 +11,7 @@ use BadMethodCallException;
 use Ingenerator\KohanaExtras\Validation\ImmutableKohanaValidation;
 use Ingenerator\KohanaExtras\Validation\ValidationResult;
 
-class ImmutableKohanaValidationTest extends \PHPUnit_Framework_TestCase
+class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_it_is_initialisable()
