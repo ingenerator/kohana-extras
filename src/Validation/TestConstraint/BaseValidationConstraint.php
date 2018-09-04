@@ -9,14 +9,13 @@ namespace Ingenerator\KohanaExtras\Validation\TestConstraint;
 
 use Ingenerator\KohanaExtras\Validation\ImmutableKohanaValidation;
 use Ingenerator\PHPUtils\Object\ObjectPropertyRipper;
-use PHPUnit_Framework_ExpectationFailedException;
 
 /**
  * Base class for making custom assertions on validation objects
  *
  * @package test\assert\ValidationConstraint
  */
-abstract class BaseValidationConstraint extends \PHPUnit\Framework\Constraint
+abstract class BaseValidationConstraint extends \PHPUnit\Framework\Constraint\Constraint
 {
 
     /**
@@ -30,7 +29,7 @@ abstract class BaseValidationConstraint extends \PHPUnit\Framework\Constraint
 
         try {
             return $this->evaluateValidation($other, $description);
-        } catch (PHPUnit_Framework_ExpectationFailedException $e) {
+        } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
             if ($returnResult) {
                 return FALSE;
             }
