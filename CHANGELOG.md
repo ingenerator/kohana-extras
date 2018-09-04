@@ -1,5 +1,10 @@
 ### Unreleased
 
+## v0.3.2 (2018-08-04)
+
+* Fix missing ingenerator/php-utils dependency
+* Fix missed Constraint namespaced PHPUnit class
+
 ## v0.3.1 (2018-08-04)
 
 * Use SMTP transport as default for SwiftMailer
