@@ -10,7 +10,7 @@ namespace test\unit\Ingenerator\KohanaExtras\ExceptionHandling;
 use Ingenerator\KohanaExtras\ExceptionHandling\DefaultRequestExceptionHandler;
 use Ingenerator\KohanaExtras\Logger\SpyingLoggerStub;
 
-class DefaultRequestExceptionHandlerTest extends \PHPUnit_Framework_TestCase
+class DefaultRequestExceptionHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

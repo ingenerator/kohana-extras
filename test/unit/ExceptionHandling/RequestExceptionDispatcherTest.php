@@ -12,7 +12,7 @@ use Ingenerator\KohanaExtras\ExceptionHandling\ExceptionHandler;
 use Ingenerator\KohanaExtras\ExceptionHandling\RequestExceptionDispatcher;
 use Symfony\Component\Process\Process;
 
-class RequestExceptionDispatcherTest extends \PHPUnit_Framework_TestCase
+class RequestExceptionDispatcherTest extends \PHPUnit\Framework\TestCase
 {
     protected $default_handler;
     protected $dependencies;

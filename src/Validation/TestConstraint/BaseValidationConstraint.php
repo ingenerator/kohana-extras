@@ -16,7 +16,7 @@ use PHPUnit_Framework_ExpectationFailedException;
  *
  * @package test\assert\ValidationConstraint
  */
-abstract class BaseValidationConstraint extends \PHPUnit_Framework_Constraint
+abstract class BaseValidationConstraint extends \PHPUnit\Framework\Constraint
 {
 
     /**

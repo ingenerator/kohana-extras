@@ -1,5 +1,10 @@
 ### Unreleased
 
+## v0.3.1 (2018-08-04)
+
+* Use SMTP transport as default for SwiftMailer
+* Use namespaced PHPUnit classes to support PHPUnit 7
+
 ## v0.3.0 (2018-03-13)
 
 * Add RequestExceptionDispatcher and default handler for dealing with exceptions / errors during execution

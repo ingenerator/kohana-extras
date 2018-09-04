@@ -10,7 +10,7 @@ use Ingenerator\KohanaExtras\RequestExecutor\ContainerAwareRequestExecutor;
 use Request;
 use Response;
 
-class ContainerAwareRequestExecutorTest extends \PHPUnit_Framework_TestCase
+class ContainerAwareRequestExecutorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Route[]

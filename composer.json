@@ -17,8 +17,9 @@
     "ingenerator/kohana-dependencies": "^0.9.1"
   },
   "require-dev": {
+    "johnkary/phpunit-speedtrap": "^1.0||^3.0",
     "kohana/koharness": "*@dev",
-    "phpunit/phpunit": "^4.8",
+    "phpunit/phpunit": "^4.8||^7.0",
     "symfony/process": "^3.4"
   },
   "suggest": {

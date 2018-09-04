@@ -10,7 +10,7 @@ namespace test\unit\Ingenerator\KohanaExtras\Message;
 use Ingenerator\KohanaExtras\Logger\SpyingLoggerStub;
 use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 
-class KohanaMessageProviderTest extends \PHPUnit_Framework_TestCase
+class KohanaMessageProviderTest extends \PHPUnit\Framework\TestCase
 {
     protected $old_modules;
     protected $tmp_module_path;

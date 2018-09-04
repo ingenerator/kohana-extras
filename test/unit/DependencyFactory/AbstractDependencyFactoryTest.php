@@ -9,7 +9,7 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 use Ingenerator\KohanaExtras\DependencyFactory\KohanaCoreFactory;
 use Ingenerator\KohanaExtras\DependencyFactory\MissingOptionalDependencyException;
 
-abstract class AbstractDependencyFactoryTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $service     key to locate
