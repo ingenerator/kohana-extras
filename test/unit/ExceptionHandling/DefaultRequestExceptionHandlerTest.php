@@ -43,11 +43,17 @@ class DefaultRequestExceptionHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function test_it_accepts_throwables_or_throws_invalid_argument($to_handle, $should_accept)
     {
-        if ( ! $should_accept) {
-            $this->setExpectedException(\InvalidArgumentException::class);
+        $e = NULL;
+        try {
+            $this->newSubject()->handle($to_handle);
+        } catch (\InvalidArgumentException $e) {
+            // nothing
         }
-
-        $this->newSubject()->handle($to_handle);
+        if ($should_accept) {
+            $this->assertNull($e);
+        } else {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
     }
     
     public function test_it_returns_http_response_from_http_exception()
