@@ -1,5 +1,8 @@
 ### Unreleased
 
+* Make project-level email relay options genuinely optional and just use defaults if
+  no configuration has been set.  
+
 ## v0.3.2 (2018-08-04)
 
 * Fix missing ingenerator/php-utils dependency
