@@ -1,5 +1,7 @@
 ### Unreleased
 
+## v0.3.4 (2018-09-06)
+
 * Define class_alias for PHPUnit_Framework_Constraint -> namespaced version in 
   BaseValidationConstraint - otherwise the namespaced parent is a breaking change in 
   dependent projects which need to define it in their bootstrap.
