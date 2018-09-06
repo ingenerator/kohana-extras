@@ -1,6 +1,11 @@
 ### Unreleased
 
-## v0.3.2 (2018-08-04)
+## v0.3.3 (2018-09-06)
+
+* Make project-level email relay options genuinely optional and just use defaults if
+  no configuration has been set.  
+
+## v0.3.2 (2018-09-04)
 
 * Fix missing ingenerator/php-utils dependency
 * Fix missed Constraint namespaced PHPUnit class

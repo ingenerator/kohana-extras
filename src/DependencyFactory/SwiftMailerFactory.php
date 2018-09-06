@@ -47,7 +47,7 @@ class SwiftMailerFactory extends OptionalDependencyFactory
         ];
     }
 
-    public static function buildSmtpTransport(array $relay)
+    public static function buildSmtpTransport(array $relay = NULL)
     {
         $config = array_merge(
             [
@@ -57,7 +57,7 @@ class SwiftMailerFactory extends OptionalDependencyFactory
                 'username' => NULL,
                 'password' => NULL,
             ],
-            $relay
+            $relay ? : []
         );
 
         $transport = new \Swift_SmtpTransport($config['host'], $config['port'], $config['security']);
