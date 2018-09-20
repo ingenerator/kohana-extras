@@ -15,7 +15,8 @@
     "php": "^5.5||^7.0",
     "ingenerator/kohana-core": "^4.0",
     "ingenerator/kohana-dependencies": "^0.9.1",
-    "ingenerator/php-utils": "^0.1.5"
+    "ingenerator/php-utils": "^0.1.5",
+    "psr/log": "^1.0"
   },
   "require-dev": {
     "johnkary/phpunit-speedtrap": "^1.0||^3.0",
