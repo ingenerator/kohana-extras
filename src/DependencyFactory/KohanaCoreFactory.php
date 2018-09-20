@@ -6,6 +6,7 @@
 
 namespace Ingenerator\KohanaExtras\DependencyFactory;
 
+use Ingenerator\KohanaExtras\Logger\KohanaPSRLogger;
 use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 
 class KohanaCoreFactory
@@ -28,6 +29,13 @@ class KohanaCoreFactory
                     '_settings' => [
                         'class'     => KohanaMessageProvider::class,
                         'arguments' => ['%kohana.log%'],
+                    ],
+                ],
+                'psr_log' => [
+                    '_settings' => [
+                        'class'     => KohanaPSRLogger::class,
+                        'arguments' => ['%kohana.log%'],
+                        'shared'    => TRUE,
                     ],
                 ],
                 'request' => [

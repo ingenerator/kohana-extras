@@ -9,6 +9,8 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 use Ingenerator\KohanaExtras\DependencyFactory\KohanaCoreFactory;
 use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
+use Ingenerator\PHPUtils\Object\ObjectPropertyRipper;
+use Psr\Log\LoggerInterface;
 
 class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
 {
@@ -16,6 +18,13 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
     {
         $service = $this->assertDefinesService('kohana.log', KohanaCoreFactory::definitions());
         $this->assertSame(\Kohana::$log, $service);
+    }
+
+    public function test_it_provides_psr_log_to_core_log()
+    {
+        $service = $this->assertDefinesService('kohana.psr_log', KohanaCoreFactory::definitions());
+        $this->assertInstanceOf(LoggerInterface::class, $service);
+        $this->assertSame(\Kohana::$log, ObjectPropertyRipper::ripOne($service, 'log'));
     }
 
     public function test_it_provides_session()
