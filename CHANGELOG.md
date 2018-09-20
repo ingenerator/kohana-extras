@@ -1,5 +1,7 @@
 ### Unreleased
 
+## v0.3.5 (2018-09-20)
+
 * Add KohanaPSRLogger to provide a standard PSR/Log interface to the Kohana log
 
 ## v0.3.4 (2018-09-06)
