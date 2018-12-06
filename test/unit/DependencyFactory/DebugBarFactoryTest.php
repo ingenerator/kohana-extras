@@ -8,8 +8,6 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 use Ingenerator\KohanaExtras\DebugBar\DebugBar;
 use Ingenerator\KohanaExtras\DependencyFactory\DebugBarFactory;
-use Doctrine\DBAL\Driver\PDOConnection;
-use Doctrine\ORM\EntityManager;
 
 class DebugBarFactoryTest extends AbstractDependencyFactoryTest
 {

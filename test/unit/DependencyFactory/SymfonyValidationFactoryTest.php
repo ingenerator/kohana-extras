@@ -7,8 +7,6 @@
 namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 use Ingenerator\KohanaExtras\DependencyFactory\DoctrineFactory;
-use Doctrine\DBAL\Driver\PDOConnection;
-use Doctrine\ORM\EntityManager;
 use Ingenerator\KohanaExtras\DependencyFactory\SymfonyValidationFactory;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

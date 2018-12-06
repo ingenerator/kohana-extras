@@ -1,5 +1,10 @@
 ### Unreleased
 
+## v0.4.0 (2018-12-06)
+
+* [BREAKING] Drop the DoctrineFactory dependency factory in favour of using the tooling 
+  from ingenerator/kohana-doctrine2
+
 ## v0.3.5 (2018-09-20)
 
 * Add KohanaPSRLogger to provide a standard PSR/Log interface to the Kohana log - 
