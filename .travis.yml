@@ -20,4 +20,4 @@ before_script:
 
 script:
  - vendor/bin/koharness
- - vendor/bin/phpunit
+ - vendor/bin/phpunit --verbose

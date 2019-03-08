@@ -104,12 +104,13 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
     {
         $container = $this->withConfigFile([], function ($f) { return DependencyContainer::initialise($f); });
 
+        $e = NULL;
         try {
             $container = $this->withConfigFile([], function ($f) { return DependencyContainer::initialise($f); });
-            $this->fail('Expected \LogicException, none got');
         } catch (\LogicException $e) {
             // Expected
         }
+        $this->assertInstanceOf(\LogicException::class, $e, 'Should have thrown LogicException');
     }
 
     public function test_it_lists_all_defined_services()

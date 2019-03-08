@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Fix all risky phpunit tests to make sensible assertions
+
 ## v0.4.0 (2018-12-06)
 
 * [BREAKING] Drop the DoctrineFactory dependency factory in favour of using the tooling 
