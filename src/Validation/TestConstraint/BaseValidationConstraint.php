@@ -56,7 +56,7 @@ abstract class BaseValidationConstraint extends \PHPUnit\Framework\Constraint\Co
     /**
      * {@inheritdoc}
      */
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
         if ($other instanceof ImmutableKohanaValidation) {
             $export = 'An instance of '.get_class($other).' with rules: '.$this->exporter->export(

@@ -1,5 +1,7 @@
 ### Unreleased
 
+* [PHP7-ONLY] Add explicit return types to ValidationConstraint classes to match the method
+  signatures in phpunit-7 and avoid fatal errors 
 * Fix all risky phpunit tests to make sensible assertions
 
 ## v0.4.0 (2018-12-06)

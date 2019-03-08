@@ -60,7 +60,7 @@ class ValidationRulesMatch extends BaseValidationConstraint
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return 'exactly matches rules: '.$this->exporter->export($this->expect_rules);
     }

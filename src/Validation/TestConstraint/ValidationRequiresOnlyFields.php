@@ -74,7 +74,7 @@ class ValidationRequiresOnlyFields extends BaseValidationConstraint
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return sprintf(
             'requires only these fields to be not_empty: %s',
