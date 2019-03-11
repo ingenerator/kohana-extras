@@ -1,5 +1,7 @@
 ### Unreleased
 
+## v0.4.1 (2019-03-11)
+
 * Drop support for all PHP5 
 * [PHP7-ONLY] Add explicit return types to ValidationConstraint classes to match the method
   signatures in phpunit-7 and avoid fatal errors 
