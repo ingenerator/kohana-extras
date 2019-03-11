@@ -66,7 +66,7 @@ class ValidationFieldRulesMatch extends BaseValidationConstraint
      *
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return sprintf(
             'has these rules for field `%s`: %s',

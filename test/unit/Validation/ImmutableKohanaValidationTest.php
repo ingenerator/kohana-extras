@@ -97,6 +97,7 @@ class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
     {
         $subject = $this->newSubject();
         call_user_func_array([$subject, $method], $args);
+        $this->assertTrue(TRUE, 'Did not throw exception');
     }
 
     public function provider_object_values()

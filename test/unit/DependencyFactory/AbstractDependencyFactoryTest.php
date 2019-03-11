@@ -52,6 +52,11 @@ abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
                 throw $e;
             } else {
                 // Accept this, we're not expecting it to actually create the dependency so we can pass
+                $this->assertInstanceOf(
+                    MissingOptionalDependencyException::class,
+                    $e,
+                    'Threw expected missing optional dependency exception'
+                );
             }
         }
     }

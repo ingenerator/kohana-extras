@@ -103,6 +103,7 @@ class KohanaPSRLoggerTest extends \PHPUnit\Framework\TestCase
     public function test_it_copes_if_context_exception_is_not_exception_instance()
     {
         $this->newSubject()->info('Problem', ['exception' => 'Uh-oh - this is not an exception']);
+        $this->assertTrue(TRUE, 'Did not throw exception');
     }
 
     public function test_it_can_accept_exception_as_message()
