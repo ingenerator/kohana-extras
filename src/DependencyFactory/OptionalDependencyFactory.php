@@ -15,7 +15,7 @@ abstract class OptionalDependencyFactory
      */
     protected static function requireClass($class, $suggest_package)
     {
-        if ( ! class_exists($class)) {
+        if ( ! \class_exists($class)) {
             throw MissingOptionalDependencyException::missingClass($class, $suggest_package);
         }
     }

@@ -55,10 +55,10 @@ class KohanaPSRLogger extends AbstractLogger
      */
     protected function convert_psr_to_kohana_level($level)
     {
-        $const_name = 'Log::'.strtoupper($level);
+        $const_name = 'Log::'.\strtoupper($level);
 
-        if (defined($const_name)) {
-            return constant($const_name);
+        if (\defined($const_name)) {
+            return \constant($const_name);
         } else {
             throw new \InvalidArgumentException("Unknown log level $level");
         }

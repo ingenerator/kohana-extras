@@ -28,7 +28,7 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
 
     public function test_its_static_set_creates_instance_and_adds_to_the_global_routes_collection()
     {
-        $name     = uniqid('http-method-route-test');
+        $name     = \uniqid('http-method-route-test');
         $instance = HttpMethodRoute::create(
             $name,
             'entity/<controller>(.<format>)',
@@ -42,7 +42,7 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
 
     public function test_its_static_create_explicit_adds_route_matching_single_default_controller()
     {
-        $name     = uniqid('http-method-route-test');
+        $name     = \uniqid('http-method-route-test');
         $instance = HttpMethodRoute::createExplicit($name, 'any-path/<any_param>', static::class);
 
         $this->assertInstanceOf(HttpMethodRoute::class, $instance);

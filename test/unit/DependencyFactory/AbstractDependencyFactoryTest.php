@@ -23,7 +23,7 @@ abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
         try {
             $list->get($service);
         } catch (\Exception $e) {
-            $this->fail('Service `'.$service.'` is not defined: ['.get_class($e).'] '.$e->getMessage());
+            $this->fail('Service `'.$service.'` is not defined: ['.\get_class($e).'] '.$e->getMessage());
         }
 
         $container = new \Dependency_Container($list);
@@ -33,7 +33,7 @@ abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
         } catch (\Dependency_Exception $e) {
             $this->fail('Cannot instantiate service `'.$service.'` - missing dependency? : '.$e->getMessage());
         } catch (\Exception $e) {
-            $this->fail('Cannot instantiate service `'.$service.'`: ['.get_class($e).'] '.$e->getMessage());
+            $this->fail('Cannot instantiate service `'.$service.'`: ['.\get_class($e).'] '.$e->getMessage());
         }
     }
 
@@ -48,7 +48,7 @@ abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
         try {
             $callable();
         } catch (MissingOptionalDependencyException $e) {
-            if (getenv('WITH_OPTIONAL_DEPENDENCIES')) {
+            if (\getenv('WITH_OPTIONAL_DEPENDENCIES')) {
                 throw $e;
             } else {
                 // Accept this, we're not expecting it to actually create the dependency so we can pass

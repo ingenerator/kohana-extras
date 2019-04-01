@@ -83,16 +83,16 @@ class DebugBar
     {
         $renderer = $this->bar->getJavascriptRenderer();
         $renderer->setIncludeVendors('css');
-        $asset_hash = md5(json_encode($renderer->getAssets()));
+        $asset_hash = \md5(\json_encode($renderer->getAssets()));
         $base_url   = '/assets/compiled/debug-bar';
         $base_path  = DOCROOT.$base_url;
-        if ( ! is_dir($base_path)) {
-            mkdir($base_path, 0777, TRUE);
+        if ( ! \is_dir($base_path)) {
+            \mkdir($base_path, 0777, TRUE);
         }
-        if ( ! file_exists("$base_path/debug-$asset_hash.css")) {
+        if ( ! \file_exists("$base_path/debug-$asset_hash.css")) {
             $renderer->dumpCssAssets("$base_path/debug-$asset_hash.css");
         }
-        if ( ! file_exists("$base_path/debug-$asset_hash.js")) {
+        if ( ! \file_exists("$base_path/debug-$asset_hash.js")) {
             $renderer->dumpJsAssets("$base_path/debug-$asset_hash.js");
         }
 

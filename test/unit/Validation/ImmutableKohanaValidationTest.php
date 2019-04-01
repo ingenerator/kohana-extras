@@ -87,7 +87,7 @@ class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
     {
         $subject = $this->newSubject();
         $subject->check();
-        call_user_func_array([$subject, $method], $args);
+        \call_user_func_array([$subject, $method], $args);
     }
 
     /**
@@ -96,7 +96,7 @@ class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
     public function test_it_does_not_throw_for_modification_before_check($method, $args)
     {
         $subject = $this->newSubject();
-        call_user_func_array([$subject, $method], $args);
+        \call_user_func_array([$subject, $method], $args);
         $this->assertTrue(TRUE, 'Did not throw exception');
     }
 

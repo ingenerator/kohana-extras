@@ -70,13 +70,13 @@ class RequestExceptionDispatcher
     public static function factory($container_class, $container_method, $service_key)
     {
         try {
-            if ( ! class_exists($container_class, FALSE)) {
+            if ( ! \class_exists($container_class, FALSE)) {
                 throw new \InvalidArgumentException('No container class '.$container_class);
             }
-            if ( ! method_exists($container_class, $container_method)) {
+            if ( ! \method_exists($container_class, $container_method)) {
                 throw new \InvalidArgumentException('No method '.$container_class.'::'.$container_method);
             }
-            $container = call_user_func([$container_class, $container_method]);
+            $container = \call_user_func([$container_class, $container_method]);
 
             return $container->get($service_key);
         } catch (\Exception $e) {
@@ -109,26 +109,26 @@ class RequestExceptionDispatcher
     {
         // Discard all previous output but ONLY if we're not running in phpunit
         // This is because phpunit needs to use output buffering to capture output for testing
-        if ( ! class_exists(\PHPUnit\Framework\TestCase::class, FALSE)) {
-            while (ob_get_level()) {
-                ob_end_clean();
+        if ( ! \class_exists(\PHPUnit\Framework\TestCase::class, FALSE)) {
+            while (\ob_get_level()) {
+                \ob_end_clean();
             }
         }
 
         if ($response instanceof \Response) {
             $response->send_headers(TRUE);
             echo $response->body();
-        } elseif (is_array($response)) {
-            if ( ! headers_sent()) {
-                http_response_code($response['code']);
+        } elseif (\is_array($response)) {
+            if ( ! \headers_sent()) {
+                \http_response_code($response['code']);
                 foreach ($response['headers'] as $header => $value) {
-                    header($header.': '.$value, TRUE);
+                    \header($header.': '.$value, TRUE);
                 }
             }
             echo $response['body'];
         } else {
             // This is really bad. WTF did we get?
-            http_response_code(500);
+            \http_response_code(500);
             echo static::class.' - Unexpected response type';
         }
     }
@@ -207,15 +207,15 @@ class RequestExceptionDispatcher
     {
         $chain_index = 0;
         do {
-            $msg = sprintf(
+            $msg = \sprintf(
                 '%s[%s] %s (%s:%s)',
                 $chain_index > 0 ? '(cause #'.$chain_index.') ' : '',
-                get_class($exception),
+                \get_class($exception),
                 $exception->getMessage(),
                 $exception->getFile(),
                 $exception->getLine()
             );
-            call_user_func(static::$syslog_func, LOG_EMERG, $msg);
+            \call_user_func(static::$syslog_func, LOG_EMERG, $msg);
             $chain_index++;
         } while ($exception = $exception->getPrevious());
     }
@@ -231,7 +231,7 @@ class RequestExceptionDispatcher
             'headers' => [
                 'Content-Type' => 'text/html;charset=utf8',
             ],
-            'body'    => file_get_contents(__DIR__.'/../../resources/generic_error_page.html'),
+            'body'    => \file_get_contents(__DIR__.'/../../resources/generic_error_page.html'),
         ];
     }
 }

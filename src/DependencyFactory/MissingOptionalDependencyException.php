@@ -19,7 +19,7 @@ class MissingOptionalDependencyException extends \InvalidArgumentException
     public static function missingClass($class, $package)
     {
         return new static(
-            sprintf('Could not find the `%s` class - have you installed the `%s` package?', $class, $package)
+            \sprintf('Could not find the `%s` class - have you installed the `%s` package?', $class, $package)
         );
     }
 

@@ -47,7 +47,7 @@ class SpyingLoggerStub extends \Log
     public function assertLogsMatching(array $patterns)
     {
         \PHPUnit\Framework\Assert::assertCount(
-            count($patterns),
+            \count($patterns),
             $this->log,
             'Expected correct number of messages'
         );

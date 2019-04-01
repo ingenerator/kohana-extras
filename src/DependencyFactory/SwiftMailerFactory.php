@@ -49,7 +49,7 @@ class SwiftMailerFactory extends OptionalDependencyFactory
 
     public static function buildSmtpTransport(array $relay = NULL)
     {
-        $config = array_merge(
+        $config = \array_merge(
             [
                 'host'     => 'localhost',
                 'port'     => 25,

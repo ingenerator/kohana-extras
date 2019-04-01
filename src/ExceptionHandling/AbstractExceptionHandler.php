@@ -43,7 +43,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
             return $this->doHandle($e);
         }
 
-        $type = is_object($e) ? get_class($e) : gettype($e);
+        $type = \is_object($e) ? \get_class($e) : \gettype($e);
         throw new \InvalidArgumentException('Expected Exception|Throwable, got '.$type);
     }
 
@@ -61,10 +61,10 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
     {
         if ($this->log) {
             $log = $this->log;
-        } elseif (class_exists(\Kohana::class, FALSE) AND \Kohana::$log) {
+        } elseif (\class_exists(\Kohana::class, FALSE) AND \Kohana::$log) {
             $log = \Kohana::$log;
         } else {
-            throw new \RuntimeException('No logger to log: ['.get_class($e).'] '.$e->getMessage(), 0, $e);
+            throw new \RuntimeException('No logger to log: ['.\get_class($e).'] '.$e->getMessage(), 0, $e);
         }
 
         $log->add(\Log::EMERGENCY, Kohana_Exception::text($e), NULL, ['exception' => $e]);

@@ -43,7 +43,7 @@ class SymfonyValidationFactory extends OptionalDependencyFactory
         // The Doctrine annotation loader does not by default autoload because some PSR-0 autoloaders are badly behaved
         // and emit warnings/output/errors when a class can't be found. Ours don't so it's safe to just use class_exists
         // as a global autoloader.
-        AnnotationRegistry::registerLoader(function ($class) { return class_exists($class); });
+        AnnotationRegistry::registerLoader(function ($class) { return \class_exists($class); });
         $builder = Validation::createValidatorBuilder();
         $builder->enableAnnotationMapping();
 
