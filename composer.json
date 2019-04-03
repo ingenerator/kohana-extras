@@ -13,9 +13,9 @@
   ],
   "require": {
     "php": "^7.2",
-    "ingenerator/kohana-core": "^4.0",
+    "ingenerator/kohana-core": "^4.3",
     "ingenerator/kohana-dependencies": "^0.9.1",
-    "ingenerator/php-utils": "^0.1.5",
+    "ingenerator/php-utils": "^1.0",
     "psr/log": "^1.0"
   },
   "require-dev": {
