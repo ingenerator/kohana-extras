@@ -10,11 +10,6 @@ namespace Ingenerator\KohanaExtras\Validation\TestConstraint;
 use Ingenerator\KohanaExtras\Validation\ImmutableKohanaValidation;
 use Ingenerator\PHPUtils\Object\ObjectPropertyRipper;
 
-if ( ! \class_exists('\PHPUnit\Framework\Constraint\Constraint')) {
-    // This is a temporary monkey-patch to support both PHPUnit 4.x and 7.x ahead of dropping
-    // support for php5
-    \class_alias('PHPUnit_Framework_Constraint', '\PHPUnit\Framework\Constraint\Constraint');
-}
 
 /**
  * Base class for making custom assertions on validation objects
