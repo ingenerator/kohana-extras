@@ -45,7 +45,7 @@ class KohanaMessageProvider
     public function message($file, $path, array $params = [], $default = NULL)
     {
         if ($message = \Kohana::message($file, $path, $default)) {
-            return strtr($message, $params);
+            return \strtr($message, $params);
         }
 
         $message_id = $file.':'.$path;
@@ -53,7 +53,7 @@ class KohanaMessageProvider
         $this->log->add(
             \Log::WARNING,
             "Undefined message '$message_id' requested by ".$this->formatCallerTrace(
-                debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)
+                \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)
             )
         );
 
@@ -67,7 +67,7 @@ class KohanaMessageProvider
      */
     protected function formatCallerTrace(array $trace)
     {
-        $trace  = array_pad($trace, 2, []);
+        $trace  = \array_pad($trace, 2, []);
         $values = \Arr::flatten(
             \Arr::extract(
                 $trace,
@@ -76,6 +76,6 @@ class KohanaMessageProvider
             )
         );
 
-        return strtr('class::function @ file[line]', $values);
+        return \strtr('class::function @ file[line]', $values);
     }
 }

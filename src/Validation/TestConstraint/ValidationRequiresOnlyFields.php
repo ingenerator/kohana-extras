@@ -29,7 +29,7 @@ class ValidationRequiresOnlyFields extends BaseValidationConstraint
     public function __construct(array $expect_required)
     {
         parent::__construct();
-        sort($expect_required);
+        \sort($expect_required);
 
         $this->expect_required = $expect_required;
     }
@@ -48,7 +48,7 @@ class ValidationRequiresOnlyFields extends BaseValidationConstraint
 
             if ($field_rules['not_empty'] !== [':value']) {
                 throw new \InvalidArgumentException(
-                    'Params for `not_empty` rule of `'.$field.'` were not valid'.json_encode(
+                    'Params for `not_empty` rule of `'.$field.'` were not valid'.\json_encode(
                         $field_rules
                     )
                 );
@@ -56,12 +56,12 @@ class ValidationRequiresOnlyFields extends BaseValidationConstraint
             $required[] = $field;
         }
 
-        sort($required);
+        \sort($required);
         try {
             $this->assertArraysEqual($this->expect_required, $required);
         } catch (\SebastianBergmann\Comparator\ComparisonFailure $failure) {
             throw new \PHPUnit\Framework\ExpectationFailedException(
-                trim($description."\n".$this->failureDescription($other)),
+                \trim($description."\n".$this->failureDescription($other)),
                 $failure
             );
         }
@@ -76,7 +76,7 @@ class ValidationRequiresOnlyFields extends BaseValidationConstraint
      */
     public function toString(): string
     {
-        return sprintf(
+        return \sprintf(
             'requires only these fields to be not_empty: %s',
             $this->exporter->export($this->expect_required)
         );

@@ -53,7 +53,7 @@ class ValidationFieldRulesMatch extends BaseValidationConstraint
             $this->assertArraysEqual($this->expect_rules, $rule_list);
         } catch (\SebastianBergmann\Comparator\ComparisonFailure $failure) {
             throw new \PHPUnit\Framework\ExpectationFailedException(
-                trim($description."\n".$this->failureDescription($other)),
+                \trim($description."\n".$this->failureDescription($other)),
                 $failure
             );
         }
@@ -68,7 +68,7 @@ class ValidationFieldRulesMatch extends BaseValidationConstraint
      */
     public function toString(): string
     {
-        return sprintf(
+        return \sprintf(
             'has these rules for field `%s`: %s',
             $this->field,
             $this->exporter->export($this->expect_rules)

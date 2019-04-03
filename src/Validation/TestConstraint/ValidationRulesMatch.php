@@ -47,7 +47,7 @@ class ValidationRulesMatch extends BaseValidationConstraint
             $this->assertArraysEqual($this->expect_rules, $rule_list);
         } catch (\SebastianBergmann\Comparator\ComparisonFailure $failure) {
             throw new \PHPUnit\Framework\ExpectationFailedException(
-                trim($description."\n".$this->failureDescription($other)),
+                \trim($description."\n".$this->failureDescription($other)),
                 $failure
             );
         }

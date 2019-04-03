@@ -68,10 +68,10 @@ class ImmutableKohanaValidation extends \Validation implements ValidationResult
     public function offsetGet($offset)
     {
         $value = parent::offsetGet($offset);
-        if ($this->is_building_errors AND is_object($value)) {
+        if ($this->is_building_errors AND \is_object($value)) {
             if ($value instanceof \DateTimeInterface) {
                 return $value->format('Y-m-d H:i:s');
-            } elseif (method_exists($value, '__toString')) {
+            } elseif (\method_exists($value, '__toString')) {
                 return (string) $value;
             } else {
                 return '{object}';

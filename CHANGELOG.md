@@ -1,5 +1,10 @@
 ### Unreleased
 
+## v1.0.0 (2019-04-03)
+
+* Run php-cs-fixer native_function_invocation fix
+* Drop support for php < 7.2
+
 ## v0.4.1 (2019-03-11)
 
 * Drop support for all PHP5 

@@ -10,11 +10,6 @@ namespace Ingenerator\KohanaExtras\Validation\TestConstraint;
 use Ingenerator\KohanaExtras\Validation\ImmutableKohanaValidation;
 use Ingenerator\PHPUtils\Object\ObjectPropertyRipper;
 
-if ( ! class_exists('\PHPUnit\Framework\Constraint\Constraint')) {
-    // This is a temporary monkey-patch to support both PHPUnit 4.x and 7.x ahead of dropping
-    // support for php5
-    class_alias('PHPUnit_Framework_Constraint', '\PHPUnit\Framework\Constraint\Constraint');
-}
 
 /**
  * Base class for making custom assertions on validation objects
@@ -59,7 +54,7 @@ abstract class BaseValidationConstraint extends \PHPUnit\Framework\Constraint\Co
     protected function failureDescription($other): string
     {
         if ($other instanceof ImmutableKohanaValidation) {
-            $export = 'An instance of '.get_class($other).' with rules: '.$this->exporter->export(
+            $export = 'An instance of '.\get_class($other).' with rules: '.$this->exporter->export(
                     $this->exportValidationRules($other)
                 );
         } else {
@@ -83,13 +78,13 @@ abstract class BaseValidationConstraint extends \PHPUnit\Framework\Constraint\Co
         $rule_list = [];
         foreach ($rules as $field => $field_rules) {
             foreach ($field_rules as $index => $field_rule) {
-                $rule_name = array_shift($field_rule);
+                $rule_name = \array_shift($field_rule);
                 if (isset($rule_list[$field][$rule_name])) {
                     throw new \UnexpectedValueException(
                         "Unexpected multiple `$rule_name` rules on field `$field`"
                     );
                 }
-                $rule_list[$field][$rule_name] = array_shift($field_rule);
+                $rule_list[$field][$rule_name] = \array_shift($field_rule);
             }
         }
 

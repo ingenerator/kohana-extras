@@ -70,13 +70,13 @@ class RequestExceptionDispatcherTest extends \PHPUnit\Framework\TestCase
 
     public function test_its_static_constructor_creates_instance_that_basically_works_even_without_kohana()
     {
-        $file   = realpath(__DIR__.'/../../../src/ExceptionHandling/RequestExceptionDispatcher.php');
+        $file   = \realpath(__DIR__.'/../../../src/ExceptionHandling/RequestExceptionDispatcher.php');
         $class  = RequestExceptionDispatcher::class;
-        $script = implode(
+        $script = \implode(
             "\n",
             [
                 '<?php',
-                'require '.var_export($file, TRUE).';',
+                'require '.\var_export($file, TRUE).';',
                 'try {',
                 '  ob_start();',
                 '  echo "This should not make it to output";',
@@ -90,19 +90,19 @@ class RequestExceptionDispatcherTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $tmpfile = tempnam(sys_get_temp_dir(), 'exceptiontest');
+        $tmpfile = \tempnam(\sys_get_temp_dir(), 'exceptiontest');
         try {
-            file_put_contents($tmpfile, $script);
+            \file_put_contents($tmpfile, $script);
             $proc = new Process('php '.$tmpfile);
             $proc->run();
             $output = $proc->getOutput();
             $this->assertNotContains('This should not make it to output', $output);
             $this->assertContains('<div class="error-panel"', $output);
             $this->assertStringStartsWith('<!DOCTYPE', $output);
-            $this->assertStringEndsWith('</html>', trim($output));
+            $this->assertStringEndsWith('</html>', \trim($output));
             $this->assertSame("Code: 500\n", $proc->getErrorOutput(), 'Should set HTTP status');
         } finally {
-            unlink($tmpfile);
+            \unlink($tmpfile);
         }
     }
 
@@ -306,7 +306,7 @@ class RequestExceptionDispatcherTest extends \PHPUnit\Framework\TestCase
             RequestExceptionDispatcher::$syslog_func = 'syslog';
         }
 
-        return implode("\n", $logged);
+        return \implode("\n", $logged);
     }
 
     protected function assertGenericErrorResponse($value)

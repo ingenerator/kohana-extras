@@ -52,12 +52,12 @@ class DebugLogWriter extends \Log_Writer
                 $this->exceptions->addThrowable($message['additional']['exception']);
             }
 
-            $file  = preg_replace('#^'.preg_quote(BASEDIR, '#').'#', '', $message['file']);
+            $file  = \preg_replace('#^'.\preg_quote(BASEDIR, '#').'#', '', $message['file']);
             $level = \Arr::get(static::$level_map, $message['level'], LogLevel::ERROR);
 
             $this->messages->log(
                 $level,
-                sprintf(
+                \sprintf(
                     '%s [%s:%s]',
                     $message['body'],
                     $file,

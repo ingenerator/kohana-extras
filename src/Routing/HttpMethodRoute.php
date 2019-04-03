@@ -34,7 +34,7 @@ class HttpMethodRoute extends \Route
     public function __construct($uri, array $action_classes, array $param_patterns = [])
     {
         foreach (['<action>', '<directory>'] as $param) {
-            if (strpos($uri, $param) !== FALSE) {
+            if (\strpos($uri, $param) !== FALSE) {
                 throw new \InvalidArgumentException(
                     'Unexpected '.$param.' parameter in route URL: '.$uri
                 );
@@ -49,7 +49,7 @@ class HttpMethodRoute extends \Route
 
         $this->action_classes = [];
         foreach ($action_classes as $classname) {
-            if (substr($classname, 0, 1) !== '\\') {
+            if (\substr($classname, 0, 1) !== '\\') {
                 $classname = '\\'.$classname;
             }
 
@@ -71,11 +71,11 @@ class HttpMethodRoute extends \Route
      */
     protected function getControllerNameFromClass($classname)
     {
-        $classname  = preg_replace('/Controller$/', '', $classname);
-        $parts      = explode('\\', $classname);
-        $class      = array_pop($parts);
-        $controller = strtolower(
-            preg_replace('/(?<!^)([A-Z]+)/', '-\\1', $class)
+        $classname  = \preg_replace('/Controller$/', '', $classname);
+        $parts      = \explode('\\', $classname);
+        $class      = \array_pop($parts);
+        $controller = \strtolower(
+            \preg_replace('/(?<!^)([A-Z]+)/', '-\\1', $class)
         );
 
         return $controller;
@@ -135,7 +135,7 @@ class HttpMethodRoute extends \Route
             return FALSE;
         }
 
-        $controller = strtolower(\Arr::get($result, 'controller'));
+        $controller = \strtolower(\Arr::get($result, 'controller'));
 
         if ( ! isset($this->action_classes[$controller])) {
             return FALSE;
@@ -143,7 +143,7 @@ class HttpMethodRoute extends \Route
 
         $result['controller'] = $this->action_classes[$controller];
 
-        $request_method = trim(strtolower($request->method()));
+        $request_method = \trim(\strtolower($request->method()));
         if ($request_method === 'head') {
             $request_method = 'get';
         }
@@ -162,7 +162,7 @@ class HttpMethodRoute extends \Route
         if ($controller = \Arr::get($params, 'controller')) {
             if ( ! isset($this->action_classes[$controller])) {
                 throw new \OutOfBoundsException(
-                    'Undefined controller `'.$controller.'` specified for route URL'.json_encode(
+                    'Undefined controller `'.$controller.'` specified for route URL'.\json_encode(
                         $this->action_classes
                     )
                 );

@@ -52,7 +52,7 @@ class RequestExecutorFactory
     {
         $definitions = ['controller' => []];
         foreach ($controllers as $controller_class => $controller_args) {
-            $key                             = '\\'.trim($controller_class, '\\');
+            $key                             = '\\'.\trim($controller_class, '\\');
             $definitions['controller'][$key] = [
                 '_settings' => [
                     'class'     => $controller_class,

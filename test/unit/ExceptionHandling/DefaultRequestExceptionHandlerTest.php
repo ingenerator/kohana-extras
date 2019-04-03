@@ -31,7 +31,7 @@ class DefaultRequestExceptionHandlerTest extends \PHPUnit\Framework\TestCase
         ];
 
         // Only in PHP7
-        if (class_exists(\Error::class, FALSE)) {
+        if (\class_exists(\Error::class, FALSE)) {
             $types[] = [new \Error, TRUE];
         }
 

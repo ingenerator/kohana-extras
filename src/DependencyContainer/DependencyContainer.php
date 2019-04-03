@@ -60,7 +60,7 @@ class DependencyContainer extends \Dependency_Container
      */
     public static function fromFile($config_file)
     {
-        if ( ! is_readable($config_file)) {
+        if ( ! \is_readable($config_file)) {
             throw new \InvalidArgumentException('No config file in '.$config_file);
         }
 

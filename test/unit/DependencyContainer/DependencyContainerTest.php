@@ -211,12 +211,12 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
 
     protected function withConfigFile(array $conf, $callable)
     {
-        $tmp_file = tempnam(sys_get_temp_dir(), '/dependencies.php');
-        file_put_contents($tmp_file, '<?php return '.var_export($conf, TRUE).';');
+        $tmp_file = \tempnam(\sys_get_temp_dir(), '/dependencies.php');
+        \file_put_contents($tmp_file, '<?php return '.\var_export($conf, TRUE).';');
         try {
             return $callable($tmp_file);
         } finally {
-            unlink($tmp_file);
+            \unlink($tmp_file);
         }
     }
 
