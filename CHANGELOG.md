@@ -1,5 +1,8 @@
 ### Unreleased
 
+* Add UrlReverseRouter with implementation to get URLs from defined HttpMethodRoutes, and mock
+  to generate them predictably from the parameters independent of any application routing rules.
+
 ## v1.0.1 (2019-04-03)
 
 * Bump missed dependencies

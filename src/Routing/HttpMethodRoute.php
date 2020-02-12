@@ -172,5 +172,14 @@ class HttpMethodRoute extends \Route
         return parent::uri($params);
     }
 
+    /**
+     * List the defined action classes, as a hash of {controller-name-in-url} => {FQ class name}
+     *
+     * @return string[]
+     */
+    public function listActionClasses():array
+    {
+        return $this->action_classes;
+    }
 
 }
