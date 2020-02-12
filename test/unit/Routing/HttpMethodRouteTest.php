@@ -7,9 +7,9 @@
 namespace test\unit\Ingenerator\KohanaExtras\Routing;
 
 
+use Ingenerator\KohanaExtras\Routing\HttpMethodRoute;
 use test\mock\Kohana\Request\HtmlRequestStub;
 use test\unit\BaseTestCase;
-use Ingenerator\KohanaExtras\Routing\HttpMethodRoute;
 
 class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
 {
@@ -130,6 +130,26 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
         $route   = new HttpMethodRoute('<controller>', $actions);
         $matches = $route->matches(\Request::with(['uri' => $url]));
         $this->assertSame($expect, $matches['controller']);
+    }
+
+    public function test_it_lists_defined_action_classes_as_controller_name_and_class()
+    {
+        $route = new HttpMethodRoute(
+            '<controller>',
+            [
+                '\\Controller\\Entity\\DoThings',
+                'Action\\Entity\\OtherThingsController',
+            ]
+        );
+        $this->assertSame(
+            [
+                'do-things'    => '\\Controller\\Entity\\DoThings',
+                // Note the leading \ is prepended in the definition even though it wasn't passed
+                // in the constructor.
+                'other-things' => '\\Action\\Entity\\OtherThingsController',
+            ],
+            $route->listActionClasses()
+        );
     }
 
     /**
