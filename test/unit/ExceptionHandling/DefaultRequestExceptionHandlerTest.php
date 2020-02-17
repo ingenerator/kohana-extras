@@ -10,13 +10,8 @@ namespace test\unit\Ingenerator\KohanaExtras\ExceptionHandling;
 use Ingenerator\KohanaExtras\ExceptionHandling\DefaultRequestExceptionHandler;
 use Ingenerator\KohanaExtras\Logger\SpyingLoggerStub;
 
-class DefaultRequestExceptionHandlerTest extends \PHPUnit\Framework\TestCase
+class DefaultRequestExceptionHandlerTest extends AbstractExceptionHandlerTest
 {
-
-    /**
-     * @var SpyingLoggerStub
-     */
-    protected $log;
 
     public function test_it_is_initialisable()
     {
@@ -82,26 +77,6 @@ class DefaultRequestExceptionHandlerTest extends \PHPUnit\Framework\TestCase
         } finally {
             \Kohana::$log = $old_log;
         }
-    }
-
-    /**
-     * @param int       $expect_status
-     * @param \Response $response
-     *
-     * @return \Response
-     */
-    protected function assertReturnsResponseStatus($expect_status, $response)
-    {
-        $this->assertInstanceOf(\Response::class, $response);
-        $this->assertSame($expect_status, $response->status());
-
-        return $response;
-    }
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->log = new \Log;
     }
 
     /**

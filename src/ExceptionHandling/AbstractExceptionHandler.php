@@ -16,6 +16,9 @@ use Kohana_Exception;
 abstract class AbstractExceptionHandler implements ExceptionHandler
 {
 
+    const PAGE_GENERIC_ERROR = 'generic_error_page.html';
+    const PAGE_GENERIC_MAINTENANCE = 'generic_maintenance_page.html';
+
 
     /**
      * @var \Log
@@ -70,5 +73,15 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
 
         $log->add(\Log::EMERGENCY, Kohana_Exception::text($e), NULL, ['exception' => $e]);
         $log->write();
+    }
+
+    protected function respondGenericErrorPage(string $resource_file, int $status_code): \Response
+    {
+        $response = new \Response;
+        $response->status($status_code);
+        $response->headers('Content-Type', 'text/html;charset=utf8');
+        $response->body(\file_get_contents(__DIR__.'/../../resources/'.$resource_file));
+
+        return $response;
     }
 }

@@ -3,6 +3,9 @@ BC breaks.
 
 ### Unreleased
 
+* Add generic exception handler to show a friendly maintenance page with a 502 and
+  reduce log verbosity on a `ConnectionException` from the DBAL package, thrown if 
+  the database server is not available or not connecting properly.
 * Update ExceptionHandler, AbstractExceptionHandler etc to strong \Throwable
   typehints. This is not breaking under LSP as  a child class can still define
   a method with no hard typehint (since `anything` is more generic than `\Throwable`).
