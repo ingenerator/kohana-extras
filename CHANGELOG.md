@@ -3,6 +3,8 @@ BC breaks.
 
 ### Unreleased
 
+* Log any previous exceptions in the chain when logging an unexpected exception in the
+  default handler.
 * Add generic exception handler to show a friendly maintenance page with a 502 and
   reduce log verbosity on a `ConnectionException` from the DBAL package, thrown if 
   the database server is not available or not connecting properly.

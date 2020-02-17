@@ -47,7 +47,29 @@ class DefaultRequestExceptionHandlerTest extends AbstractExceptionHandlerTest
         $this->log = new SpyingLoggerStub;
         $e         = new \BadMethodCallException('Ooops');
         $this->newSubject()->handle($e);
-        $this->log->assertOneLog(\Log::EMERGENCY, \Kohana_Exception::text($e), NULL, ['exception' => $e]);
+        $this->log->assertOneLog(
+            \Log::EMERGENCY,
+            \Kohana_Exception::text($e),
+            NULL,
+            ['exception' => $e]
+        );
+    }
+
+    public function test_it_logs_generic_exceptions_with_their_previous_chain_if_any()
+    {
+        $this->log = new SpyingLoggerStub;
+        $e_cause   = new \BadMethodCallException('Oooops', 20);
+        $e_rethrow = new \RuntimeException('Cannot do something', 0, $e_cause);
+        $e_final   = new \InvalidArgumentException('Thing is not valid', 0, $e_rethrow);
+        $this->newSubject()->handle($e_final);
+        $this->log->assertOneLog(
+            \Log::EMERGENCY,
+            \Kohana_Exception::text($e_final)
+            ."\nCause: ".\Kohana_Exception::text($e_rethrow)
+            ."\nCause: ".\Kohana_Exception::text($e_cause),
+            NULL,
+            ['exception' => $e_final]
+        );
     }
 
     public function test_it_logs_to_global_kohana_log_if_nothing_injected()
@@ -72,7 +94,10 @@ class DefaultRequestExceptionHandlerTest extends AbstractExceptionHandlerTest
             $this->newSubject()->handle($original_exception);
             $this->fail('Should have thrown');
         } catch (\RuntimeException $caught_exception) {
-            $this->assertContains($original_exception->getMessage(), $caught_exception->getMessage());
+            $this->assertContains(
+                $original_exception->getMessage(),
+                $caught_exception->getMessage()
+            );
             $this->assertSame($original_exception, $caught_exception->getPrevious());
         } finally {
             \Kohana::$log = $old_log;

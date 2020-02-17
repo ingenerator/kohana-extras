@@ -6,8 +6,6 @@
 
 namespace Ingenerator\KohanaExtras\ExceptionHandling;
 
-use Kohana_Exception;
-
 /**
  * Base for an exception handler that supports logging if a log has been initialised
  *
@@ -57,7 +55,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
     /**
      * @param \Throwable $e
      */
-    protected function logException(\Throwable $e)
+    protected function logException(\Throwable $e, bool $with_previous = TRUE)
     {
         if ($this->log) {
             $log = $this->log;
@@ -71,7 +69,17 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
             );
         }
 
-        $log->add(\Log::EMERGENCY, Kohana_Exception::text($e), NULL, ['exception' => $e]);
+        $message_lines = [\Kohana_Exception::text($e)];
+
+        if ($with_previous) {
+            $parent = $e->getPrevious();
+            while ($parent) {
+                $message_lines[] = "Cause: ".\Kohana_Exception::text($parent);
+                $parent          = $parent->getPrevious();
+            }
+        }
+
+        $log->add(\Log::EMERGENCY, \implode("\n", $message_lines), NULL, ['exception' => $e]);
         $log->write();
     }
 
