@@ -26,7 +26,7 @@ class DefaultRequestExceptionHandler extends AbstractExceptionHandler
      * {@inheritdoc}
      * @see \Kohana_Exception::_handler() - this is like that, but not quite the same
      */
-    protected function doHandle($e)
+    protected function doHandle(\Throwable $e)
     {
         if ($e instanceof \HTTP_Exception) {
             return $e->get_response();

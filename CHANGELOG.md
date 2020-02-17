@@ -1,4 +1,11 @@
+See also [CHANGELOG_FUTURE.md](CHANGELOG_FUTURE.md) for planning future
+BC breaks. 
+
 ### Unreleased
+
+* Update ExceptionHandler, AbstractExceptionHandler etc to strong \Throwable
+  typehints. This is not breaking under LSP as  a child class can still define
+  a method with no hard typehint (since `anything` is more generic than `\Throwable`).
 
 ## v1.1.0 (2020-02-12)
 

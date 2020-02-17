@@ -9,9 +9,7 @@ namespace Ingenerator\KohanaExtras\ExceptionHandling;
 use Kohana_Exception;
 
 /**
- * Base for an exception handler that supports enforcing type-safety of the argument
- * without strict hints (which are different for PHP5.x vs PHP7.x) and for logging if
- * a log has been initialised
+ * Base for an exception handler that supports logging if a log has been initialised
  *
  * @package Ingenerator\KohanaExtras\ExceptionHandling
  */
@@ -33,38 +31,41 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
     }
 
     /**
-     * @param \Exception|\Throwable $e
+     * @param \Throwable $e
      *
      * @return \Response|null
      */
-    public function handle($e)
+    public function handle(\Throwable $e)
     {
-        if (($e instanceof \Exception) OR ($e instanceof \Throwable)) {
-            return $this->doHandle($e);
-        }
-
-        $type = \is_object($e) ? \get_class($e) : \gettype($e);
-        throw new \InvalidArgumentException('Expected Exception|Throwable, got '.$type);
+        // Historic stub retained for BC, it was just there to allow us to enforce that we had
+        // either a Throwable or an Exception.
+        //
+        // In a future breaking release
+        return $this->doHandle($e);
     }
 
     /**
-     * @param \Exception|\Throwable $e
+     * @param \Throwable $e
      *
      * @return \Response|null
      */
-    abstract protected function doHandle($e);
+    abstract protected function doHandle(\Throwable $e);
 
     /**
-     * @param \Exception|\Throwable $e
+     * @param \Throwable $e
      */
-    protected function logException($e)
+    protected function logException(\Throwable $e)
     {
         if ($this->log) {
             $log = $this->log;
         } elseif (\class_exists(\Kohana::class, FALSE) AND \Kohana::$log) {
             $log = \Kohana::$log;
         } else {
-            throw new \RuntimeException('No logger to log: ['.\get_class($e).'] '.$e->getMessage(), 0, $e);
+            throw new \RuntimeException(
+                'No logger to log: ['.\get_class($e).'] '.$e->getMessage(),
+                0,
+                $e
+            );
         }
 
         $log->add(\Log::EMERGENCY, Kohana_Exception::text($e), NULL, ['exception' => $e]);

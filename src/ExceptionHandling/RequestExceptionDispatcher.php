@@ -151,11 +151,11 @@ class RequestExceptionDispatcher
     /**
      * Attempts to handle the provided exception and generate a response
      *
-     * @param \Exception|\Throwable $exception
+     * @param \Throwable $exception
      *
      * @return array|null|\Response
      */
-    public function handle($exception)
+    public function handle(\Throwable $exception)
     {
         if ($this->is_fallback) {
             return $this->handleFallback($exception);
@@ -187,11 +187,11 @@ class RequestExceptionDispatcher
     }
 
     /**
-     * @param \Exception|\Throwable $exception
+     * @param \Throwable $exception
      *
      * @return array
      */
-    protected function handleFallback($exception)
+    protected function handleFallback(\Throwable $exception)
     {
         $this->logException($exception);
 
@@ -201,9 +201,9 @@ class RequestExceptionDispatcher
     /**
      * Log this exception into syslog (or your overridden callable)
      *
-     * @param \Exception|\Throwable $exception
+     * @param \Throwable $exception
      */
-    protected function logException($exception)
+    protected function logException(\Throwable $exception)
     {
         $chain_index = 0;
         do {
