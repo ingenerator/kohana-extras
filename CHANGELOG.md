@@ -3,6 +3,8 @@ BC breaks.
 
 ### Unreleased
 
+* Register Session_Exception and ConnectionException handlers by default in the ExceptionHandlerFactory,
+  can be replaced or overridden in project dependency config
 * Add handler to show generic fatal error page on any Session_Exception
 * Log any previous exceptions in the chain when logging an unexpected exception in the
   default handler.

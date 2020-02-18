@@ -6,9 +6,10 @@
 
 namespace Ingenerator\KohanaExtras\DependencyFactory;
 
-
+use Ingenerator\KohanaExtras\ExceptionHandling\DBALConnectionExceptionHandler;
 use Ingenerator\KohanaExtras\ExceptionHandling\DefaultRequestExceptionHandler;
 use Ingenerator\KohanaExtras\ExceptionHandling\RequestExceptionDispatcher;
+use Ingenerator\KohanaExtras\ExceptionHandling\SessionExceptionHandler;
 
 class ExceptionHandlerFactory
 {
@@ -33,6 +34,23 @@ class ExceptionHandlerFactory
      *          'class'     => My\NotFoundExceptionHandler::class,
      *          'arguments' => ['%view.error.404%', '%view.renderer%']
      *        ],
+     *      ]
+     *    ]);
+     *
+     * The package already provides default handlers for:
+     *   * Session_Exception (shows a generic error)
+     *   * \Doctrine\DBAL\Exception\ConnectionException (shows a 503 maintenance page).
+     *
+     * These are processed last in the handler stack. You can replace, disable, or customise the
+     * order of the default handlers by defining a handler on the same exception class in your own
+     * list of handler definitions. To disable the handler, pass a `'handler' => FALSE`.
+     *
+     * For example to disable the Session_Exception handler:
+     *
+     *    ExceptionHandlerFactory::definitions([
+     *      [
+     *        'type'    => \Session_Exception::class,
+     *        'handler' => FALSE
      *      ]
      *    ]);
      *
@@ -63,7 +81,14 @@ class ExceptionHandlerFactory
             ],
         ];
 
+        $handlers = self::appendDefaultHandlersIfNotCustomised($handlers);
+
         foreach ($handlers as $handler_def) {
+            if ($handler_def['handler'] === FALSE) {
+                // This has just been defined to disable a default custom handler
+                continue;
+            }
+
             $class = $handler_def['handler']['class'];
 
             // Define it as a service in its own right
@@ -77,5 +102,45 @@ class ExceptionHandlerFactory
         }
 
         return $base;
+    }
+
+    /**
+     * @param array $handlers
+     *
+     * @return array
+     */
+    protected static function appendDefaultHandlersIfNotCustomised(array $handlers): array
+    {
+        $default_handlers = [
+            [
+                'type'    => \Doctrine\DBAL\Exception\ConnectionException::class,
+                'handler' => [
+                    'class'     => DBALConnectionExceptionHandler::class,
+                    'arguments' => ['%kohana.log%'],
+                ],
+            ],
+            [
+                'type'    => \Session_Exception::class,
+                'handler' => [
+                    'class'     => SessionExceptionHandler::class,
+                    'arguments' => ['%kohana.log%'],
+                ],
+            ],
+        ];
+
+        // Map the types that are already defined by the user's own handlers
+        $explicitly_handled_types = [];
+        foreach ($handlers as $handler_def) {
+            $explicitly_handled_types[$handler_def['type']] = TRUE;
+        }
+
+        // Append the handlers that are not customised
+        foreach ($default_handlers as $handler_def) {
+            if ( ! isset($explicitly_handled_types[$handler_def['type']])) {
+                $handlers[] = $handler_def;
+            }
+        }
+
+        return $handlers;
     }
 }
