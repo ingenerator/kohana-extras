@@ -30,7 +30,7 @@ class DBALConnectionExceptionHandlerTest extends AbstractExceptionHandlerTest
     {
         $e_dbal   = new ConnectionException('SQL whatever from doctrine');
         $response = $this->newSubject()->handle($e_dbal);
-        $this->assertResponseIsMaintenance502($response);
+        $this->assertResponseIsMaintenance503($response);
     }
 
     protected function newSubject()

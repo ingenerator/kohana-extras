@@ -31,9 +31,9 @@ abstract class AbstractExceptionHandlerTest extends TestCase
     /**
      * @param \Response $response
      */
-    protected function assertResponseIsMaintenance502(\Response $response): void
+    protected function assertResponseIsMaintenance503(\Response $response): void
     {
-        $this->assertReturnsResponseStatus(502, $response);
+        $this->assertReturnsResponseStatus(503, $response);
         $this->assertSame('text/html;charset=utf8', $response->headers('Content-Type'));
         $this->assertContains('offline for maintenance', $response->body());
     }

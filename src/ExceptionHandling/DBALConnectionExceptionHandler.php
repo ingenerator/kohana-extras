@@ -20,7 +20,7 @@ class DBALConnectionExceptionHandler extends AbstractExceptionHandler
             'DB connection error: '.\Kohana_Exception::text($e)
         );
 
-        return $this->respondGenericErrorPage(static::PAGE_GENERIC_MAINTENANCE, 502);
+        return $this->respondGenericErrorPage(static::PAGE_GENERIC_MAINTENANCE, 503);
     }
 
 }
