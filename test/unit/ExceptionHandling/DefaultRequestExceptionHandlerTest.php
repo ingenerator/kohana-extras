@@ -62,14 +62,7 @@ class DefaultRequestExceptionHandlerTest extends AbstractExceptionHandlerTest
         $e_rethrow = new \RuntimeException('Cannot do something', 0, $e_cause);
         $e_final   = new \InvalidArgumentException('Thing is not valid', 0, $e_rethrow);
         $this->newSubject()->handle($e_final);
-        $this->log->assertOneLog(
-            \Log::EMERGENCY,
-            \Kohana_Exception::text($e_final)
-            ."\nCause: ".\Kohana_Exception::text($e_rethrow)
-            ."\nCause: ".\Kohana_Exception::text($e_cause),
-            NULL,
-            ['exception' => $e_final]
-        );
+        $this->assertLoggedExceptionChain($e_final, $e_rethrow, $e_cause);
     }
 
     public function test_it_logs_to_global_kohana_log_if_nothing_injected()

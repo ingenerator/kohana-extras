@@ -3,6 +3,7 @@ BC breaks.
 
 ### Unreleased
 
+* Add handler to show generic fatal error page on any Session_Exception
 * Log any previous exceptions in the chain when logging an unexpected exception in the
   default handler.
 * Add generic exception handler to show a friendly maintenance page with a 502 and

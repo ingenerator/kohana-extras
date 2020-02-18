@@ -38,6 +38,37 @@ abstract class AbstractExceptionHandlerTest extends TestCase
         $this->assertContains('offline for maintenance', $response->body());
     }
 
+    /**
+     * @param \Response $response
+     */
+    protected function assertResponseIsGeneric500(\Response $response): void
+    {
+        $this->assertReturnsResponseStatus(500, $response);
+        $this->assertSame('text/html;charset=utf8', $response->headers('Content-Type'));
+        $this->assertContains('error has been logged', $response->body());
+    }
+
+
+    /**
+     * @param \Throwable $actual_exception
+     * @param \Throwable ...$previous_exceptions
+     */
+    protected function assertLoggedExceptionChain(
+        \Throwable $actual_exception,
+        \Throwable ...$previous_exceptions
+    ) {
+        $expect_msg = \Kohana_Exception::text($actual_exception);
+        foreach ($previous_exceptions as $exception) {
+            $expect_msg .= "\nCause: ".\Kohana_Exception::text($exception);
+        }
+        $this->log->assertOneLog(
+            \Log::EMERGENCY,
+            $expect_msg,
+            NULL,
+            ['exception' => $actual_exception]
+        );
+    }
+
     public function setUp()
     {
         parent::setUp();
