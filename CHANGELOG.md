@@ -1,4 +1,21 @@
+See also [CHANGELOG_FUTURE.md](CHANGELOG_FUTURE.md) for planning future
+BC breaks. 
+
 ### Unreleased
+
+## v1.2.0 (2020-02-18)
+
+* Register Session_Exception and ConnectionException handlers by default in the ExceptionHandlerFactory,
+  can be replaced or overridden in project dependency config
+* Add handler to show generic fatal error page on any Session_Exception
+* Log any previous exceptions in the chain when logging an unexpected exception in the
+  default handler.
+* Add generic exception handler to show a friendly maintenance page with a 502 and
+  reduce log verbosity on a `ConnectionException` from the DBAL package, thrown if 
+  the database server is not available or not connecting properly.
+* Update ExceptionHandler, AbstractExceptionHandler etc to strong \Throwable
+  typehints. This is not breaking under LSP as  a child class can still define
+  a method with no hard typehint (since `anything` is more generic than `\Throwable`).
 
 ## v1.1.0 (2020-02-12)
 

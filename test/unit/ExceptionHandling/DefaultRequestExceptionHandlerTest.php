@@ -10,52 +10,14 @@ namespace test\unit\Ingenerator\KohanaExtras\ExceptionHandling;
 use Ingenerator\KohanaExtras\ExceptionHandling\DefaultRequestExceptionHandler;
 use Ingenerator\KohanaExtras\Logger\SpyingLoggerStub;
 
-class DefaultRequestExceptionHandlerTest extends \PHPUnit\Framework\TestCase
+class DefaultRequestExceptionHandlerTest extends AbstractExceptionHandlerTest
 {
-
-    /**
-     * @var SpyingLoggerStub
-     */
-    protected $log;
 
     public function test_it_is_initialisable()
     {
         $this->assertInstanceOf(DefaultRequestExceptionHandler::class, $this->newSubject());
     }
 
-    public function provider_throwable_types()
-    {
-        $types = [
-            [new \Exception('anything'), TRUE],
-            [new \stdClass, FALSE],
-        ];
-
-        // Only in PHP7
-        if (\class_exists(\Error::class, FALSE)) {
-            $types[] = [new \Error, TRUE];
-        }
-
-        return $types;
-    }
-
-    /**
-     * @dataProvider provider_throwable_types
-     */
-    public function test_it_accepts_throwables_or_throws_invalid_argument($to_handle, $should_accept)
-    {
-        $e = NULL;
-        try {
-            $this->newSubject()->handle($to_handle);
-        } catch (\InvalidArgumentException $e) {
-            // nothing
-        }
-        if ($should_accept) {
-            $this->assertNull($e);
-        } else {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
-        }
-    }
-    
     public function test_it_returns_http_response_from_http_exception()
     {
         $e = \HTTP_Exception::factory(302);
@@ -85,7 +47,22 @@ class DefaultRequestExceptionHandlerTest extends \PHPUnit\Framework\TestCase
         $this->log = new SpyingLoggerStub;
         $e         = new \BadMethodCallException('Ooops');
         $this->newSubject()->handle($e);
-        $this->log->assertOneLog(\Log::EMERGENCY, \Kohana_Exception::text($e), NULL, ['exception' => $e]);
+        $this->log->assertOneLog(
+            \Log::EMERGENCY,
+            \Kohana_Exception::text($e),
+            NULL,
+            ['exception' => $e]
+        );
+    }
+
+    public function test_it_logs_generic_exceptions_with_their_previous_chain_if_any()
+    {
+        $this->log = new SpyingLoggerStub;
+        $e_cause   = new \BadMethodCallException('Oooops', 20);
+        $e_rethrow = new \RuntimeException('Cannot do something', 0, $e_cause);
+        $e_final   = new \InvalidArgumentException('Thing is not valid', 0, $e_rethrow);
+        $this->newSubject()->handle($e_final);
+        $this->assertLoggedExceptionChain($e_final, $e_rethrow, $e_cause);
     }
 
     public function test_it_logs_to_global_kohana_log_if_nothing_injected()
@@ -110,31 +87,14 @@ class DefaultRequestExceptionHandlerTest extends \PHPUnit\Framework\TestCase
             $this->newSubject()->handle($original_exception);
             $this->fail('Should have thrown');
         } catch (\RuntimeException $caught_exception) {
-            $this->assertContains($original_exception->getMessage(), $caught_exception->getMessage());
+            $this->assertContains(
+                $original_exception->getMessage(),
+                $caught_exception->getMessage()
+            );
             $this->assertSame($original_exception, $caught_exception->getPrevious());
         } finally {
             \Kohana::$log = $old_log;
         }
-    }
-
-    /**
-     * @param int       $expect_status
-     * @param \Response $response
-     *
-     * @return \Response
-     */
-    protected function assertReturnsResponseStatus($expect_status, $response)
-    {
-        $this->assertInstanceOf(\Response::class, $response);
-        $this->assertSame($expect_status, $response->status());
-
-        return $response;
-    }
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->log = new \Log;
     }
 
     /**

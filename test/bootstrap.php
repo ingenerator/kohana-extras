@@ -17,7 +17,7 @@ Kohana_Exception::$error_view = 'text-error';
 
 // Require fake session implementation from Koharness to avoid errors in unit tests
 require_once __DIR__.'/../vendor/kohana/koharness/helper_classes/Session/Fake.php';
-\Session::$default = 'fake';
+\Session::$default           = 'fake';
 \Session::$instances['fake'] = new Session_Fake;
 
 // Autoload mocks and test-support helpers that should not autoload in the main app
@@ -25,3 +25,8 @@ $mock_loader = new \Composer\Autoload\ClassLoader;
 $mock_loader->addPsr4('test\\mock\\Ingenerator\\KohanaExtras\\', [__DIR__.'/mock/']);
 $mock_loader->addPsr4('test\\unit\\Ingenerator\\KohanaExtras\\', [__DIR__.'/unit/']);
 $mock_loader->register();
+
+// Fake the Doctrine exception class that we use for our handler without having to require doctrine here
+if ( ! class_exists(\Doctrine\DBAL\Exception\ConnectionException::class)) {
+    require_once __DIR__.'/mock/mock_doctrine_connection_exception.php';
+}

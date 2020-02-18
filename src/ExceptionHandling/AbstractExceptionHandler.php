@@ -6,17 +6,16 @@
 
 namespace Ingenerator\KohanaExtras\ExceptionHandling;
 
-use Kohana_Exception;
-
 /**
- * Base for an exception handler that supports enforcing type-safety of the argument
- * without strict hints (which are different for PHP5.x vs PHP7.x) and for logging if
- * a log has been initialised
+ * Base for an exception handler that supports logging if a log has been initialised
  *
  * @package Ingenerator\KohanaExtras\ExceptionHandling
  */
 abstract class AbstractExceptionHandler implements ExceptionHandler
 {
+
+    const PAGE_GENERIC_ERROR = 'generic_error_page.html';
+    const PAGE_GENERIC_MAINTENANCE = 'generic_maintenance_page.html';
 
 
     /**
@@ -33,41 +32,64 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
     }
 
     /**
-     * @param \Exception|\Throwable $e
+     * @param \Throwable $e
      *
      * @return \Response|null
      */
-    public function handle($e)
+    public function handle(\Throwable $e)
     {
-        if (($e instanceof \Exception) OR ($e instanceof \Throwable)) {
-            return $this->doHandle($e);
-        }
-
-        $type = \is_object($e) ? \get_class($e) : \gettype($e);
-        throw new \InvalidArgumentException('Expected Exception|Throwable, got '.$type);
+        // Historic stub retained for BC, it was just there to allow us to enforce that we had
+        // either a Throwable or an Exception.
+        //
+        // In a future breaking release
+        return $this->doHandle($e);
     }
 
     /**
-     * @param \Exception|\Throwable $e
+     * @param \Throwable $e
      *
      * @return \Response|null
      */
-    abstract protected function doHandle($e);
+    abstract protected function doHandle(\Throwable $e);
 
     /**
-     * @param \Exception|\Throwable $e
+     * @param \Throwable $e
      */
-    protected function logException($e)
+    protected function logException(\Throwable $e, bool $with_previous = TRUE)
     {
         if ($this->log) {
             $log = $this->log;
         } elseif (\class_exists(\Kohana::class, FALSE) AND \Kohana::$log) {
             $log = \Kohana::$log;
         } else {
-            throw new \RuntimeException('No logger to log: ['.\get_class($e).'] '.$e->getMessage(), 0, $e);
+            throw new \RuntimeException(
+                'No logger to log: ['.\get_class($e).'] '.$e->getMessage(),
+                0,
+                $e
+            );
         }
 
-        $log->add(\Log::EMERGENCY, Kohana_Exception::text($e), NULL, ['exception' => $e]);
+        $message_lines = [\Kohana_Exception::text($e)];
+
+        if ($with_previous) {
+            $parent = $e->getPrevious();
+            while ($parent) {
+                $message_lines[] = "Cause: ".\Kohana_Exception::text($parent);
+                $parent          = $parent->getPrevious();
+            }
+        }
+
+        $log->add(\Log::EMERGENCY, \implode("\n", $message_lines), NULL, ['exception' => $e]);
         $log->write();
+    }
+
+    protected function respondGenericErrorPage(string $resource_file, int $status_code): \Response
+    {
+        $response = new \Response;
+        $response->status($status_code);
+        $response->headers('Content-Type', 'text/html;charset=utf8');
+        $response->body(\file_get_contents(__DIR__.'/../../resources/'.$resource_file));
+
+        return $response;
     }
 }

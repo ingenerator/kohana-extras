@@ -38,14 +38,13 @@ interface ExceptionHandler
 {
 
     /**
-     * Note there is no hard typehint to allow for PHP5 - PHP7 cross-compatibility. The AbstractExceptionHandler
-     * will allow you to enforce that what you get is at least something exceptiony. Similarly, handlers can define
-     * their expected type in phpdoc but cannot define a hard hint in the method.
+     * Note that handlers can define their expected type in phpdoc but cannot define a hard hint
+     * in the method signature as this would violate the Liskov Substitution Principle
      *
-     * @param \Exception|\Throwable $e
+     * @param \Throwable $e
      *
      * @return \Response|null
      */
-    public function handle($e);
+    public function handle(\Throwable $e);
 
 }
