@@ -3,6 +3,7 @@ BC breaks.
 
 ### Unreleased (BREAKING)
 
+* Add KohanaPsrLogWriter as bridge for Kohana::$log calls to PSR\Log
 * Update DependencyContainer to use the php-utils InitialisableSingletonTrait instead of own 
   implementation. Requires apps to change `DependencyContainer::initialise` to `::initialiseFromFile`
 
