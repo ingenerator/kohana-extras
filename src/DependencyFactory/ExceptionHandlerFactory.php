@@ -116,14 +116,14 @@ class ExceptionHandlerFactory
                 'type'    => \Doctrine\DBAL\Exception\ConnectionException::class,
                 'handler' => [
                     'class'     => DBALConnectionExceptionHandler::class,
-                    'arguments' => ['%kohana.log%'],
+                    'arguments' => ['%kohana.psr_log%'],
                 ],
             ],
             [
                 'type'    => \Session_Exception::class,
                 'handler' => [
                     'class'     => SessionExceptionHandler::class,
-                    'arguments' => ['%kohana.log%'],
+                    'arguments' => ['%kohana.psr_log%'],
                 ],
             ],
         ];

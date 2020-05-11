@@ -129,7 +129,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         $this->assertDefinesExceptionHandlerMappingAndServiceAtIndex(
             ConnectionException::class,
             DBALConnectionExceptionHandler::class,
-            ['%kohana.log%'],
+            ['%kohana.psr_log%'],
             0,
             $definitions
         );
@@ -137,7 +137,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         $this->assertDefinesExceptionHandlerMappingAndServiceAtIndex(
             \Session_Exception::class,
             SessionExceptionHandler::class,
-            ['%kohana.log%'],
+            ['%kohana.psr_log%'],
             1,
             $definitions
         );
