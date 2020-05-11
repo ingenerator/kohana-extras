@@ -28,7 +28,7 @@ class KohanaCoreFactory
                 'message_provider' => [
                     '_settings' => [
                         'class'     => KohanaMessageProvider::class,
-                        'arguments' => ['%kohana.log%'],
+                        'arguments' => ['%kohana.psr_log%'],
                     ],
                 ],
                 'psr_log' => [

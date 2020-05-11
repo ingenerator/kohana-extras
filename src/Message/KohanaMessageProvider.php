@@ -6,6 +6,8 @@
 
 namespace Ingenerator\KohanaExtras\Message;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * Dependency inversion wrapper around \Kohana::message() that also supports replacing parameters
  * into messages and logging if a message does not exist.
@@ -15,14 +17,14 @@ namespace Ingenerator\KohanaExtras\Message;
 class KohanaMessageProvider
 {
     /**
-     * @var \Log
+     * @var LoggerInterface
      */
     protected $log;
 
     /**
-     * @param \Log $log
+     * @param LoggerInterface $log
      */
-    public function __construct(\Log $log)
+    public function __construct(LoggerInterface $log)
     {
         $this->log = $log;
     }
@@ -50,32 +52,12 @@ class KohanaMessageProvider
 
         $message_id = $file.':'.$path;
 
-        $this->log->add(
-            \Log::WARNING,
-            "Undefined message '$message_id' requested by ".$this->formatCallerTrace(
-                \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)
-            )
+        $this->log->warning(
+            "Undefined message '$message_id'",
+            ['exception' => new \InvalidArgumentException('Undefined message `'.$message_id.'`')]
         );
 
         return $message_id;
     }
 
-    /**
-     * @param array $trace
-     *
-     * @return string
-     */
-    protected function formatCallerTrace(array $trace)
-    {
-        $trace  = \array_pad($trace, 2, []);
-        $values = \Arr::flatten(
-            \Arr::extract(
-                $trace,
-                ['1.class', '1.function', '0.file', '0.line'],
-                '?'
-            )
-        );
-
-        return \strtr('class::function @ file[line]', $values);
-    }
 }

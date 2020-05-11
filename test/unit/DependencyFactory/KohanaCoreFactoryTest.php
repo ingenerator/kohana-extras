@@ -20,7 +20,7 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
         $this->assertSame(\Kohana::$log, $service);
     }
 
-    public function test_it_provides_psr_log_to_core_log()
+    public function test_it_provides_stackdriver_application_logger_as_default_psr_log()
     {
         $service = $this->assertDefinesService('kohana.psr_log', KohanaCoreFactory::definitions());
         $this->assertInstanceOf(LoggerInterface::class, $service);

@@ -3,6 +3,9 @@ BC breaks.
 
 ### Unreleased (BREAKING)
 
+* KohanaMessageProvider now takes PSR/Log
+* Deprecate use of Kohana_Log as a dependency to application code, in future apps should log direct 
+  to a PSR/Log implementation
 * Add KohanaPsrLogWriter as bridge for Kohana::$log calls to PSR\Log
 * Update DependencyContainer to use the php-utils InitialisableSingletonTrait instead of own 
   implementation. Requires apps to change `DependencyContainer::initialise` to `::initialiseFromFile`
