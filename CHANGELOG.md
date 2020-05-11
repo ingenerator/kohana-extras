@@ -1,7 +1,10 @@
 See also [CHANGELOG_FUTURE.md](CHANGELOG_FUTURE.md) for planning future
 BC breaks. 
 
-### Unreleased
+### Unreleased (BREAKING)
+
+* Update DependencyContainer to use the php-utils InitialisableSingletonTrait instead of own 
+  implementation. Requires apps to change `DependencyContainer::initialise` to `::initialiseFromFile`
 
 ## v1.2.0 (2020-02-18)
 

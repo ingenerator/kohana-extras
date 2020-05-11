@@ -7,12 +7,15 @@
 namespace Ingenerator\KohanaExtras\DependencyContainer;
 
 
+use Ingenerator\PHPUtils\Object\InitialisableSingletonTrait;
+
+/**
+ * @method static DependencyContainer instance()
+ */
 class DependencyContainer extends \Dependency_Container
 {
-    /**
-     * @var DependencyContainer
-     */
-    protected static $instance;
+
+    use InitialisableSingletonTrait;
 
     /**
      * @param array $config
@@ -25,32 +28,19 @@ class DependencyContainer extends \Dependency_Container
         $this->_cache('dependencies', $this);
     }
 
-    /**
-     * @return DependencyContainer
-     */
-    public static function instance()
-    {
-        if ( ! static::$instance) {
-            throw new \LogicException(static::class.' has not been initialised');
-        }
-
-        return static::$instance;
-    }
 
     /**
      * @param string $config_file
      *
      * @return DependencyContainer
      */
-    public static function initialise($config_file)
+    public static function initialiseFromFile(string $config_file)
     {
-        if (static::$instance) {
-            throw new \LogicException(static::class.' has already been initialised');
-        }
+        static::initialise(function () use ($config_file) {
+            return static::fromFile($config_file);
+        });
 
-        static::$instance = static::fromFile($config_file);
-
-        return static::$instance;
+        return static::instance();
     }
 
     /**
