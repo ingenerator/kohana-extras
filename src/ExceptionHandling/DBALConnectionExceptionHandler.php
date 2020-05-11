@@ -6,6 +6,7 @@ namespace Ingenerator\KohanaExtras\ExceptionHandling;
 
 class DBALConnectionExceptionHandler extends AbstractExceptionHandler
 {
+
     /**
      * Handle when the database is not reachable, usually due to e.g. a maintenance window
      *
@@ -13,7 +14,7 @@ class DBALConnectionExceptionHandler extends AbstractExceptionHandler
      *
      * @return \Response|null
      */
-    protected function doHandle(\Throwable $e)
+    public function handle(\Throwable $e): ?\Response
     {
         $this->log->warning(
             'DB connection error: '.\Kohana_Exception::text($e)

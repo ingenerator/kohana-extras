@@ -1,8 +1,9 @@
-See also [CHANGELOG_FUTURE.md](CHANGELOG_FUTURE.md) for planning future
-BC breaks. 
 
 ### Unreleased (BREAKING)
 
+* Exception handler interface changed - implementation should now happen directly in the `handle`
+  method which has a hard typehint on `Throwable $e` as the parameter and `?:Response` as the return type
+  - the old `abstract protected function doHandle()` is no longer used.
 * All Exception handlers now take PSR/Log and this is no longer an optional dependency. Custom exception
   tracing and previous exception chain logging is now delegated to the main logger implementation.
 * KohanaMessageProvider now takes PSR/Log

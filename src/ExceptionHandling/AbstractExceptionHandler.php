@@ -32,27 +32,6 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
 
     /**
      * @param \Throwable $e
-     *
-     * @return \Response|null
-     */
-    public function handle(\Throwable $e)
-    {
-        // Historic stub retained for BC, it was just there to allow us to enforce that we had
-        // either a Throwable or an Exception.
-        //
-        // In a future breaking release
-        return $this->doHandle($e);
-    }
-
-    /**
-     * @param \Throwable $e
-     *
-     * @return \Response|null
-     */
-    abstract protected function doHandle(\Throwable $e);
-
-    /**
-     * @param \Throwable $e
      */
     protected function logException(\Throwable $e)
     {

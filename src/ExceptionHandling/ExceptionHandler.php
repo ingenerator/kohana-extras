@@ -45,6 +45,6 @@ interface ExceptionHandler
      *
      * @return \Response|null
      */
-    public function handle(\Throwable $e);
+    public function handle(\Throwable $e): ?\Response;
 
 }

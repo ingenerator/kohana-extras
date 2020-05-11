@@ -15,7 +15,9 @@ use Symfony\Component\Process\Process;
 class RequestExceptionDispatcherTest extends \PHPUnit\Framework\TestCase
 {
     protected $default_handler;
+
     protected $dependencies;
+
     protected $handler_map = [];
 
     public function test_it_is_initialisable_when_kohana_is_all_initialised()
@@ -330,7 +332,7 @@ class DummyHandler implements ExceptionHandler
         $this->response_prefix = $response_prefix;
     }
 
-    public function handle($e)
+    public function handle(\Throwable $e): ?\Response
     {
         if ($this->response_prefix) {
             return \Response::factory()->body($this->response_prefix.': '.$e->getMessage());
@@ -350,7 +352,7 @@ class ThrowingHandler implements ExceptionHandler
 
     public function __construct($msg = 'I broke') { $this->msg = $msg; }
 
-    public function handle($e)
+    public function handle(\Throwable $e): ?\Response
     {
         throw new \RuntimeException($this->msg, 0, $e);
     }
