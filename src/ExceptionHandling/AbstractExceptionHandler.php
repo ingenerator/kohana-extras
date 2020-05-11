@@ -6,6 +6,8 @@
 
 namespace Ingenerator\KohanaExtras\ExceptionHandling;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * Base for an exception handler that supports logging if a log has been initialised
  *
@@ -14,19 +16,16 @@ namespace Ingenerator\KohanaExtras\ExceptionHandling;
 abstract class AbstractExceptionHandler implements ExceptionHandler
 {
 
-    const PAGE_GENERIC_ERROR = 'generic_error_page.html';
+    const PAGE_GENERIC_ERROR       = 'generic_error_page.html';
     const PAGE_GENERIC_MAINTENANCE = 'generic_maintenance_page.html';
 
 
     /**
-     * @var \Log
+     * @var LoggerInterface
      */
     protected $log;
 
-    /**
-     * @param \Log|NULL $log will default to \Kohana::$log if nothing is injected
-     */
-    public function __construct(\Log $log = NULL)
+    public function __construct(LoggerInterface $log)
     {
         $this->log = $log;
     }
@@ -55,32 +54,9 @@ abstract class AbstractExceptionHandler implements ExceptionHandler
     /**
      * @param \Throwable $e
      */
-    protected function logException(\Throwable $e, bool $with_previous = TRUE)
+    protected function logException(\Throwable $e)
     {
-        if ($this->log) {
-            $log = $this->log;
-        } elseif (\class_exists(\Kohana::class, FALSE) AND \Kohana::$log) {
-            $log = \Kohana::$log;
-        } else {
-            throw new \RuntimeException(
-                'No logger to log: ['.\get_class($e).'] '.$e->getMessage(),
-                0,
-                $e
-            );
-        }
-
-        $message_lines = [\Kohana_Exception::text($e)];
-
-        if ($with_previous) {
-            $parent = $e->getPrevious();
-            while ($parent) {
-                $message_lines[] = "Cause: ".\Kohana_Exception::text($parent);
-                $parent          = $parent->getPrevious();
-            }
-        }
-
-        $log->add(\Log::EMERGENCY, \implode("\n", $message_lines), NULL, ['exception' => $e]);
-        $log->write();
+        $this->log->emergency(\Kohana_Exception::text($e), ['exception' => $e]);
     }
 
     protected function respondGenericErrorPage(string $resource_file, int $status_code): \Response

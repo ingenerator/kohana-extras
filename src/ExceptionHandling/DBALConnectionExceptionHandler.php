@@ -15,8 +15,7 @@ class DBALConnectionExceptionHandler extends AbstractExceptionHandler
      */
     protected function doHandle(\Throwable $e)
     {
-        $this->log->add(
-            \Log::WARNING,
+        $this->log->warning(
             'DB connection error: '.\Kohana_Exception::text($e)
         );
 

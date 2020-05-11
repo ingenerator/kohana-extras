@@ -21,7 +21,7 @@ class SessionExceptionHandlerTest extends AbstractExceptionHandlerTest
         $e_final   = new \Session_Exception('Could not read session', [], 0, $e_rethrow);
 
         $this->newSubject()->handle($e_final);
-        $this->assertLoggedExceptionChain($e_final, $e_rethrow, $e_cause);
+        $this->assertLoggedException($e_final, $e_rethrow, $e_cause);
     }
 
     public function test_it_renders_generic_error_page()

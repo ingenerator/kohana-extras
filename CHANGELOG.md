@@ -3,6 +3,8 @@ BC breaks.
 
 ### Unreleased (BREAKING)
 
+* All Exception handlers now take PSR/Log and this is no longer an optional dependency. Custom exception
+  tracing and previous exception chain logging is now delegated to the main logger implementation.
 * KohanaMessageProvider now takes PSR/Log
 * Deprecate use of Kohana_Log as a dependency to application code, in future apps should log direct 
   to a PSR/Log implementation

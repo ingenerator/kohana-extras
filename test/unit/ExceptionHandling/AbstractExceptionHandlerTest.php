@@ -4,13 +4,14 @@
 namespace test\unit\Ingenerator\KohanaExtras\ExceptionHandling;
 
 
-use Ingenerator\KohanaExtras\Logger\SpyingLoggerStub;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LogLevel;
+use Psr\Log\Test\TestLogger;
 
 abstract class AbstractExceptionHandlerTest extends TestCase
 {
     /**
-     * @var SpyingLoggerStub
+     * @var TestLogger
      */
     protected $log;
 
@@ -50,29 +51,27 @@ abstract class AbstractExceptionHandlerTest extends TestCase
 
 
     /**
-     * @param \Throwable $actual_exception
-     * @param \Throwable ...$previous_exceptions
+     * @param \Throwable $exception
      */
-    protected function assertLoggedExceptionChain(
-        \Throwable $actual_exception,
-        \Throwable ...$previous_exceptions
-    ) {
-        $expect_msg = \Kohana_Exception::text($actual_exception);
-        foreach ($previous_exceptions as $exception) {
-            $expect_msg .= "\nCause: ".\Kohana_Exception::text($exception);
-        }
-        $this->log->assertOneLog(
-            \Log::EMERGENCY,
-            $expect_msg,
-            NULL,
-            ['exception' => $actual_exception]
+    protected function assertLoggedException(\Throwable $exception)
+    {
+        $expect_msg = \Kohana_Exception::text($exception);
+        $this->assertCount(1, $this->log->records);
+        $this->assertSame(
+            [
+                'level'   => LogLevel::EMERGENCY,
+                'message' => $expect_msg,
+                'context' => ['exception' => $exception],
+
+            ],
+            $this->log->records[0]
         );
     }
 
     public function setUp()
     {
         parent::setUp();
-        $this->log = new SpyingLoggerStub;
+        $this->log = new TestLogger;
     }
 
 }

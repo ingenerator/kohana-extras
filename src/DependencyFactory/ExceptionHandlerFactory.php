@@ -65,7 +65,7 @@ class ExceptionHandlerFactory
                 'default'    => [
                     '_settings' => [
                         'class'     => DefaultRequestExceptionHandler::class,
-                        'arguments' => ['%kohana.log%'],
+                        'arguments' => ['%kohana.psr_log%'],
                     ],
                 ],
                 'dispatcher' => [
