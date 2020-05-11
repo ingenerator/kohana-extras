@@ -15,7 +15,7 @@
     "php": "^7.2",
     "ingenerator/kohana-core": "^4.3",
     "ingenerator/kohana-dependencies": "^0.9.1",
-    "ingenerator/php-utils": "^1.0",
+    "ingenerator/php-utils": "dev-1.x-feat-loggers",
     "psr/log": "^1.0"
   },
   "require-dev": {
