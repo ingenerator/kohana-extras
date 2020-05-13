@@ -222,4 +222,3 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
 class CustomDependencyContainer extends DependencyContainer
 {
 }
-

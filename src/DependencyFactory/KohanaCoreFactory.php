@@ -6,8 +6,8 @@
 
 namespace Ingenerator\KohanaExtras\DependencyFactory;
 
-use Ingenerator\KohanaExtras\Logger\KohanaPSRLogger;
 use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
+use Ingenerator\PHPUtils\Logging\StackdriverApplicationLogger;
 
 class KohanaCoreFactory
 {
@@ -18,7 +18,7 @@ class KohanaCoreFactory
     {
         return [
             'kohana' => [
-                'log'     => [
+                'log'              => [
                     '_settings' => [
                         'class'       => KohanaCoreFactory::class,
                         'constructor' => 'getLog',
@@ -31,28 +31,28 @@ class KohanaCoreFactory
                         'arguments' => ['%kohana.psr_log%'],
                     ],
                 ],
-                'psr_log' => [
+                'psr_log'          => [
                     '_settings' => [
-                        'class'     => KohanaPSRLogger::class,
-                        'arguments' => ['%kohana.log%'],
-                        'shared'    => TRUE,
+                        'class'       => StackdriverApplicationLogger::class,
+                        'constructor' => 'instance',
+                        'shared'      => TRUE,
                     ],
                 ],
-                'request' => [
+                'request'          => [
                     '_settings' => [
                         'class'       => KohanaCoreFactory::class,
                         'constructor' => 'getRequest',
                         'shared'      => TRUE,
                     ],
                 ],
-                'routes' => [
+                'routes'           => [
                     '_settings' => [
                         'class'       => \Route::class,
                         'constructor' => 'all',
                         'shared'      => FALSE,
                     ],
                 ],
-                'session' => [
+                'session'          => [
                     '_settings' => [
                         'class'       => \Session::class,
                         'constructor' => 'instance',

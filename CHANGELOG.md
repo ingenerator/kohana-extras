@@ -1,6 +1,8 @@
 
 ### Unreleased (BREAKING)
 
+* Default kohana.psr_log implementation now uses StackdriverApplicationLogger (which must first have been
+  initialised globally).
 * RequestExceptionDispatcher fallback logging implementation changed - logs JSON to STDERR by default and 
   attempts to use a StackdriverApplicationLogger instance if it exists. 
 * Exception handler interface changed - implementation should now happen directly in the `handle`

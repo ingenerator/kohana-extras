@@ -9,7 +9,7 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 use Ingenerator\KohanaExtras\DependencyFactory\KohanaCoreFactory;
 use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
-use Ingenerator\PHPUtils\Object\ObjectPropertyRipper;
+use Ingenerator\PHPUtils\Logging\StackdriverApplicationLogger;
 use Psr\Log\LoggerInterface;
 
 class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
@@ -24,7 +24,7 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
     {
         $service = $this->assertDefinesService('kohana.psr_log', KohanaCoreFactory::definitions());
         $this->assertInstanceOf(LoggerInterface::class, $service);
-        $this->assertSame(\Kohana::$log, ObjectPropertyRipper::ripOne($service, 'log'));
+        $this->assertInstanceOf(StackdriverApplicationLogger::class, $service);
     }
 
     public function test_it_provides_session()
@@ -56,6 +56,22 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
         $route  = \Route::set('test-factory-route', '/path/to/factory/test/to/not/match/anything');
         $routes = $this->assertDefinesService('kohana.routes', KohanaCoreFactory::definitions());
         $this->assertSame($route, $routes['test-factory-route']);
+    }
+
+    protected function setUp()
+    {
+        parent::setup();
+        if ( ! StackdriverApplicationLogger::isInitialised()) {
+            StackdriverApplicationLogger::initialise(
+                function () { return new StackdriverApplicationLogger('php://stdout'); }
+            );
+        }
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
     }
 
 }

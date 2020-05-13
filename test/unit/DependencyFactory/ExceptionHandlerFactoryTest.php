@@ -10,12 +10,12 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 use Ingenerator\KohanaExtras\DependencyFactory\ExceptionHandlerFactory;
-use Ingenerator\KohanaExtras\DependencyFactory\KohanaCoreFactory;
 use Ingenerator\KohanaExtras\ExceptionHandling\DBALConnectionExceptionHandler;
 use Ingenerator\KohanaExtras\ExceptionHandling\DefaultRequestExceptionHandler;
 use Ingenerator\KohanaExtras\ExceptionHandling\RequestExceptionDispatcher;
 use Ingenerator\KohanaExtras\ExceptionHandling\SessionExceptionHandler;
 use Ingenerator\PHPUtils\StringEncoding\JSON;
+use Psr\Log\NullLogger;
 
 class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
 {
@@ -25,7 +25,15 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         $service = $this->assertDefinesService(
             'exception_handler.default',
             \Arr::merge(
-                KohanaCoreFactory::definitions(),
+                [
+                    'kohana' => [
+                        'psr_log' => [
+                            '_settings' => [
+                                'class' => NullLogger::class,
+                            ],
+                        ],
+                    ],
+                ],
                 ExceptionHandlerFactory::definitions()
             )
         );
@@ -44,8 +52,14 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
                             'arguments' => [[]],
                         ],
                     ],
+                    'kohana'       => [
+                        'psr_log' => [
+                            '_settings' => [
+                                'class' => NullLogger::class,
+                            ],
+                        ],
+                    ],
                 ],
-                KohanaCoreFactory::definitions(),
                 ExceptionHandlerFactory::definitions()
             )
         );
