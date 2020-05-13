@@ -22,7 +22,8 @@
     "johnkary/phpunit-speedtrap": "^3.0",
     "kohana/koharness": "*@dev",
     "phpunit/phpunit": "^7.0",
-    "symfony/process": "^3.4"
+    "symfony/process": "^3.4",
+    "mikey179/vfsstream": "^1.6"
   },
   "suggest": {
     "maximebf/debugbar": "^1.14 to use the debug bar in development environments"

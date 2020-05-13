@@ -1,6 +1,8 @@
 
 ### Unreleased (BREAKING)
 
+* RequestExceptionDispatcher fallback logging implementation changed - logs JSON to STDERR by default and 
+  attempts to use a StackdriverApplicationLogger instance if it exists. 
 * Exception handler interface changed - implementation should now happen directly in the `handle`
   method which has a hard typehint on `Throwable $e` as the parameter and `?:Response` as the return type
   - the old `abstract protected function doHandle()` is no longer used.

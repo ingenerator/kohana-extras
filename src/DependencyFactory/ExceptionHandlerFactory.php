@@ -74,6 +74,7 @@ class ExceptionHandlerFactory
                         'arguments' => [
                             '%exception_handler.default%',
                             '%dependencies%',
+                            '%kohana.psr_log%',
                             [],
                         ],
                     ],
@@ -95,7 +96,7 @@ class ExceptionHandlerFactory
             $base['exception_handler']['handler'][$class]['_settings'] = $handler_def['handler'];
 
             // Define the reference in the dispatcher config mapping
-            $base['exception_handler']['dispatcher']['_settings']['arguments'][2][] = [
+            $base['exception_handler']['dispatcher']['_settings']['arguments'][3][] = [
                 'type'    => $handler_def['type'],
                 'handler' => 'exception_handler.handler.'.$class,
             ];

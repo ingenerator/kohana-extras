@@ -98,7 +98,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         int $dispatcher_index,
         array $definitions
     ) {
-        $defined_handler_mapping = $definitions['exception_handler']['dispatcher']['_settings']['arguments'][2];
+        $defined_handler_mapping = $definitions['exception_handler']['dispatcher']['_settings']['arguments'][3];
         $defined_handlers        = implode(
             "\n",
             array_map(
@@ -242,7 +242,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
 
         $this->assertSame(
             $expect,
-            $definitions['exception_handler']['dispatcher']['_settings']['arguments'][2],
+            $definitions['exception_handler']['dispatcher']['_settings']['arguments'][3],
             'Expected exact exception to handler defition map'
         );
     }
@@ -255,7 +255,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         string $exception_class,
         array $definitions
     ): void {
-        foreach ($definitions['exception_handler']['dispatcher']['_settings']['arguments'][2] as $handler_def) {
+        foreach ($definitions['exception_handler']['dispatcher']['_settings']['arguments'][3] as $handler_def) {
             if ($handler_def['type'] === $exception_class) {
                 $this->fail(
                     "Did not expect to find a handler definition for $exception_class\n"
