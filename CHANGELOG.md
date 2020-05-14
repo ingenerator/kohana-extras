@@ -1,6 +1,8 @@
 
 ### Unreleased (BREAKING)
 
+## v2.0.0-beta1 (2020-05-14)
+
 * Default kohana.psr_log implementation now uses StackdriverApplicationLogger (which must first have been
   initialised globally).
 * RequestExceptionDispatcher fallback logging implementation changed - logs JSON to STDERR by default and 
