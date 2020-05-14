@@ -7,6 +7,9 @@
 namespace Ingenerator\KohanaExtras\Logger;
 
 
+/**
+ * @deprecated Application code that produces logs should be updated to use a PSR/Logger directly
+ */
 class SpyingLoggerStub extends \Log
 {
     protected $log = [];

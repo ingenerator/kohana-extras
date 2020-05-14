@@ -8,24 +8,21 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyContainer;
 
 
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
+use Ingenerator\PHPUtils\Object\SingletonNotInitialisedException;
 
 class DependencyContainerTest extends \PHPUnit\Framework\TestCase
 {
     protected $old_instance;
 
-    /**
-     * @expectedException \LogicException
-     */
     public function test_it_throws_from_instance_if_not_initialised()
     {
+        $this->expectException(SingletonNotInitialisedException::class);
         DependencyContainer::instance();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function test_it_throws_on_initialise_if_no_config_file()
     {
+        $this->expectException(\InvalidArgumentException::class);
         DependencyContainer::fromFile('/no/file/here.php');
     }
 
@@ -86,7 +83,7 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
 
     public function test_it_can_make_singleton_initialised_from_file_path()
     {
-        $container = $this->withConfigFile([], function ($f) { return DependencyContainer::initialise($f); });
+        $container = $this->withConfigFile([], function ($f) { return DependencyContainer::initialiseFromFile($f); });
         $this->assertSame($container, DependencyContainer::instance(), '::instance() should match ::initialise()');
         $this->assertSame($container, DependencyContainer::instance(), '::instance() should match ::instance()');
     }
@@ -95,18 +92,18 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
     {
         $container = $this->withConfigFile(
             [],
-            function ($tmp_file) { return CustomDependencyContainer::initialise($tmp_file); }
+            function ($tmp_file) { return CustomDependencyContainer::initialiseFromFile($tmp_file); }
         );
         $this->assertInstanceOf(CustomDependencyContainer::class, $container);
     }
 
     public function test_it_throws_on_attempt_to_reinitialise()
     {
-        $container = $this->withConfigFile([], function ($f) { return DependencyContainer::initialise($f); });
+        $container = $this->withConfigFile([], function ($f) { return DependencyContainer::initialiseFromFile($f); });
 
         $e = NULL;
         try {
-            $container = $this->withConfigFile([], function ($f) { return DependencyContainer::initialise($f); });
+            $container = $this->withConfigFile([], function ($f) { return DependencyContainer::initialiseFromFile($f); });
         } catch (\LogicException $e) {
             // Expected
         }
@@ -225,4 +222,3 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
 class CustomDependencyContainer extends DependencyContainer
 {
 }
-

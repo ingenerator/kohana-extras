@@ -13,9 +13,9 @@ namespace Ingenerator\KohanaExtras\ExceptionHandling;
  */
 class SessionExceptionHandler extends AbstractExceptionHandler
 {
-    protected function doHandle(\Throwable $e)
+    public function handle(\Throwable $e): ?\Response
     {
-        $this->logException($e, TRUE);
+        $this->logException($e);
 
         return $this->respondGenericErrorPage(static::PAGE_GENERIC_ERROR, 500);
     }

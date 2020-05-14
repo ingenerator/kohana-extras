@@ -15,14 +15,15 @@
     "php": "^7.2",
     "ingenerator/kohana-core": "^4.3",
     "ingenerator/kohana-dependencies": "^0.9.1",
-    "ingenerator/php-utils": "^1.0",
+    "ingenerator/php-utils": "^1.5",
     "psr/log": "^1.0"
   },
   "require-dev": {
     "johnkary/phpunit-speedtrap": "^3.0",
     "kohana/koharness": "*@dev",
     "phpunit/phpunit": "^7.0",
-    "symfony/process": "^3.4"
+    "symfony/process": "^3.4",
+    "mikey179/vfsstream": "^1.6"
   },
   "suggest": {
     "maximebf/debugbar": "^1.14 to use the debug bar in development environments"
@@ -41,6 +42,7 @@
   "config": {
     "preferred-install": "dist"
   },
+  "minimum-stability": "beta",
   "extra": {
     "installer-paths": {
       "vendor/{$vendor}/{$name}": [

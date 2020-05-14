@@ -22,11 +22,12 @@ use Kohana_Exception;
  */
 class DefaultRequestExceptionHandler extends AbstractExceptionHandler
 {
+
     /**
      * {@inheritdoc}
      * @see \Kohana_Exception::_handler() - this is like that, but not quite the same
      */
-    protected function doHandle(\Throwable $e)
+    public function handle(\Throwable $e): ?\Response
     {
         if ($e instanceof \HTTP_Exception) {
             return $e->get_response();

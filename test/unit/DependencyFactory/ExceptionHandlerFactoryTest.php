@@ -10,12 +10,12 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 use Ingenerator\KohanaExtras\DependencyFactory\ExceptionHandlerFactory;
-use Ingenerator\KohanaExtras\DependencyFactory\KohanaCoreFactory;
 use Ingenerator\KohanaExtras\ExceptionHandling\DBALConnectionExceptionHandler;
 use Ingenerator\KohanaExtras\ExceptionHandling\DefaultRequestExceptionHandler;
 use Ingenerator\KohanaExtras\ExceptionHandling\RequestExceptionDispatcher;
 use Ingenerator\KohanaExtras\ExceptionHandling\SessionExceptionHandler;
 use Ingenerator\PHPUtils\StringEncoding\JSON;
+use Psr\Log\NullLogger;
 
 class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
 {
@@ -25,7 +25,15 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         $service = $this->assertDefinesService(
             'exception_handler.default',
             \Arr::merge(
-                KohanaCoreFactory::definitions(),
+                [
+                    'kohana' => [
+                        'psr_log' => [
+                            '_settings' => [
+                                'class' => NullLogger::class,
+                            ],
+                        ],
+                    ],
+                ],
                 ExceptionHandlerFactory::definitions()
             )
         );
@@ -44,8 +52,14 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
                             'arguments' => [[]],
                         ],
                     ],
+                    'kohana'       => [
+                        'psr_log' => [
+                            '_settings' => [
+                                'class' => NullLogger::class,
+                            ],
+                        ],
+                    ],
                 ],
-                KohanaCoreFactory::definitions(),
                 ExceptionHandlerFactory::definitions()
             )
         );
@@ -98,7 +112,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         int $dispatcher_index,
         array $definitions
     ) {
-        $defined_handler_mapping = $definitions['exception_handler']['dispatcher']['_settings']['arguments'][2];
+        $defined_handler_mapping = $definitions['exception_handler']['dispatcher']['_settings']['arguments'][3];
         $defined_handlers        = implode(
             "\n",
             array_map(
@@ -129,7 +143,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         $this->assertDefinesExceptionHandlerMappingAndServiceAtIndex(
             ConnectionException::class,
             DBALConnectionExceptionHandler::class,
-            ['%kohana.log%'],
+            ['%kohana.psr_log%'],
             0,
             $definitions
         );
@@ -137,7 +151,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         $this->assertDefinesExceptionHandlerMappingAndServiceAtIndex(
             \Session_Exception::class,
             SessionExceptionHandler::class,
-            ['%kohana.log%'],
+            ['%kohana.psr_log%'],
             1,
             $definitions
         );
@@ -242,7 +256,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
 
         $this->assertSame(
             $expect,
-            $definitions['exception_handler']['dispatcher']['_settings']['arguments'][2],
+            $definitions['exception_handler']['dispatcher']['_settings']['arguments'][3],
             'Expected exact exception to handler defition map'
         );
     }
@@ -255,7 +269,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         string $exception_class,
         array $definitions
     ): void {
-        foreach ($definitions['exception_handler']['dispatcher']['_settings']['arguments'][2] as $handler_def) {
+        foreach ($definitions['exception_handler']['dispatcher']['_settings']['arguments'][3] as $handler_def) {
             if ($handler_def['type'] === $exception_class) {
                 $this->fail(
                     "Did not expect to find a handler definition for $exception_class\n"

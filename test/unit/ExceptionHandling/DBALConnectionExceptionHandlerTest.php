@@ -5,6 +5,7 @@ namespace test\unit\Ingenerator\KohanaExtras\ExceptionHandling;
 
 use Doctrine\DBAL\Exception\ConnectionException;
 use Ingenerator\KohanaExtras\ExceptionHandling\DBALConnectionExceptionHandler;
+use Psr\Log\LogLevel;
 
 class DBALConnectionExceptionHandlerTest extends AbstractExceptionHandlerTest
 {
@@ -18,11 +19,15 @@ class DBALConnectionExceptionHandlerTest extends AbstractExceptionHandlerTest
     {
         $e = new ConnectionException('SQL whatever from doctrine');
         $this->newSubject()->handle($e);
-        $this->log->assertOneLog(
-            \Log::WARNING,
-            'DB connection error: '.\Kohana_Exception::text($e),
-            NULL,
-            NULL
+        $this->assertSame(
+            [
+                [
+                    'level'   => LogLevel::WARNING,
+                    'message' => 'DB connection error: '.\Kohana_Exception::text($e),
+                    'context' => [],
+                ],
+            ],
+            $this->log->records
         );
     }
 

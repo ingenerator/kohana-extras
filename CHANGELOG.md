@@ -1,7 +1,23 @@
-See also [CHANGELOG_FUTURE.md](CHANGELOG_FUTURE.md) for planning future
-BC breaks. 
 
-### Unreleased
+### Unreleased (BREAKING)
+
+## v2.0.0-beta1 (2020-05-14)
+
+* Default kohana.psr_log implementation now uses StackdriverApplicationLogger (which must first have been
+  initialised globally).
+* RequestExceptionDispatcher fallback logging implementation changed - logs JSON to STDERR by default and 
+  attempts to use a StackdriverApplicationLogger instance if it exists. 
+* Exception handler interface changed - implementation should now happen directly in the `handle`
+  method which has a hard typehint on `Throwable $e` as the parameter and `?:Response` as the return type
+  - the old `abstract protected function doHandle()` is no longer used.
+* All Exception handlers now take PSR/Log and this is no longer an optional dependency. Custom exception
+  tracing and previous exception chain logging is now delegated to the main logger implementation.
+* KohanaMessageProvider now takes PSR/Log
+* Deprecate use of Kohana_Log as a dependency to application code, in future apps should log direct 
+  to a PSR/Log implementation
+* Add KohanaPsrLogWriter as bridge for Kohana::$log calls to PSR\Log
+* Update DependencyContainer to use the php-utils InitialisableSingletonTrait instead of own 
+  implementation. Requires apps to change `DependencyContainer::initialise` to `::initialiseFromFile`
 
 ## v1.2.0 (2020-02-18)
 

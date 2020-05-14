@@ -7,16 +7,17 @@
 namespace test\unit\Ingenerator\KohanaExtras\Message;
 
 
-use Ingenerator\KohanaExtras\Logger\SpyingLoggerStub;
 use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
+use Psr\Log\Test\TestLogger;
 
 class KohanaMessageProviderTest extends \PHPUnit\Framework\TestCase
 {
     protected $old_modules;
+
     protected $tmp_module_path;
 
     /**
-     * @var SpyingLoggerStub
+     * @var TestLogger
      */
     protected $log;
 
@@ -97,7 +98,7 @@ class KohanaMessageProviderTest extends \PHPUnit\Framework\TestCase
         $file = \uniqid();
         $this->givenMessageFile($file, ['thing' => 'other']);
         $this->newSubject()->message($file, 'thing');
-        $this->log->assertNothingLogged();
+        $this->assertEmpty($this->log->records, 'Should log nothing');
     }
 
     public function test_it_logs_nothing_if_message_is_defaulted()
@@ -105,25 +106,21 @@ class KohanaMessageProviderTest extends \PHPUnit\Framework\TestCase
         $file = \uniqid();
         $this->givenMessageFile($file, []);
         $this->newSubject()->message($file, 'thing', [], 'some default text');
-        $this->log->assertNothingLogged();
+        $this->assertEmpty($this->log->records, 'Should log nothing');
     }
 
     public function test_it_logs_warning_if_message_is_undefined()
     {
         $file = \uniqid();
         $this->givenMessageFile($file, []);
-        $line = __LINE__ + 1;
         $this->newSubject()->message($file, 'thing.stuff');
-        $this->log->assertOneLog(
-            \Log::WARNING,
-            "Undefined message '$file:thing.stuff' requested by ".__METHOD__." @ ".__FILE__."[$line]"
-        );
+        $this->assertTrue($this->log->hasWarningThatContains("Undefined message '$file:thing.stuff'"));
     }
 
     public function setUp()
     {
         parent::setUp();
-        $this->log = new SpyingLoggerStub;
+        $this->log = new TestLogger;
     }
 
     public function tearDown()

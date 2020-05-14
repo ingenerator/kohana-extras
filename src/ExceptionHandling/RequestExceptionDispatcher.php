@@ -8,14 +8,22 @@ namespace Ingenerator\KohanaExtras\ExceptionHandling;
 
 
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
+use Ingenerator\PHPUtils\Logging\StackdriverApplicationLogger;
+use Psr\Log\LoggerInterface;
 
 class RequestExceptionDispatcher
 {
 
     /**
-     * @var callable Override this if you want to send emergency fallback logs somewhere else
+     * @var array[] Override this to send emergency fallback logs elsewhere
+     *
+     * @see FallbackLogger::makeBestLogger()
      */
-    public static $syslog_func = 'syslog';
+    public static $fallbackLoggerFactories = [
+        // Attempt to log to the StackdriverApplicationLogger if it exists
+        // If not it will fall back to the built-in FallbackLogger to stderr by default
+        [StackdriverApplicationLogger::class, 'instance'],
+    ];
 
     /**
      * @var ExceptionHandler
@@ -36,6 +44,11 @@ class RequestExceptionDispatcher
      * @var bool
      */
     protected $is_fallback = FALSE;
+
+    /**
+     * @var LoggerInterface|FallbackLogger
+     */
+    protected $logger;
 
     /**
      * Handle the exception and render the response, using the full handler stack if possible
@@ -88,13 +101,21 @@ class RequestExceptionDispatcher
     }
 
     /**
-     * Gets an instance that just logs to syslog and returns the generic error response
+     * Gets an instance that just logs to the best logger it can find and returns the generic error response
+     *
+     * The logger in use can be customised by overriding the ::$fallbackLoggerFactories property
      *
      * @return static
      */
     public static function factoryFallback()
     {
-        $inst              = new static;
+        require_once __DIR__.'/FallbackLogger.php';
+        $inst              = new static(
+            NULL,
+            NULL,
+            FallbackLogger::makeBestLogger(static::$fallbackLoggerFactories),
+            []
+        );
         $inst->is_fallback = TRUE;
 
         return $inst;
@@ -134,17 +155,20 @@ class RequestExceptionDispatcher
     }
 
     /**
-     * @param ExceptionHandler|NULL    $default_handler
-     * @param DependencyContainer|NULL $dependencies
-     * @param array                    $handler_map
+     * @param ExceptionHandler|NULL          $default_handler
+     * @param DependencyContainer|NULL       $dependencies
+     * @param LoggerInterface|FallbackLogger $logger In reality, may be any object with an ->emergency method
+     * @param array                          $handler_map
      */
     public function __construct(
-        ExceptionHandler $default_handler = NULL,
-        DependencyContainer $dependencies = NULL,
+        ?ExceptionHandler $default_handler,
+        ?DependencyContainer $dependencies,
+        object $logger,
         array $handler_map = []
     ) {
         $this->default_handler = $default_handler;
         $this->dependencies    = $dependencies;
+        $this->logger          = $logger;
         $this->handler_map     = $handler_map;
     }
 
@@ -205,19 +229,16 @@ class RequestExceptionDispatcher
      */
     protected function logException(\Throwable $exception)
     {
-        $chain_index = 0;
-        do {
-            $msg = \sprintf(
-                '%s[%s] %s (%s:%s)',
-                $chain_index > 0 ? '(cause #'.$chain_index.') ' : '',
-                \get_class($exception),
+        $this->logger->emergency(
+            \sprintf(
+                '[%s] %s (%s:%s)',
+                get_class($exception),
                 $exception->getMessage(),
                 $exception->getFile(),
                 $exception->getLine()
-            );
-            \call_user_func(static::$syslog_func, LOG_EMERG, $msg);
-            $chain_index++;
-        } while ($exception = $exception->getPrevious());
+            ),
+            ['exception' => $exception]
+        );
     }
 
     /**
