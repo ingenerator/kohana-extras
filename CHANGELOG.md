@@ -1,6 +1,10 @@
 
 ### Unreleased (BREAKING)
 
+## v2.0.0-beta2 (2020-09-24)
+
+* SwiftMailerFactory supports transport plugins being added by overriding the config
+
 ## v2.0.0-beta1 (2020-05-14)
 
 * Default kohana.psr_log implementation now uses StackdriverApplicationLogger (which must first have been
