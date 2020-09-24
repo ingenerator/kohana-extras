@@ -9,11 +9,11 @@ namespace Ingenerator\KohanaExtras\DependencyFactory;
 
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\Driver\PDOConnection;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Validator\Validation;
 
 class SwiftMailerFactory extends OptionalDependencyFactory
 {
@@ -47,8 +47,17 @@ class SwiftMailerFactory extends OptionalDependencyFactory
         ];
     }
 
-    public static function buildSmtpTransport(array $relay = NULL)
-    {
+    /**
+     * @param array|null                  $relay
+     * @param \Swift_Events_EventListener ...$plugins
+     *
+     * @return \Swift_SmtpTransport
+     */
+    public static function buildSmtpTransport(
+        array $relay = NULL,
+        \Swift_Events_EventListener ...$plugins
+    ): \Swift_SmtpTransport {
+
         $config = \array_merge(
             [
                 'host'     => 'localhost',
@@ -57,12 +66,16 @@ class SwiftMailerFactory extends OptionalDependencyFactory
                 'username' => NULL,
                 'password' => NULL,
             ],
-            $relay ? : []
+            $relay ?: []
         );
 
         $transport = new \Swift_SmtpTransport($config['host'], $config['port'], $config['security']);
         $transport->setUsername($config['username']);
         $transport->setPassword($config['password']);
+
+        foreach ($plugins as $plugin) {
+            $transport->registerPlugin($plugin);
+        }
 
         return $transport;
     }
