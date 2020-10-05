@@ -6,7 +6,6 @@
 
 namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
-use Ingenerator\KohanaExtras\DependencyFactory\DoctrineFactory;
 use Ingenerator\KohanaExtras\DependencyFactory\SwiftMailerFactory;
 
 class SwiftMailerFactoryTest extends AbstractDependencyFactoryTest
