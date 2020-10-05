@@ -1,6 +1,10 @@
 
 ### Unreleased (BREAKING)
 
+## v2.0.0-beta3 (2020-10-05)
+
+* Allow SwiftMailer plugins to be registered from dependencies() method
+
 ## v2.0.0-beta2 (2020-09-24)
 
 * SwiftMailerFactory supports transport plugins being added by overriding the config

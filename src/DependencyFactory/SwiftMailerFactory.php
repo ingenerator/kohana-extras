@@ -8,20 +8,17 @@
 namespace Ingenerator\KohanaExtras\DependencyFactory;
 
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\DBAL\Driver\PDOConnection;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Validator\RecursiveValidator;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use function array_merge;
 
 class SwiftMailerFactory extends OptionalDependencyFactory
 {
 
     /**
+     * @param array $config
+     *
      * @return array
      */
-    public static function definitions()
+    public static function definitions($config = ['plugins' => []])
     {
         static::requireClass(\Swift_Mailer::class, 'swiftmailer/swiftmailer');
 
@@ -39,7 +36,7 @@ class SwiftMailerFactory extends OptionalDependencyFactory
                     '_settings' => [
                         'class'       => static::class,
                         'constructor' => 'buildSmtpTransport',
-                        'arguments'   => ['@email.relay@'],
+                        'arguments'   => array_merge(['@email.relay@'], $config['plugins'] ?? []),
                         'shared'      => TRUE,
                     ],
                 ],
