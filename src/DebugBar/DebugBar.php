@@ -12,6 +12,13 @@ use DebugBar\StandardDebugBar;
 use Doctrine\ORM\EntityManagerInterface;
 use Ingenerator\KohanaExtras\DebugBar\DebugLogWriter;
 use Ingenerator\KohanaExtras\DebugBar\DebugStackTrace;
+use function basename;
+use function copy;
+use function glob;
+use function is_dir;
+use function json_encode;
+use function md5;
+use function mkdir;
 
 /**
  * Simple wrapper for DebugBar to manage availability on the site
@@ -83,21 +90,28 @@ class DebugBar
     {
         $renderer = $this->bar->getJavascriptRenderer();
         $renderer->setIncludeVendors('css');
-        $asset_hash = \md5(\json_encode($renderer->getAssets()));
-        $base_url   = '/assets/compiled/debug-bar';
-        $base_path  = DOCROOT.$base_url;
-        if ( ! \is_dir($base_path)) {
-            \mkdir($base_path, 0777, TRUE);
-        }
-        if ( ! \file_exists("$base_path/debug-$asset_hash.css")) {
-            $renderer->dumpCssAssets("$base_path/debug-$asset_hash.css");
-        }
-        if ( ! \file_exists("$base_path/debug-$asset_hash.js")) {
-            $renderer->dumpJsAssets("$base_path/debug-$asset_hash.js");
+
+        $debugbar_root = '/dev-assets/debugbar/';
+        $hash          = md5(json_encode($renderer->getAssets()));
+        $asset_url     = $debugbar_root.$hash;
+        $asset_path    = DOCROOT.$asset_url;
+        if ( ! is_dir($asset_path)) {
+            mkdir($asset_path, 0777, TRUE);
+            $renderer->dumpCssAssets("$asset_path/debugbar.css");
+            $renderer->dumpJsAssets("$asset_path/debugbar.js");
+
+            $font_path = DOCROOT.$debugbar_root.'fonts';
+            if ( ! is_dir($font_path)) {
+                mkdir($font_path, 0777, TRUE);
+                $src = APPPATH.'../vendor/maximebf/debugbar/src/DebugBar/Resources/vendor/font-awesome/fonts/*.*';
+                foreach (glob($src) as $file) {
+                    copy($file, $font_path.'/'.basename($file));
+                }
+            }
         }
 
-        return '<link href="'."$base_url/debug-$asset_hash.css".'" rel="stylesheet">'
-            .'<script src="'."$base_url/debug-$asset_hash.js".'"></script>'
+        return '<link href="'."$asset_url/debugbar.css".'" rel="stylesheet">'
+            .'<script src="'."$asset_url/debugbar.js".'"></script>'
             .$renderer->render();
     }
 

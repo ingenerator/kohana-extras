@@ -1,6 +1,9 @@
 
 ### Unreleased (BREAKING)
 
+## v2.0.0-beta4 (2020-10-05)
+* Copy the debugbar fonts (font-awesome) on first render to htdocs. Only copy the fonts if necessary. Use a separate 'dev-assets' dir under htdocs to prevent any accidental pollution / commits between this and production code.
+
 ## v2.0.0-beta3 (2020-10-05)
 
 * Allow SwiftMailer plugins to be registered from dependencies() method
