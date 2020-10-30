@@ -36,7 +36,7 @@ abstract class AbstractExceptionHandlerTest extends TestCase
     {
         $this->assertReturnsResponseStatus(503, $response);
         $this->assertSame('text/html;charset=utf8', $response->headers('Content-Type'));
-        $this->assertContains('offline for maintenance', $response->body());
+        $this->assertStringContainsString('offline for maintenance', $response->body());
     }
 
     /**
@@ -46,7 +46,7 @@ abstract class AbstractExceptionHandlerTest extends TestCase
     {
         $this->assertReturnsResponseStatus(500, $response);
         $this->assertSame('text/html;charset=utf8', $response->headers('Content-Type'));
-        $this->assertContains('error has been logged', $response->body());
+        $this->assertStringContainsString('error has been logged', $response->body());
     }
 
 
@@ -68,7 +68,7 @@ abstract class AbstractExceptionHandlerTest extends TestCase
         );
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->log = new TestLogger;

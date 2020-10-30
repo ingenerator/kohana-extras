@@ -80,18 +80,18 @@ class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider      provider_immutable_method_calls
-     * @expectedException BadMethodCallException
+     * @dataProvider provider_immutable_method_calls
      */
     public function test_it_throws_for_any_attempted_modification_after_check($method, $args)
     {
         $subject = $this->newSubject();
         $subject->check();
+        $this->expectException(BadMethodCallException::class);
         \call_user_func_array([$subject, $method], $args);
     }
 
     /**
-     * @dataProvider      provider_immutable_method_calls
+     * @dataProvider provider_immutable_method_calls
      */
     public function test_it_does_not_throw_for_modification_before_check($method, $args)
     {
@@ -116,7 +116,7 @@ class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
         $subject = $this->newSubject(['field' => new $value]);
         $subject->rule('field', 'equals', [':value', 'not-this']);
         $errors = $subject->errors('validation');
-        $this->assertInternalType('string', $errors['field']);
+        $this->assertIsString($errors['field']);
     }
 
     public function newSubject($data = [])

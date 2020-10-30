@@ -327,8 +327,8 @@ PHP
         );
 
         $this->assertCount(2, $logged, 'Expected two log messages');
-        $this->assertContains('No\Such\Class', $logged[0]['msg']);
-        $this->assertContains('No logic!', $logged[1]['msg']);
+        $this->assertStringContainsString('No\Such\Class', $logged[0]['msg']);
+        $this->assertStringContainsString('No logic!', $logged[1]['msg']);
     }
 
 
@@ -383,7 +383,7 @@ PHP
         return $proc;
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->default_handler = new DummyHandler('default');
@@ -436,7 +436,7 @@ PHP
     {
         $this->assertSame(500, $value['code']);
         $this->assertSame('text/html;charset=utf8', $value['headers']['Content-Type']);
-        $this->assertContains('<body>', $value['body']);
+        $this->assertStringContainsString('<body>', $value['body']);
     }
 
 }

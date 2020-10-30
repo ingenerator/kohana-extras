@@ -3,11 +3,14 @@
 namespace test\unit\Ingenerator\KohanaExtras;
 
 use Ingenerator\KohanaExtras\Logger\KohanaPSRLogger;
+use InvalidArgumentException;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Log\LoggerInterface;
 
 class KohanaPSRLoggerTest extends \PHPUnit\Framework\TestCase
 {
+    use ProphecyTrait;
 
     /**
      * @var \Log
@@ -15,7 +18,7 @@ class KohanaPSRLoggerTest extends \PHPUnit\Framework\TestCase
     protected $log;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->log = $this->prophesize(\Log::class);;
@@ -113,11 +116,9 @@ class KohanaPSRLoggerTest extends \PHPUnit\Framework\TestCase
         $this->log->add(\Log::ALERT, \Kohana_Exception::text($e), [], ['exception' => $e])->shouldHaveBeenCalled();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function test_it_throws_on_invalid_level()
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->newSubject()->log('random', 'bad level');
     }
 

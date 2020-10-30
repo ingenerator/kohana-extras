@@ -8,12 +8,17 @@
     {
       "name": "Andrew Coulton",
       "email": "andrew@ingenerator.com",
-      "homepage": "http://ingenerator.com"
+      "homepage": "https://ingenerator.com"
+    },
+    {
+      "name": "Craig Gosman",
+      "email": "craig@ingenerator.com",
+      "homepage": "https://ingenerator.com"
     }
   ],
   "require": {
-    "php": "^7.2",
-    "ingenerator/kohana-core": "^4.3",
+    "php": "^7.4",
+    "ingenerator/kohana-core": "^4.7",
     "ingenerator/kohana-dependencies": "^0.9.1",
     "ingenerator/php-utils": "^1.5",
     "psr/log": "^1.0"
@@ -21,9 +26,10 @@
   "require-dev": {
     "johnkary/phpunit-speedtrap": "^3.0",
     "kohana/koharness": "*@dev",
-    "phpunit/phpunit": "^7.0",
+    "phpunit/phpunit": "^9.0",
     "symfony/process": "^3.4",
-    "mikey179/vfsstream": "^1.6"
+    "mikey179/vfsstream": "^1.6.8",
+    "phpspec/prophecy-phpunit": "^2.0"
   },
   "suggest": {
     "maximebf/debugbar": "^1.14 to use the debug bar in development environments"
