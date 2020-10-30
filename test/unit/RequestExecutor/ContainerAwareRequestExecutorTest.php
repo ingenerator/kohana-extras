@@ -63,7 +63,7 @@ class ContainerAwareRequestExecutorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->dependencies = new DependencyContainer([]);

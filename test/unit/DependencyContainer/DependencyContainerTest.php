@@ -167,13 +167,13 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $container->has($service));
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->old_instance = $this->resetSingleton(NULL);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->resetSingleton($this->old_instance);

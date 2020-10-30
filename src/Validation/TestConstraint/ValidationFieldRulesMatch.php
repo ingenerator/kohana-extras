@@ -9,6 +9,8 @@ namespace Ingenerator\KohanaExtras\Validation\TestConstraint;
 
 use Ingenerator\KohanaExtras\Validation\ImmutableKohanaValidation;
 use Ingenerator\KohanaExtras\Validation\TestConstraint\BaseValidationConstraint;
+use PHPUnit\Framework\ExpectationFailedException;
+use SebastianBergmann\Comparator\ComparisonFailure;
 
 /**
  * Asserts that all rules for a single field exactly matches the expectation
@@ -33,7 +35,6 @@ class ValidationFieldRulesMatch extends BaseValidationConstraint
      */
     public function __construct($field, array $expect_rules)
     {
-        parent::__construct();
         $this->field        = $field;
         $this->expect_rules = $expect_rules;
     }
@@ -51,8 +52,8 @@ class ValidationFieldRulesMatch extends BaseValidationConstraint
 
         try {
             $this->assertArraysEqual($this->expect_rules, $rule_list);
-        } catch (\SebastianBergmann\Comparator\ComparisonFailure $failure) {
-            throw new \PHPUnit\Framework\ExpectationFailedException(
+        } catch (ComparisonFailure $failure) {
+            throw new ExpectationFailedException(
                 \trim($description."\n".$this->failureDescription($other)),
                 $failure
             );
@@ -71,7 +72,7 @@ class ValidationFieldRulesMatch extends BaseValidationConstraint
         return \sprintf(
             'has these rules for field `%s`: %s',
             $this->field,
-            $this->exporter->export($this->expect_rules)
+            $this->exporter()->export($this->expect_rules)
         );
     }
 

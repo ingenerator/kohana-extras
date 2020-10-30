@@ -117,13 +117,13 @@ class KohanaMessageProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->log->hasWarningThatContains("Undefined message '$file:thing.stuff'"));
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->log = new TestLogger;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->tmp_module_path) {
             `rm -rf $this->tmp_module_path`;

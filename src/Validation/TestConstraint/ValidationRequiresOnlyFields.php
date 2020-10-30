@@ -28,7 +28,6 @@ class ValidationRequiresOnlyFields extends BaseValidationConstraint
      */
     public function __construct(array $expect_required)
     {
-        parent::__construct();
         \sort($expect_required);
 
         $this->expect_required = $expect_required;
@@ -78,7 +77,7 @@ class ValidationRequiresOnlyFields extends BaseValidationConstraint
     {
         return \sprintf(
             'requires only these fields to be not_empty: %s',
-            $this->exporter->export($this->expect_required)
+            $this->exporter()->export($this->expect_required)
         );
     }
 

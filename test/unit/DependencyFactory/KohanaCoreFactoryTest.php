@@ -58,7 +58,7 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
         $this->assertSame($route, $routes['test-factory-route']);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setup();
         if ( ! StackdriverApplicationLogger::isInitialised()) {
@@ -68,7 +68,7 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

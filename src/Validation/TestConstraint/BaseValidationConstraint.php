@@ -9,6 +9,10 @@ namespace Ingenerator\KohanaExtras\Validation\TestConstraint;
 
 use Ingenerator\KohanaExtras\Validation\ImmutableKohanaValidation;
 use Ingenerator\PHPUtils\Object\ObjectPropertyRipper;
+use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit\Framework\ExpectationFailedException;
+use SebastianBergmann\Comparator\ComparisonFailure;
+use SebastianBergmann\Comparator\Factory;
 
 
 /**
@@ -16,13 +20,13 @@ use Ingenerator\PHPUtils\Object\ObjectPropertyRipper;
  *
  * @package test\assert\ValidationConstraint
  */
-abstract class BaseValidationConstraint extends \PHPUnit\Framework\Constraint\Constraint
+abstract class BaseValidationConstraint extends Constraint
 {
 
     /**
      * {@inheritdoc}
      */
-    public function evaluate($other, $description = '', $returnResult = FALSE)
+    public function evaluate($other, $description = '', $returnResult = FALSE): ?bool
     {
         if ( ! $other instanceof ImmutableKohanaValidation) {
             $this->fail($other, 'Value should be an instance of '.ImmutableKohanaValidation::class);
@@ -30,7 +34,7 @@ abstract class BaseValidationConstraint extends \PHPUnit\Framework\Constraint\Co
 
         try {
             return $this->evaluateValidation($other, $description);
-        } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
+        } catch (ExpectationFailedException $e) {
             if ($returnResult) {
                 return FALSE;
             }
@@ -54,11 +58,11 @@ abstract class BaseValidationConstraint extends \PHPUnit\Framework\Constraint\Co
     protected function failureDescription($other): string
     {
         if ($other instanceof ImmutableKohanaValidation) {
-            $export = 'An instance of '.\get_class($other).' with rules: '.$this->exporter->export(
+            $export = 'An instance of '.\get_class($other).' with rules: '.$this->exporter()->export(
                     $this->exportValidationRules($other)
                 );
         } else {
-            $export = $this->exporter->export($other);
+            $export = $this->exporter()->export($other);
         }
 
         return $export.' '.$this->toString();
@@ -95,11 +99,11 @@ abstract class BaseValidationConstraint extends \PHPUnit\Framework\Constraint\Co
      * @param array $expected
      * @param array $actual
      *
-     * @throws \SebastianBergmann\Comparator\ComparisonFailure
+     * @throws ComparisonFailure
      */
     protected function assertArraysEqual(array $expected, array $actual)
     {
-        $comparatorFactory = \SebastianBergmann\Comparator\Factory::getInstance();
+        $comparatorFactory = Factory::getInstance();
         $comparator        = $comparatorFactory->getComparatorFor($expected, $actual);
         $comparator->assertEquals($expected, $actual);
     }

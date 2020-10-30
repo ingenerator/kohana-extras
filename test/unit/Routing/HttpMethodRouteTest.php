@@ -7,7 +7,10 @@
 namespace test\unit\Ingenerator\KohanaExtras\Routing;
 
 
+use BadMethodCallException;
 use Ingenerator\KohanaExtras\Routing\HttpMethodRoute;
+use InvalidArgumentException;
+use OutOfBoundsException;
 use test\mock\Kohana\Request\HtmlRequestStub;
 use test\unit\BaseTestCase;
 
@@ -18,11 +21,9 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(HttpMethodRoute::class, $this->newSubject());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function test_its_static_set_throws()
     {
+        $this->expectException(BadMethodCallException::class);
         HttpMethodRoute::set('any');
     }
 
@@ -53,12 +54,12 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      * @testWith ["stuff/<controller>/<action>"]
      *           ["<directory>/<controller>"]
      */
     public function test_it_cannot_be_constructed_with_unsupported_url_parameters($uri)
     {
+        $this->expectException(InvalidArgumentException::class);
         new HttpMethodRoute($uri, [static::class]);
     }
 
@@ -70,11 +71,9 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
         new HttpMethodRoute('foo/bar', [static::class]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function test_it_cannot_be_constructed_without_at_least_one_action_class()
     {
+        $this->expectException(InvalidArgumentException::class);
         new HttpMethodRoute('foo/<controller>', []);
     }
 
@@ -101,7 +100,7 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
         $route   = new HttpMethodRoute($uri_pattern, $actions);
         $matches = $route->matches(\Request::with(['uri' => $url]));
         if ($expect_match) {
-            $this->assertInternalType('array', $matches);
+            $this->assertIsArray($matches);
             $this->assertNotEmpty($matches);
         } else {
             $this->assertFalse($matches);
@@ -214,12 +213,10 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function test_it_throws_if_attempting_to_generate_uri_with_undefined_controller()
     {
         $route = new HttpMethodRoute("foo/<controller>", ['Some\ActionClass']);
+        $this->expectException(OutOfBoundsException::class);
         $route->uri(['controller' => 'nothing-here']);
     }
 
