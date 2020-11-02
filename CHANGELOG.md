@@ -1,6 +1,9 @@
 
 ### Unreleased (BREAKING)
 
+## v2.0.2 (2020-11-02)
+* Support SwiftMailer ^6
+
 ## v2.0.1 (2020-11-02)
 * Bump kohana-dependencies to php 7.4 tested release
 
