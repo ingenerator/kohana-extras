@@ -1,6 +1,12 @@
 
 ### Unreleased (BREAKING)
 
+## v2.0.1 (2020-11-02)
+* Bump kohana-dependencies to php 7.4 tested release
+
+## v2.0.0 (2020-11-02)
+* Stable release supporting php 7.4
+
 ## v2.0.0-beta5 (2020-10-30)
 * Support php7.4
 
