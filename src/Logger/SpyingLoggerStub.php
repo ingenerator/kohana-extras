@@ -7,6 +7,8 @@
 namespace Ingenerator\KohanaExtras\Logger;
 
 
+use PHPUnit\Framework\Assert;
+
 /**
  * @deprecated Application code that produces logs should be updated to use a PSR/Logger directly
  */
@@ -29,12 +31,12 @@ class SpyingLoggerStub extends \Log
 
     public function assertNothingLogged()
     {
-        \PHPUnit\Framework\Assert::assertSame([], $this->log);
+        Assert::assertSame([], $this->log);
     }
 
     public function assertOneLog($level, $message, array $values = NULL, array $additional = NULL)
     {
-        \PHPUnit\Framework\Assert::assertSame(
+        Assert::assertSame(
             [
                 [
                     'level'      => $level,
@@ -49,14 +51,14 @@ class SpyingLoggerStub extends \Log
 
     public function assertLogsMatching(array $patterns)
     {
-        \PHPUnit\Framework\Assert::assertCount(
+        Assert::assertCount(
             \count($patterns),
             $this->log,
             'Expected correct number of messages'
         );
 
         foreach ($patterns as $index => $pattern) {
-            \PHPUnit\Framework\Assert::assertRegExp(
+            Assert::assertMatchesRegularExpression(
                 $pattern,
                 $this->log[$index]['message'],
                 'Expect match at index '.$index
