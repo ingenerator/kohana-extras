@@ -27,7 +27,6 @@ class SwiftMailerFactory extends OptionalDependencyFactory
                 'mailer'    => [
                     '_settings' => [
                         'class'       => \Swift_Mailer::class,
-                        'constructor' => 'newInstance',
                         'arguments'   => ['%swiftmailer.transport%'],
                         'shared'      => TRUE,
                     ],
