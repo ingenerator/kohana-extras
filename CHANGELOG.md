@@ -1,5 +1,7 @@
 
-### Unreleased (BREAKING)
+### Unreleased
+
+* Add a dependency factory for our mysql session handler
 
 ## v2.0.2 (2020-11-02)
 * Support SwiftMailer ^6
