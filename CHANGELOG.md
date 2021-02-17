@@ -1,6 +1,7 @@
 
 ### Unreleased
 
+* Add extensible HTTP-triggered garbage collection (see README)
 * Add a dependency factory for our mysql session handler
 
 ## v2.0.2 (2020-11-02)
