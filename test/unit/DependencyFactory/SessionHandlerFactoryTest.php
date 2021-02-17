@@ -11,49 +11,32 @@ use Ingenerator\PHPUtils\Session\MysqlSession;
 
 class SessionHandlerFactoryTest extends AbstractDependencyFactoryTest
 {
+    protected array $stub_services = [
+        'doctrine.pdo_connection' => PDOStub::class,
+    ];
+
     public function test_it_defines_session_handler_with_doctrine_pdo_as_default()
     {
         $this->assertInstanceOf(
             MysqlSession::class,
             $this->assertDefinesService(
                 'session_handler',
-                \Arr::merge(
-                    [
-                        'doctrine' => [
-                            'pdo_connection' => [
-                                '_settings' => [
-                                    'class' => PDOStub::class
-                                ],
-                            ],
-                        ],
-                    ],
-                    SessionHandlerFactory::definitions()
-                )
+                SessionHandlerFactory::definitions()
             )
         );
     }
 
     public function test_it_defines_session_handler_with_alternate_pdo_service_ref()
     {
+        $this->stub_services['my.random_pdo'] = PDOStub::class;
         $this->assertInstanceOf(
             MysqlSession::class,
             $this->assertDefinesService(
                 'session_handler',
-                \Arr::merge(
+                SessionHandlerFactory::definitions(
                     [
-                        'my' => [
-                            'random_pdo' => [
-                                '_settings' => [
-                                    'class' => PDOStub::class,
-                                ],
-                            ]
-                        ],
-                    ],
-                    SessionHandlerFactory::definitions(
-                        [
-                            SessionHandlerFactory::OPT_PDO_SERVICE => 'my.random_pdo'
-                        ]
-                    )
+                        SessionHandlerFactory::OPT_PDO_SERVICE => 'my.random_pdo',
+                    ]
                 )
             )
         );

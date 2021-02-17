@@ -6,6 +6,7 @@
 
 namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
+use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 use Ingenerator\KohanaExtras\DependencyFactory\MissingOptionalDependencyException;
 
 abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
@@ -85,5 +86,10 @@ abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
         }
 
         return \Arr::merge($stubs, $definitions);
+    }
 }
+
+class ConstructorlessDependencyContainerStub extends DependencyContainer
+{
+    public function __construct() { }
 }
