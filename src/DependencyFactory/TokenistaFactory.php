@@ -22,7 +22,7 @@ class TokenistaFactory extends OptionalDependencyFactory
                         'class'       => static::class,
                         'constructor' => 'makeTokenista',
                         'arguments'   => [
-                            '@tokenista.secret@',
+                            '@!tokenista.secret!@',
                             '@tokenista.options@'
                         ],
                     ],
@@ -33,10 +33,6 @@ class TokenistaFactory extends OptionalDependencyFactory
 
     public static function makeTokenista($secret)
     {
-        if ( ! $secret) {
-            throw new \InvalidArgumentException('No tokenista.secret has been configured');
-        }
-
         return new Tokenista($secret);
     }
 }

@@ -35,7 +35,7 @@ class SessionHandlerFactory
                     'class' => \Ingenerator\PHPUtils\Session\MysqlSession::class,
                     'arguments' => [
                         '%'.$options[static::OPT_PDO_SERVICE].'%',
-                        '@application.session_hash_salt@',
+                        '@!application.session_hash_salt!@',
                     ],
                 ],
             ],

@@ -38,7 +38,7 @@ class GarbageCollectorFactory
     {
         $collectors      = array_merge(static::$default_collectors, $collectors);
         $controller_args = [
-            '@application.garbage_collection_token@',
+            '@!application.garbage_collection_token!@',
         ];
         $defs            = [];
         $collector_idx   = 0;

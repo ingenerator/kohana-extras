@@ -1,6 +1,8 @@
 
 ### Unreleased
 
+* Require that the config values for session hash salt, garbage collect token and tokenista secret
+  are defined (not null) before the dependency container creates the related service.
 * Add extensible HTTP-triggered garbage collection (see README)
 * Add a dependency factory for our mysql session handler
 
