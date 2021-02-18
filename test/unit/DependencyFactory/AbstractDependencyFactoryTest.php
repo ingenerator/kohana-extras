@@ -22,6 +22,23 @@ abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
     protected array $stub_services = [];
 
     /**
+     * A map of config groups that should get a stubbed value
+     *
+     * The ->assertDefinesService method will set these, and they're cleared in the teardown. Note that this replaces
+     * the *entire* config group specified.
+     *
+     * For example:
+     *   $this->stub_config = ['application' => ['ssl_active' => TRUE]]
+     *
+     */
+    protected array $stub_config = [];
+
+    /**
+     * Internal tracking of original values of config groups to restore during test tearDown
+     */
+    private array $restore_config = [];
+
+    /**
      * @param string $service     key to locate
      * @param array  $definitions the array of definitions provided by this factory
      *
@@ -30,7 +47,8 @@ abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
     protected function assertDefinesService($service, array $definitions)
     {
         $definitions = $this->mergeStubServices($definitions);
-        $list        = \Dependency_Definition_List::factory()->from_array($definitions);
+        $this->stubConfigValues();
+        $list = \Dependency_Definition_List::factory()->from_array($definitions);
         try {
             $list->get($service);
         } catch (\Exception $e) {
@@ -86,6 +104,23 @@ abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
         }
 
         return \Arr::merge($stubs, $definitions);
+    }
+
+    protected function stubConfigValues()
+    {
+        foreach ($this->stub_config as $group => $values) {
+            $cfg                          = \Kohana::$config->load($group);
+            $this->restore_config[$group] = $cfg->as_array();
+            $cfg->exchangeArray($values);
+        }
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        foreach ($this->restore_config as $group => $values) {
+            \Kohana::$config->load($group)->exchangeArray($values);
+        }
     }
 }
 

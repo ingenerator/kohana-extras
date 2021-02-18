@@ -19,6 +19,12 @@ class GarbageCollectorFactoryTest extends AbstractDependencyFactoryTest
         'session_handler' => MysqlSessionStub::class,
     ];
 
+    protected array $stub_config = [
+        'application' => [
+            'garbage_collection_token' => 'sesame',
+        ],
+    ];
+
     public function test_it_defines_the_gc_controller()
     {
         $this->assertInstanceOf(
@@ -57,13 +63,6 @@ class GarbageCollectorFactoryTest extends AbstractDependencyFactoryTest
                 ]
             )
         );
-    }
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $cfg = \Kohana::$config->load('application');
-        $cfg->set('garbage_collection_token', 'sesame');
     }
 
     /**

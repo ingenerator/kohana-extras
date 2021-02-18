@@ -15,6 +15,12 @@ class SessionHandlerFactoryTest extends AbstractDependencyFactoryTest
         'doctrine.pdo_connection' => PDOStub::class,
     ];
 
+    protected array $stub_config = [
+        'application' => [
+            'session_hash_salt' => 'insecure',
+        ],
+    ];
+
     public function test_it_defines_session_handler_with_doctrine_pdo_as_default()
     {
         $this->assertInstanceOf(
