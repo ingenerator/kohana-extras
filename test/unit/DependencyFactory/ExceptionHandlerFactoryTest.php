@@ -8,7 +8,6 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 
 use Doctrine\DBAL\Exception\ConnectionException;
-use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 use Ingenerator\KohanaExtras\DependencyFactory\ExceptionHandlerFactory;
 use Ingenerator\KohanaExtras\ExceptionHandling\DBALConnectionExceptionHandler;
 use Ingenerator\KohanaExtras\ExceptionHandling\DefaultRequestExceptionHandler;
@@ -19,23 +18,16 @@ use Psr\Log\NullLogger;
 
 class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
 {
+    protected array $stub_services = [
+        'dependencies'   => ConstructorlessDependencyContainerStub::class,
+        'kohana.psr_log' => NullLogger::class,
+    ];
 
     public function test_it_provides_default_handler()
     {
         $service = $this->assertDefinesService(
             'exception_handler.default',
-            \Arr::merge(
-                [
-                    'kohana' => [
-                        'psr_log' => [
-                            '_settings' => [
-                                'class' => NullLogger::class,
-                            ],
-                        ],
-                    ],
-                ],
-                ExceptionHandlerFactory::definitions()
-            )
+            ExceptionHandlerFactory::definitions()
         );
         $this->assertInstanceOf(DefaultRequestExceptionHandler::class, $service);
     }
@@ -44,24 +36,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
     {
         $service = $this->assertDefinesService(
             'exception_handler.dispatcher',
-            \Arr::merge(
-                [
-                    'dependencies' => [
-                        '_settings' => [
-                            'class'     => DependencyContainer::class,
-                            'arguments' => [[]],
-                        ],
-                    ],
-                    'kohana'       => [
-                        'psr_log' => [
-                            '_settings' => [
-                                'class' => NullLogger::class,
-                            ],
-                        ],
-                    ],
-                ],
-                ExceptionHandlerFactory::definitions()
-            )
+            ExceptionHandlerFactory::definitions()
         );
 
         $this->assertInstanceOf(RequestExceptionDispatcher::class, $service);
