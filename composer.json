@@ -20,7 +20,7 @@
     "php": "^7.4",
     "ingenerator/kohana-core": "^4.7",
     "ingenerator/kohana-dependencies": "^1.2",
-    "ingenerator/php-utils": "^1.5",
+    "ingenerator/php-utils": "^1.9.0",
     "psr/log": "^1.0"
   },
   "require-dev": {
@@ -33,7 +33,8 @@
   },
   "suggest": {
     "maximebf/debugbar": "^1.14 to use the debug bar in development environments",
-    "swiftmailer/swiftmailer": "^6.2.3 to use the SwiftMailer dependency factory"
+    "swiftmailer/swiftmailer": "^6.2.3 to use the SwiftMailer dependency factory",
+    "ingenerator/swiftmailer-transport-ses": "^1.0 to use custom SwiftMailer transports"
   },
   "repositories": [
     {
