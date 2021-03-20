@@ -1,6 +1,12 @@
 
 ### Unreleased
 
+## v2.2.0 (2021-03-20)
+
+* Add SwiftMailer SES transport factory definitions
+* Add Metrics Agent factory definitions
+
+
 ## v2.1.0 (2021-03-08)
 
 * Require that the config values for session hash salt, garbage collect token and tokenista secret
