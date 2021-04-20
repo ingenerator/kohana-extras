@@ -1,6 +1,10 @@
 
 ### Unreleased
 
+## v2.2.1 (2021-04-20)
+
+* Support PHP8.0 
+
 ## v2.2.0 (2021-03-20)
 
 * Add SwiftMailer SES transport factory definitions
