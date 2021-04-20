@@ -17,7 +17,7 @@
     }
   ],
   "require": {
-    "php": "^7.4",
+    "php": "^7.4 || ~8.0.0",
     "ingenerator/kohana-core": "^4.7",
     "ingenerator/kohana-dependencies": "^1.2",
     "ingenerator/php-utils": "^1.9.0",
