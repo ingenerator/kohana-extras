@@ -27,7 +27,7 @@
     "johnkary/phpunit-speedtrap": "^3.3",
     "kohana/koharness": "*@dev",
     "phpunit/phpunit": "^9.5.5",
-    "symfony/process": "^6.1",
+    "symfony/process": "^5.4",
     "mikey179/vfsstream": "^1.6.11",
     "phpspec/prophecy-phpunit": "^2.0"
   },
