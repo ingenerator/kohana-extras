@@ -65,7 +65,7 @@ class ImmutableKohanaValidation extends \Validation implements ValidationResult
      *
      * {@inheritdoc}
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         $value = parent::offsetGet($offset);
         if ($this->is_building_errors AND \is_object($value)) {

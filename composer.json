@@ -17,18 +17,18 @@
     }
   ],
   "require": {
-    "php": "^7.4 || ~8.0.0",
-    "ingenerator/kohana-core": "^4.7",
+    "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
+    "ingenerator/kohana-core": "^4.9",
     "ingenerator/kohana-dependencies": "^1.2",
     "ingenerator/php-utils": "^1.9.0",
     "psr/log": "^1.0"
   },
   "require-dev": {
-    "johnkary/phpunit-speedtrap": "^3.0",
+    "johnkary/phpunit-speedtrap": "^3.3",
     "kohana/koharness": "*@dev",
-    "phpunit/phpunit": "^9.0",
-    "symfony/process": "^3.4",
-    "mikey179/vfsstream": "^1.6.8",
+    "phpunit/phpunit": "^9.5.5",
+    "symfony/process": "^6.1",
+    "mikey179/vfsstream": "^1.6.11",
     "phpspec/prophecy-phpunit": "^2.0"
   },
   "suggest": {
@@ -48,7 +48,10 @@
     }
   },
   "config": {
-    "preferred-install": "dist"
+    "preferred-install": "dist",
+    "allow-plugins": {
+      "composer/installers": true
+    }
   },
   "minimum-stability": "beta",
   "extra": {

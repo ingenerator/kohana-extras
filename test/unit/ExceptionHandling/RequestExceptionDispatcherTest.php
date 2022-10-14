@@ -374,7 +374,7 @@ PHP
         $tmpfile = \tempnam(\sys_get_temp_dir(), 'exceptiontest');
         try {
             \file_put_contents($tmpfile, "<?php\n".$script);
-            $proc = new Process('php '.$tmpfile);
+            $proc = new Process(['php', $tmpfile]);
             $proc->run();
         } finally {
             \unlink($tmpfile);
