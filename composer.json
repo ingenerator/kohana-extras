@@ -28,8 +28,7 @@
     "kohana/koharness": "*@dev",
     "phpunit/phpunit": "^9.5.5",
     "symfony/process": "^5.4",
-    "mikey179/vfsstream": "^1.6.11",
-    "phpspec/prophecy-phpunit": "^2.0"
+    "mikey179/vfsstream": "^1.6.11"
   },
   "suggest": {
     "maximebf/debugbar": "^1.14 to use the debug bar in development environments",
