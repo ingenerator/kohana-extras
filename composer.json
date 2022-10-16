@@ -2,7 +2,7 @@
   "name": "ingenerator/kohana-extras",
   "type": "library",
   "description": "Helper and wrapper classes for Kohana",
-  "homepage": "http://github.com/ingenerator/kohana-extras",
+  "homepage": "https://github.com/ingenerator/kohana-extras",
   "license": "BSD-3-Clause",
   "authors": [
     {
