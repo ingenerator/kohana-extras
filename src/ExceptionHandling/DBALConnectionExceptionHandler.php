@@ -16,8 +16,13 @@ class DBALConnectionExceptionHandler extends AbstractExceptionHandler
      */
     public function handle(\Throwable $e): ?\Response
     {
+        // Note that DBAL ConnectionException is thrown for a variety of error conditions including some that are
+        // more properly runtime errors e.g. incorrect use of transactions / rollback when no transaction active etc.
+        // So although we show the maintenance page for everything, we log these as a full exception for error reporting
+        // and review.
         $this->log->warning(
-            'DB connection error: '.\Kohana_Exception::text($e)
+            'DB connection error: '.\Kohana_Exception::text($e),
+            ['exception' => $e]
         );
 
         return $this->respondGenericErrorPage(static::PAGE_GENERIC_MAINTENANCE, 503);
