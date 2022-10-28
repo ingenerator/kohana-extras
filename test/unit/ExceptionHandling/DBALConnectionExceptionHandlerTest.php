@@ -15,7 +15,7 @@ class DBALConnectionExceptionHandlerTest extends AbstractExceptionHandlerTest
         $this->assertInstanceOf(DBALConnectionExceptionHandler::class, $this->newSubject());
     }
 
-    public function test_it_logs_warning_without_full_exception_trace()
+    public function test_it_logs_warning_and_exception()
     {
         $e = new ConnectionException('SQL whatever from doctrine');
         $this->newSubject()->handle($e);
@@ -24,7 +24,9 @@ class DBALConnectionExceptionHandlerTest extends AbstractExceptionHandlerTest
                 [
                     'level'   => LogLevel::WARNING,
                     'message' => 'DB connection error: '.\Kohana_Exception::text($e),
-                    'context' => [],
+                    'context' => [
+                        'exception' => $e
+                    ],
                 ],
             ],
             $this->log->records
