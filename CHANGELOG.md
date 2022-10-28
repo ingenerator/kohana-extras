@@ -1,6 +1,8 @@
 
 ### Unreleased
 
+* Fix deprecation warning passing NULL to preg_replace
+
 ## v2.3.0 (2022-10-16)
 
 * Support PHP8.1 and PHP8.2
