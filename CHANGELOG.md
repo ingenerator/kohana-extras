@@ -1,6 +1,10 @@
 
 ### Unreleased
 
+## v2.3.1 (2022-10-28)
+
+* Log the full exception for tracing / error reporting from the DBALConnectionExceptionHandler.
+
 ## v2.3.0 (2022-10-16)
 
 * Support PHP8.1 and PHP8.2
