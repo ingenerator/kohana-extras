@@ -33,6 +33,7 @@
   "suggest": {
     "maximebf/debugbar": "^1.14 to use the debug bar in development environments",
     "swiftmailer/swiftmailer": "^6.2.3 to use the SwiftMailer dependency factory",
+    "symfony/mailer": "^6.3 to use the Symfony mailer dependency factory",
     "ingenerator/swiftmailer-transport-ses": "^1.0 to use custom SwiftMailer transports"
   },
   "repositories": [
