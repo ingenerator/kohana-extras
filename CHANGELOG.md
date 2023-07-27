@@ -1,6 +1,10 @@
 
 ### Unreleased
 
+## v2.3.2 (2023-07-27)
+
+* Add dependency factory for symfony mailer
+
 ## v2.3.1 (2022-10-28)
 
 * Fix deprecation warning passing NULL to preg_replace
