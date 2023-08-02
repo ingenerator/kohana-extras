@@ -1,9 +1,6 @@
 A set of useful extra classes for Kohana - including wrappers that make it easier to inject
 or fake parts of the core Kohana underlying behaviour.
 
-[![Build Status](https://travis-ci.org/ingenerator/kohana-extras.svg?branch=1.x)](https://travis-ci.org/ingenerator/kohana-extras)
-
-
 # Installing kohana-extras
 
 This isn't in packagist yet : you'll need to add our package repository to your composer.json:
