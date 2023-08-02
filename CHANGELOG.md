@@ -1,6 +1,8 @@
 
 ### Unreleased
 
+* Support SES transport in symfony mailer dependency factory
+
 ## v2.3.2 (2023-07-27)
 
 * Add dependency factory for symfony mailer
