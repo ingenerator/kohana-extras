@@ -1,6 +1,8 @@
 
 ### Unreleased
 
+* Support Sendgrid transport in symfony mailer dependency factory
+
 ## v2.3.3 (2023-08-02)
 
 * Support SES transport in symfony mailer dependency factory

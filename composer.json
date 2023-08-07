@@ -35,6 +35,7 @@
     "swiftmailer/swiftmailer": "^6.2.3 to use the SwiftMailer dependency factory",
     "symfony/mailer": "^6.3 to use the Symfony mailer dependency factory",
     "symfony/amazon-mailer": "^6.3 to use Symfony mailer AWS SES transport",
+    "symfony/sendgrid-mailer": "^6.3 to use Symfony mailer Sendgrid API transport",
     "ingenerator/swiftmailer-transport-ses": "^1.0 to use custom SwiftMailer transports"
   },
   "repositories": [

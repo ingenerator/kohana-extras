@@ -11,9 +11,16 @@ use AsyncAws\Ses\SesClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mailer\Bridge\Amazon\Transport\SesHttpAsyncAwsTransport;
+use Symfony\Component\Mailer\Bridge\Sendgrid\Transport\SendgridApiTransport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
+use Symfony\Contracts\HttpClient\ResponseStreamInterface;
+use UnexpectedValueException;
+use function str_replace;
 
 class SymfonyMailerFactory extends OptionalDependencyFactory
 {
@@ -86,6 +93,36 @@ class SymfonyMailerFactory extends OptionalDependencyFactory
         ];
     }
 
+    public static function definitionsSendGrid(array $subscribers = []): array
+    {
+        static::requireClass(Mailer::class, 'symfony/mailer');
+        static::requireClass(SendgridApiTransport::class, 'symfony/sendgrid-mailer');
+
+        return [
+            'symfonymailer' => [
+                'mailer'    => [
+                    '_settings' => [
+                        'class'     => Mailer::class,
+                        'arguments' => ['%symfonymailer.transport%'],
+                        'shared'    => TRUE,
+                    ],
+                ],
+                'transport' => [
+                    '_settings' => [
+                        'class'       => static::class,
+                        'constructor' => 'buildSendGridTransport',
+                        'arguments'   => [
+                            '@!email.relay!@',
+                            '%kohana.psr_log%',
+                            ...$subscribers,
+                        ],
+                        'shared'      => TRUE,
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public static function buildSESClient(array $client_options, LoggerInterface $logger): SesClient
     {
         return new SesClient(
@@ -145,6 +182,61 @@ class SymfonyMailerFactory extends OptionalDependencyFactory
         }
 
         return $transport;
+    }
+
+    public static function buildSendGridTransport(
+        array $config,
+        LoggerInterface $logger,
+        EventSubscriberInterface ...$subscribers
+    ): SendgridApiTransport {
+        return new SendgridApiTransport(
+            key: $config['api_key'],
+            client: isset($config['mock_endpoint']) ?
+                self::stubMockSendgridEndpointHttpClient($config['mock_endpoint']) : NULL,
+            dispatcher: static::buildEventDispatcher(...$subscribers),
+            logger: $logger
+        );
+    }
+
+    private static function stubMockSendgridEndpointHttpClient(string $mock_endpoint): HttpClientInterface
+    {
+        return new class ($mock_endpoint) implements HttpClientInterface {
+
+            private HttpClientInterface $client;
+
+            public function __construct(private string $mock_endpoint)
+            {
+                $this->client = HttpClient::create();
+            }
+
+            public function request(string $method, string $url, array $options = []): ResponseInterface
+            {
+                if (str_starts_with($url, 'https://api.sendgrid.com/')) {
+                    return $this->client->request(
+                        $method,
+                        str_replace('https://api.sendgrid.com', $this->mock_endpoint, $url),
+                        $options
+                    );
+                }
+
+                throw new UnexpectedValueException('Expecting request to "https://api.sendgrid.com..." not "'.$url.'"');
+            }
+
+            public function stream(
+                iterable|ResponseInterface $responses,
+                float $timeout = NULL
+            ): ResponseStreamInterface {
+                return $this->client->stream($responses, $timeout);
+            }
+
+            public function withOptions(array $options): static
+            {
+                $clone         = clone($this);
+                $clone->client = $clone->client->withOptions($options);
+
+                return $clone;
+            }
+        };
     }
 
     protected static function buildEventDispatcher(EventSubscriberInterface ...$subscribers): EventDispatcher
