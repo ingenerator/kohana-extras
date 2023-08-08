@@ -1,6 +1,8 @@
 
 ### Unreleased
 
+## v2.3.4 (2023-08-08)
+
 * Mark Swiftmailer dependency factory methods deprecated due to swiftmailer no longer being supported.
 * Support Sendgrid transport in symfony mailer dependency factory
 
