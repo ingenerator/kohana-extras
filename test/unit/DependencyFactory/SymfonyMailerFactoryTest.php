@@ -8,8 +8,10 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 use AsyncAws\Ses\SesClient;
 use Ingenerator\KohanaExtras\DependencyFactory\SymfonyMailerFactory;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Bridge\Amazon\Transport\SesHttpAsyncAwsTransport;
+use Symfony\Component\Mailer\Bridge\Sendgrid\Transport\SendgridApiTransport;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 
 
@@ -70,6 +72,42 @@ class SymfonyMailerFactoryTest extends AbstractDependencyFactoryTest
                 $this->assertInstanceOf(
                     SesHttpAsyncAwsTransport::class,
                     $this->assertDefinesService('symfonymailer.transport', SymfonyMailerFactory::definitionsSES())
+                );
+            }
+        );
+    }
+
+    public function test_it_defines_symfonymailer_mailer_sendgrid()
+    {
+        $this->assertOptionalService(
+            function () {
+                $this->assertInstanceOf(
+                    Mailer::class,
+                    $this->assertDefinesService('symfonymailer.mailer', SymfonyMailerFactory::definitionsSendGrid())
+                );
+            }
+        );
+    }
+
+    public function test_it_defines_symfonymailer_sendgrid_client()
+    {
+        $this->assertOptionalService(
+            function () {
+                $this->assertInstanceOf(
+                    HttpClient::class,
+                    $this->assertDefinesService('symfonymailer.http_client', SymfonyMailerFactory::definitionsSendGrid())
+                );
+            }
+        );
+    }
+
+    public function test_it_defines_symfonymailer_sendgrid_transport()
+    {
+        $this->assertOptionalService(
+            function () {
+                $this->assertInstanceOf(
+                    SendgridApiTransport::class,
+                    $this->assertDefinesService('symfonymailer.transport', SymfonyMailerFactory::definitionsSendGrid())
                 );
             }
         );

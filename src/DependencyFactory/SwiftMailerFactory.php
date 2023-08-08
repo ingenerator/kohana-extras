@@ -24,6 +24,9 @@ class SwiftMailerFactory extends OptionalDependencyFactory
         return self::definitionsSMTP($config);
     }
 
+    /**
+     * @deprecated Recommended you migrate to symfony mailer as swiftmailer is no longer supported
+     */
     public static function definitionsSMTP(array $config = ['plugins' => []]): array
     {
         static::requireClass(\Swift_Mailer::class, 'swiftmailer/swiftmailer');
@@ -49,6 +52,9 @@ class SwiftMailerFactory extends OptionalDependencyFactory
         ];
     }
 
+    /**
+     * @deprecated Recommended you migrate to symfony mailer as swiftmailer is no longer supported
+     */
     public static function definitionsSES(array $config = ['plugins' => []]): array
     {
         static::requireClass(SESTransportFactory::class, 'ingenerator/swiftmailer-transport-ses');
