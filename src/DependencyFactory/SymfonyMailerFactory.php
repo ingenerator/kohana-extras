@@ -20,6 +20,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 use UnexpectedValueException;
+use function array_merge;
 use function str_replace;
 
 class SymfonyMailerFactory extends OptionalDependencyFactory
@@ -100,19 +101,27 @@ class SymfonyMailerFactory extends OptionalDependencyFactory
 
         return [
             'symfonymailer' => [
-                'mailer'    => [
+                'mailer'      => [
                     '_settings' => [
                         'class'     => Mailer::class,
                         'arguments' => ['%symfonymailer.transport%'],
                         'shared'    => TRUE,
                     ],
                 ],
-                'transport' => [
+                'http_client' => [
+                    '_settings' => [
+                        'class'       => HttpClient::class,
+                        'constructor' => 'create',
+                        'shared'      => TRUE,
+                    ],
+                ],
+                'transport'   => [
                     '_settings' => [
                         'class'       => static::class,
                         'constructor' => 'buildSendGridTransport',
                         'arguments'   => [
                             '@!email.relay!@',
+                            '%symfonymailer.http_client%',
                             '%kohana.psr_log%',
                             ...$subscribers,
                         ],
@@ -185,28 +194,30 @@ class SymfonyMailerFactory extends OptionalDependencyFactory
     }
 
     public static function buildSendGridTransport(
-        array $config,
-        LoggerInterface $logger,
+        array                    $config,
+        HttpClientInterface      $client,
+        LoggerInterface          $logger,
         EventSubscriberInterface ...$subscribers
-    ): SendgridApiTransport {
+    ): SendgridApiTransport
+    {
         return new SendgridApiTransport(
             key: $config['api_key'],
             client: isset($config['mock_endpoint']) ?
-                self::stubMockSendgridEndpointHttpClient($config['mock_endpoint']) : NULL,
+                self::stubSendgridMockEndpointClient($config['mock_endpoint'], $client) : $client,
             dispatcher: static::buildEventDispatcher(...$subscribers),
             logger: $logger
         );
     }
 
-    private static function stubMockSendgridEndpointHttpClient(string $mock_endpoint): HttpClientInterface
+    private static function stubSendgridMockEndpointClient(
+        string              $mock_endpoint,
+        HttpClientInterface $client
+    ): HttpClientInterface
     {
-        return new class ($mock_endpoint) implements HttpClientInterface {
+        return new class ($mock_endpoint, $client) implements HttpClientInterface {
 
-            private HttpClientInterface $client;
-
-            public function __construct(private string $mock_endpoint)
+            public function __construct(private string $mock_endpoint, private HttpClientInterface $client)
             {
-                $this->client = HttpClient::create();
             }
 
             public function request(string $method, string $url, array $options = []): ResponseInterface
@@ -219,19 +230,20 @@ class SymfonyMailerFactory extends OptionalDependencyFactory
                     );
                 }
 
-                throw new UnexpectedValueException('Expecting request to "https://api.sendgrid.com..." not "'.$url.'"');
+                throw new UnexpectedValueException('Expecting request to "https://api.sendgrid.com..." not "' . $url . '"');
             }
 
             public function stream(
                 iterable|ResponseInterface $responses,
-                float $timeout = NULL
-            ): ResponseStreamInterface {
+                float                      $timeout = NULL
+            ): ResponseStreamInterface
+            {
                 return $this->client->stream($responses, $timeout);
             }
 
             public function withOptions(array $options): static
             {
-                $clone         = clone($this);
+                $clone = clone($this);
                 $clone->client = $clone->client->withOptions($options);
 
                 return $clone;

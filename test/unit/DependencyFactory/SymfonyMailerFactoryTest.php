@@ -8,6 +8,7 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 use AsyncAws\Ses\SesClient;
 use Ingenerator\KohanaExtras\DependencyFactory\SymfonyMailerFactory;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Bridge\Amazon\Transport\SesHttpAsyncAwsTransport;
 use Symfony\Component\Mailer\Bridge\Sendgrid\Transport\SendgridApiTransport;
@@ -83,6 +84,18 @@ class SymfonyMailerFactoryTest extends AbstractDependencyFactoryTest
                 $this->assertInstanceOf(
                     Mailer::class,
                     $this->assertDefinesService('symfonymailer.mailer', SymfonyMailerFactory::definitionsSendGrid())
+                );
+            }
+        );
+    }
+
+    public function test_it_defines_symfonymailer_sendgrid_client()
+    {
+        $this->assertOptionalService(
+            function () {
+                $this->assertInstanceOf(
+                    HttpClient::class,
+                    $this->assertDefinesService('symfonymailer.http_client', SymfonyMailerFactory::definitionsSendGrid())
                 );
             }
         );
