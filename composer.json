@@ -20,15 +20,16 @@
     "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
     "ingenerator/kohana-core": "^4.9",
     "ingenerator/kohana-dependencies": "^1.2",
-    "ingenerator/php-utils": "^1.9.0",
-    "psr/log": "^1.0"
+    "ingenerator/php-utils": "^1.9.0 || ^2.0",
+    "psr/log": "^1.0 || ^2.0 || ^3.0"
   },
   "require-dev": {
     "johnkary/phpunit-speedtrap": "^3.3",
     "kohana/koharness": "*@dev",
     "phpunit/phpunit": "^9.5.5",
-    "symfony/process": "^5.4",
-    "mikey179/vfsstream": "^1.6.11"
+    "symfony/process": "^7.0",
+    "mikey179/vfsstream": "^1.6.11",
+    "fig/log-test": "^1.1"
   },
   "suggest": {
     "maximebf/debugbar": "^1.14 to use the debug bar in development environments",
