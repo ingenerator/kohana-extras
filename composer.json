@@ -17,26 +17,25 @@
     }
   ],
   "require": {
-    "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
+    "php": "~8.2.0",
     "ingenerator/kohana-core": "^4.9",
     "ingenerator/kohana-dependencies": "^1.2",
-    "ingenerator/php-utils": "^1.9.0",
-    "psr/log": "^1.0"
+    "ingenerator/php-utils": "^1.9.0 || ^2.0",
+    "psr/log": "^1.0 || ^2.0 || ^3.0"
   },
   "require-dev": {
     "johnkary/phpunit-speedtrap": "^3.3",
     "kohana/koharness": "*@dev",
     "phpunit/phpunit": "^9.5.5",
-    "symfony/process": "^5.4",
-    "mikey179/vfsstream": "^1.6.11"
+    "symfony/process": "^7.0",
+    "mikey179/vfsstream": "^1.6.11",
+    "fig/log-test": "^1.1"
   },
   "suggest": {
     "maximebf/debugbar": "^1.14 to use the debug bar in development environments",
-    "swiftmailer/swiftmailer": "^6.2.3 to use the SwiftMailer dependency factory",
     "symfony/mailer": "^6.3 to use the Symfony mailer dependency factory",
     "symfony/amazon-mailer": "^6.3 to use Symfony mailer AWS SES transport",
-    "symfony/sendgrid-mailer": "^6.3 to use Symfony mailer Sendgrid API transport",
-    "ingenerator/swiftmailer-transport-ses": "^1.0 to use custom SwiftMailer transports"
+    "symfony/sendgrid-mailer": "^6.3 to use Symfony mailer Sendgrid API transport"
   },
   "repositories": [
     {

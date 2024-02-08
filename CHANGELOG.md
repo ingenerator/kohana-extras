@@ -1,6 +1,12 @@
 
 ### Unreleased
 
+## v3.0.0 (2024-02-08)
+
+* Drop support for PHP 8.0 & 8.1
+* Drop swiftmailer factories
+* Drop KohanaPSRLogger
+
 ## v2.3.4 (2023-08-08)
 
 * Mark Swiftmailer dependency factory methods deprecated due to swiftmailer no longer being supported.
