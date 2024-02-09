@@ -45,6 +45,7 @@ class SymfonyValidationFactory extends OptionalDependencyFactory
         // as a global autoloader.
         AnnotationRegistry::registerLoader(function ($class) { return \class_exists($class); });
         $builder = Validation::createValidatorBuilder();
+        $builder->addDefaultDoctrineAnnotationReader();
         $builder->enableAnnotationMapping();
 
         // @todo: need to enable metadata cache before using the validator from a web context

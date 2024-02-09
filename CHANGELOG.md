@@ -1,6 +1,10 @@
 
 ### Unreleased
 
+## v3.1.0 (2024-02-09)
+
+* Reinstate default behaviour of symfony validator to create doctrine annotation reader which was subtly removed in validator v6 
+
 ## v3.0.0 (2024-02-08)
 
 * Drop support for PHP 8.0 & 8.1
