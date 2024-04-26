@@ -10,6 +10,7 @@ use AsyncAws\Ses\SesClient;
 use Ingenerator\KohanaExtras\DependencyFactory\SymfonyMailerFactory;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Bridge\Amazon\Transport\SesApiAsyncAwsTransport;
 use Symfony\Component\Mailer\Bridge\Amazon\Transport\SesHttpAsyncAwsTransport;
 use Symfony\Component\Mailer\Bridge\Sendgrid\Transport\SendgridApiTransport;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
@@ -53,6 +54,18 @@ class SymfonyMailerFactoryTest extends AbstractDependencyFactoryTest
         );
     }
 
+    public function test_it_defines_symfonymailer_mailer_ses_api()
+    {
+        $this->assertOptionalService(
+            function () {
+                $this->assertInstanceOf(
+                    Mailer::class,
+                    $this->assertDefinesService('symfonymailer.mailer', SymfonyMailerFactory::definitionsSESApi())
+                );
+            }
+        );
+    }
+
     public function test_it_defines_symfonymailer_ses_client()
     {
         $this->assertOptionalService(
@@ -72,6 +85,18 @@ class SymfonyMailerFactoryTest extends AbstractDependencyFactoryTest
                 $this->assertInstanceOf(
                     SesHttpAsyncAwsTransport::class,
                     $this->assertDefinesService('symfonymailer.transport', SymfonyMailerFactory::definitionsSES())
+                );
+            }
+        );
+    }
+
+    public function test_it_defines_symfonymailer_ses_api_transport()
+    {
+        $this->assertOptionalService(
+            function () {
+                $this->assertInstanceOf(
+                    SesApiAsyncAwsTransport::class,
+                    $this->assertDefinesService('symfonymailer.transport', SymfonyMailerFactory::definitionsSESApi())
                 );
             }
         );
