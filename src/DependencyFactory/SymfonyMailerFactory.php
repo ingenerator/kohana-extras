@@ -12,6 +12,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\Mailer\Bridge\Amazon\Transport\SesApiAsyncAwsTransport;
 use Symfony\Component\Mailer\Bridge\Amazon\Transport\SesHttpAsyncAwsTransport;
 use Symfony\Component\Mailer\Bridge\Sendgrid\Transport\SendgridApiTransport;
 use Symfony\Component\Mailer\Mailer;
@@ -94,6 +95,29 @@ class SymfonyMailerFactory extends OptionalDependencyFactory
         ];
     }
 
+    public static function definitionsSESApi(array $subscribers = []): array
+    {
+        static::requireClass(Mailer::class, 'symfony/mailer');
+        static::requireClass(SesApiAsyncAwsTransport::class, 'symfony/amazon-mailer');
+
+        $definitions = static::definitionsSES();
+
+        $definitions['symfonymailer']['transport'] = [
+            '_settings' => [
+                'class'       => static::class,
+                'constructor' => 'buildSESApiTransport',
+                'arguments'   => [
+                    '%symfonymailer.ses_client%',
+                    '%kohana.psr_log%',
+                    ...$subscribers,
+                ],
+                'shared'      => TRUE,
+            ],
+        ];
+
+        return $definitions;
+    }
+
     public static function definitionsSendGrid(array $subscribers = []): array
     {
         static::requireClass(Mailer::class, 'symfony/mailer');
@@ -154,6 +178,18 @@ class SymfonyMailerFactory extends OptionalDependencyFactory
     ): SesHttpAsyncAwsTransport
     {
         return new SesHttpAsyncAwsTransport(
+            sesClient: $ses_client,
+            dispatcher: static::buildEventDispatcher(...$subscribers),
+            logger: $logger
+        );
+    }
+
+    public static function buildSESApiTransport(
+        SesClient $ses_client,
+        LoggerInterface $logger,
+        EventSubscriberInterface ...$subscribers
+    ): SesApiAsyncAwsTransport {
+        return new SesApiAsyncAwsTransport(
             sesClient: $ses_client,
             dispatcher: static::buildEventDispatcher(...$subscribers),
             logger: $logger

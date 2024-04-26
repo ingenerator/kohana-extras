@@ -1,6 +1,10 @@
 
 ### Unreleased
 
+## v3.1.1 (2024-04-26)
+
+* Support Amazon SES API (Simple JSON API) transport in symfony mailer dependency factory
+
 ## v3.1.0 (2024-02-09)
 
 * Reinstate default behaviour of symfony validator to create doctrine annotation reader which was subtly removed in validator v6 
