@@ -1,6 +1,10 @@
 
 ### Unreleased
 
+## v3.2.0 (2024-09-25)
+
+* Support PHP 8.3
+
 ## v3.1.1 (2024-04-26)
 
 * Support Amazon SES API (Simple JSON API) transport in symfony mailer dependency factory
