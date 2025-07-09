@@ -157,7 +157,7 @@ class HttpMethodRoute extends \Route
     /**
      * {@inheritdoc}
      */
-    public function uri(array $params = NULL)
+    public function uri(?array $params = NULL)
     {
         if ($controller = \Arr::get($params, 'controller')) {
             if ( ! isset($this->action_classes[$controller])) {

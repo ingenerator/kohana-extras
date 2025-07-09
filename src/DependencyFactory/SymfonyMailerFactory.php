@@ -271,7 +271,7 @@ class SymfonyMailerFactory extends OptionalDependencyFactory
 
             public function stream(
                 iterable|ResponseInterface $responses,
-                float                      $timeout = NULL
+                ?float                     $timeout = NULL
             ): ResponseStreamInterface
             {
                 return $this->client->stream($responses, $timeout);

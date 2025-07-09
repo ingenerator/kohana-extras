@@ -12,7 +12,7 @@ use Doctrine\DBAL\Logging\DebugStack;
 
 class DebugDoctrineQueryTrace extends DebugStack
 {
-    public function startQuery($sql, array $params = NULL, array $types = NULL)
+    public function startQuery($sql, ?array $params = NULL, ?array $types = NULL)
     {
         foreach (\debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $index => $dbg) {
             $params['_dbg'.$index] = $this->formatTraceLine($dbg);

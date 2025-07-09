@@ -17,7 +17,7 @@
     }
   ],
   "require": {
-    "php": "~8.2.0 || ~8.3.0",
+    "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
     "ingenerator/kohana-core": "^4.9",
     "ingenerator/kohana-dependencies": "^1.2",
     "ingenerator/php-utils": "^1.9.0 || ^2.0",
@@ -25,10 +25,10 @@
   },
   "require-dev": {
     "johnkary/phpunit-speedtrap": "^3.3",
-    "kohana/koharness": "*@dev",
-    "phpunit/phpunit": "^9.5.5",
-    "symfony/process": "^7.0",
-    "mikey179/vfsstream": "^1.6.11",
+    "kohana/koharness": "dev-master",
+    "phpunit/phpunit": "^9.6.23",
+    "symfony/process": "^7.1",
+    "mikey179/vfsstream": "^1.6.12",
     "fig/log-test": "^1.1"
   },
   "suggest": {

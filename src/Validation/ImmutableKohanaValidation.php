@@ -137,7 +137,7 @@ class ImmutableKohanaValidation extends \Validation implements ValidationResult
     /**
      * {@inheritdoc}
      */
-    public function rule($field, $rule, array $params = NULL)
+    public function rule($field, $rule, ?array $params = NULL)
     {
         $this->throwIfAlreadyChecked(__METHOD__);
 
@@ -167,7 +167,7 @@ class ImmutableKohanaValidation extends \Validation implements ValidationResult
     /**
      * {@inheritdoc}
      */
-    public function error($field, $error, array $params = NULL)
+    public function error($field, $error, ?array $params = NULL)
     {
         $this->throwIfAlreadyChecked(__METHOD__);
 
