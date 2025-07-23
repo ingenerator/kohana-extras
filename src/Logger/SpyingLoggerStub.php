@@ -19,7 +19,7 @@ class SpyingLoggerStub extends \Log
     /**
      * {@inheritdoc}
      */
-    public function add($level, $message, array $values = NULL, array $additional = NULL)
+    public function add($level, $message, ?array $values = NULL, ?array $additional = NULL)
     {
         $this->log[] = [
             'level'      => $level,
@@ -34,7 +34,7 @@ class SpyingLoggerStub extends \Log
         Assert::assertSame([], $this->log);
     }
 
-    public function assertOneLog($level, $message, array $values = NULL, array $additional = NULL)
+    public function assertOneLog($level, $message, ?array $values = NULL, ?array $additional = NULL)
     {
         Assert::assertSame(
             [
