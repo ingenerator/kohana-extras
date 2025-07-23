@@ -1,6 +1,10 @@
 
 ### Unreleased
 
+## v3.3.1 (2025-07-23)
+
+* Fix deprecated implicit nullable parameters in deprecated SpyingLoggerStub
+
 ## v3.3.0 (2025-07-22)
 
 * Support PHP 8.4
