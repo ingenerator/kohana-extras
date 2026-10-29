@@ -24,8 +24,8 @@
     "psr/log": "^1.0 || ^2.0 || ^3.0"
   },
   "require-dev": {
+    "ext-mbstring": "*",
     "johnkary/phpunit-speedtrap": "^3.3",
-    "kohana/koharness": "dev-master",
     "phpunit/phpunit": "^9.6.23",
     "symfony/process": "^7.1",
     "mikey179/vfsstream": "^1.6.12",
