@@ -13,7 +13,7 @@ use BadMethodCallException;
 use Ingenerator\KohanaExtras\ExceptionHandling\DefaultRequestExceptionHandler;
 use Psr\Log\Test\TestLogger;
 
-class DefaultRequestExceptionHandlerTest extends AbstractExceptionHandlerTest
+class DefaultRequestExceptionHandlerTest extends AbstractExceptionHandlerTestcase
 {
 
     public function test_it_is_initialisable()

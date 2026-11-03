@@ -24,7 +24,7 @@ use Ingenerator\KohanaExtras\ExceptionHandling\SessionExceptionHandler;
 use Ingenerator\PHPUtils\StringEncoding\JSON;
 use Psr\Log\NullLogger;
 
-class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
+class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTestcase
 {
     protected array $stub_services = [
         'dependencies'   => ConstructorlessDependencyContainerStub::class,

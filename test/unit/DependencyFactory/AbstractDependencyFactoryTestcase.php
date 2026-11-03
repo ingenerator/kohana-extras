@@ -16,7 +16,7 @@ use Kohana;
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 use Ingenerator\KohanaExtras\DependencyFactory\MissingOptionalDependencyException;
 
-abstract class AbstractDependencyFactoryTest extends TestCase
+abstract class AbstractDependencyFactoryTestcase extends TestCase
 {
     /**
      * A map of service_name => stub class name for shared services that our definitions depend on.

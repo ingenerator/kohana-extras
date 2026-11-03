@@ -10,7 +10,7 @@ use PDO;
 use Ingenerator\KohanaExtras\DependencyFactory\SessionHandlerFactory;
 use Ingenerator\PHPUtils\Session\MysqlSession;
 
-class SessionHandlerFactoryTest extends AbstractDependencyFactoryTest
+class SessionHandlerFactoryTest extends AbstractDependencyFactoryTestcase
 {
     protected array $stub_services = [
         'doctrine.pdo_connection' => PDOStub::class,

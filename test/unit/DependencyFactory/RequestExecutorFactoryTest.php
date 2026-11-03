@@ -11,7 +11,7 @@ use Ingenerator\KohanaExtras\DependencyFactory\KohanaCoreFactory;
 use Ingenerator\KohanaExtras\DependencyFactory\RequestExecutorFactory;
 use Ingenerator\KohanaExtras\RequestExecutor\ContainerAwareRequestExecutor;
 
-class RequestExecutorFactoryTest extends AbstractDependencyFactoryTest
+class RequestExecutorFactoryTest extends AbstractDependencyFactoryTestcase
 {
     protected array $stub_services = [
         'dependencies' => ConstructorlessDependencyContainerStub::class,

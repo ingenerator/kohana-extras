@@ -9,7 +9,7 @@ use RuntimeException;
 use Session_Exception;
 use Ingenerator\KohanaExtras\ExceptionHandling\SessionExceptionHandler;
 
-class SessionExceptionHandlerTest extends AbstractExceptionHandlerTest
+class SessionExceptionHandlerTest extends AbstractExceptionHandlerTestcase
 {
 
     public function test_it_is_initialisable()

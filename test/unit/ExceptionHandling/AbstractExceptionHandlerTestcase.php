@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use Psr\Log\Test\TestLogger;
 
-abstract class AbstractExceptionHandlerTest extends TestCase
+abstract class AbstractExceptionHandlerTestcase extends TestCase
 {
     /**
      * @var TestLogger

@@ -9,7 +9,7 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 use Ingenerator\KohanaExtras\DependencyFactory\SymfonyValidationFactory;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class SymfonyValidationFactoryTest extends AbstractDependencyFactoryTest
+class SymfonyValidationFactoryTest extends AbstractDependencyFactoryTestcase
 {
 
     public function test_it_defines_validator()

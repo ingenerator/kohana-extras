@@ -8,7 +8,7 @@ use Ingenerator\KohanaExtras\DependencyFactory\KohanaCoreFactory;
 use Ingenerator\KohanaExtras\DependencyFactory\UrlReverseRouterFactory;
 use Ingenerator\KohanaExtras\Routing\HttpMethodRouteReverseRouter;
 
-class UrlReverseRouterFactoryTest extends AbstractDependencyFactoryTest
+class UrlReverseRouterFactoryTest extends AbstractDependencyFactoryTestcase
 {
     public function test_it_provides_http_method_route_reverse_router()
     {

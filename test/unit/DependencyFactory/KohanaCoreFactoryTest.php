@@ -16,7 +16,7 @@ use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 use Ingenerator\PHPUtils\Logging\StackdriverApplicationLogger;
 use Psr\Log\LoggerInterface;
 
-class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
+class KohanaCoreFactoryTest extends AbstractDependencyFactoryTestcase
 {
     public function test_it_provides_log()
     {
