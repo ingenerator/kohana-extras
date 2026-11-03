@@ -6,10 +6,17 @@
 
 namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
+use PHPUnit\Framework\TestCase;
+use Dependency_Definition_List;
+use Exception;
+use Dependency_Container;
+use Dependency_Exception;
+use Arr;
+use Kohana;
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 use Ingenerator\KohanaExtras\DependencyFactory\MissingOptionalDependencyException;
 
-abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractDependencyFactoryTest extends TestCase
 {
     /**
      * A map of service_name => stub class name for shared services that our definitions depend on.
@@ -48,20 +55,20 @@ abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $definitions = $this->mergeStubServices($definitions);
         $this->stubConfigValues();
-        $list = \Dependency_Definition_List::factory()->from_array($definitions);
+        $list = Dependency_Definition_List::factory()->from_array($definitions);
         try {
             $list->get($service);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->fail('Service `'.$service.'` is not defined: ['.\get_class($e).'] '.$e->getMessage());
         }
 
-        $container = new \Dependency_Container($list);
+        $container = new Dependency_Container($list);
 
         try {
             return $container->get($service);
-        } catch (\Dependency_Exception $e) {
+        } catch (Dependency_Exception $e) {
             $this->fail('Cannot instantiate service `'.$service.'` - missing dependency? : '.$e->getMessage());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->fail('Cannot instantiate service `'.$service.'`: ['.\get_class($e).'] '.$e->getMessage());
         }
     }
@@ -100,16 +107,16 @@ abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
         // Merges in $this->stub_services
         $stubs = [];
         foreach ($this->stub_services as $s => $class) {
-            \Arr::set_path($stubs, $s, ['_settings' => ['class' => $class]]);
+            Arr::set_path($stubs, $s, ['_settings' => ['class' => $class]]);
         }
 
-        return \Arr::merge($stubs, $definitions);
+        return Arr::merge($stubs, $definitions);
     }
 
     protected function stubConfigValues()
     {
         foreach ($this->stub_config as $group => $values) {
-            $cfg                          = \Kohana::$config->load($group);
+            $cfg                          = Kohana::$config->load($group);
             $this->restore_config[$group] = $cfg->as_array();
             $cfg->exchangeArray($values);
         }
@@ -119,7 +126,7 @@ abstract class AbstractDependencyFactoryTest extends \PHPUnit\Framework\TestCase
     {
         parent::tearDown();
         foreach ($this->restore_config as $group => $values) {
-            \Kohana::$config->load($group)->exchangeArray($values);
+            Kohana::$config->load($group)->exchangeArray($values);
         }
     }
 }

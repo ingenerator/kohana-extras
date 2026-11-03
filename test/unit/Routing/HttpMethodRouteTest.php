@@ -7,14 +7,17 @@
 namespace test\unit\Ingenerator\KohanaExtras\Routing;
 
 
+use PHPUnit\Framework\TestCase;
+use Route;
+use Request;
+use PHPUnit\Framework\Attributes\TestWith;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use BadMethodCallException;
 use Ingenerator\KohanaExtras\Routing\HttpMethodRoute;
 use InvalidArgumentException;
 use OutOfBoundsException;
-use test\mock\Kohana\Request\HtmlRequestStub;
-use test\unit\BaseTestCase;
 
-class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
+class HttpMethodRouteTest extends TestCase
 {
     public function test_it_is_initialisable()
     {
@@ -37,8 +40,8 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
             ['format' => 'csv']
         );
         $this->assertInstanceOf(HttpMethodRoute::class, $instance);
-        $this->assertInstanceOf(\Route::class, $instance);
-        $this->assertSame($instance, \Route::get($name));
+        $this->assertInstanceOf(Route::class, $instance);
+        $this->assertSame($instance, Route::get($name));
     }
 
     public function test_its_static_create_explicit_adds_route_matching_single_default_controller()
@@ -47,22 +50,21 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
         $instance = HttpMethodRoute::createExplicit($name, 'any-path/<any_param>', static::class);
 
         $this->assertInstanceOf(HttpMethodRoute::class, $instance);
-        $this->assertSame($instance, \Route::get($name));
-        $match = $instance->matches(\Request::with(['uri' => 'any-path/this-param']));
+        $this->assertSame($instance, Route::get($name));
+        $match = $instance->matches(Request::with(['uri' => 'any-path/this-param']));
         $this->assertEquals('\\'.static::class, $match['controller']);
         $this->assertEquals('this-param', $match['any_param']);
     }
 
-    /**
-     * @testWith ["stuff/<controller>/<action>"]
-     *           ["<directory>/<controller>"]
-     */
+    #[TestWith(['stuff/<controller>/<action>'])]
+    #[TestWith(['<directory>/<controller>'])]
     public function test_it_cannot_be_constructed_with_unsupported_url_parameters($uri)
     {
         $this->expectException(InvalidArgumentException::class);
         new HttpMethodRoute($uri, [static::class]);
     }
 
+    #[DoesNotPerformAssertions]
     public function test_it_cannot_be_constructed_with_missing_controller_parameter()
     {
         $this->markTestIncomplete(
@@ -77,20 +79,18 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
         new HttpMethodRoute('foo/<controller>', []);
     }
 
-    /**
-     * @testWith ["foo/<controller>", ["Action\\Entity\\DoThings"], "bar/bax", false]
-     *           ["foo/<controller>", ["Action\\Entity\\DoThings"], "foo", false]
-     *           ["foo/<controller>", ["Action\\Entity\\DoThings"], "foo/", false]
-     *           ["foo/<controller>", ["Action\\Entity\\DoThings"], "foo/DoThings", false]
-     *           ["foo/<controller>", ["Action\\Entity\\DoThings"], "foo/do-other", false]
-     *           ["foo/<controller>", ["Action\\Entity\\DoThings"], "bar/do-things", false]
-     *           ["foo/<controller>", ["Action\\Entity\\DoThings"], "foo/do-things", true]
-     *           ["foo/<controller>", ["Action\\Entity\\DoThings"], "foo/do-things", true]
-     *           ["foo/<controller>", ["Action\\Entity\\DoThingsController"], "foo/do-things", true]
-     *           ["foo/<controller>", ["Action\\Entity\\DoThingPDF"], "foo/do-thing-pdf", true]
-     *           ["baz/<controller>", ["\\Entity\\DoThings", "\\Entity\\DoStuff"], "baz/do-stuff", true]
-     *           ["web/stuff/<controller>", ["\\Entity\\DoThings", "\\Entity\\DoStuff"], "web/stuff/do-stuff", true]
-     */
+    #[TestWith(['foo/<controller>', ['Action\Entity\DoThings'], 'bar/bax', false])]
+    #[TestWith(['foo/<controller>', ['Action\Entity\DoThings'], 'foo', false])]
+    #[TestWith(['foo/<controller>', ['Action\Entity\DoThings'], 'foo/', false])]
+    #[TestWith(['foo/<controller>', ['Action\Entity\DoThings'], 'foo/DoThings', false])]
+    #[TestWith(['foo/<controller>', ['Action\Entity\DoThings'], 'foo/do-other', false])]
+    #[TestWith(['foo/<controller>', ['Action\Entity\DoThings'], 'bar/do-things', false])]
+    #[TestWith(['foo/<controller>', ['Action\Entity\DoThings'], 'foo/do-things', true])]
+    #[TestWith(['foo/<controller>', ['Action\Entity\DoThings'], 'foo/do-things', true])]
+    #[TestWith(['foo/<controller>', ['Action\Entity\DoThingsController'], 'foo/do-things', true])]
+    #[TestWith(['foo/<controller>', ['Action\Entity\DoThingPDF'], 'foo/do-thing-pdf', true])]
+    #[TestWith(['baz/<controller>', ['\Entity\DoThings', '\Entity\DoStuff'], 'baz/do-stuff', true])]
+    #[TestWith(['web/stuff/<controller>', ['\Entity\DoThings', '\Entity\DoStuff'], 'web/stuff/do-stuff', true])]
     public function test_it_only_matches_if_pattern_matches_and_controller_whitelisted(
         $uri_pattern,
         $actions,
@@ -98,7 +98,7 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
         $expect_match
     ) {
         $route   = new HttpMethodRoute($uri_pattern, $actions);
-        $matches = $route->matches(\Request::with(['uri' => $url]));
+        $matches = $route->matches(Request::with(['uri' => $url]));
         if ($expect_match) {
             $this->assertIsArray($matches);
             $this->assertNotEmpty($matches);
@@ -110,24 +110,22 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
     public function test_it_does_not_return_directory_param_in_match()
     {
         $route   = new HttpMethodRoute('foo/<controller>', ['Some\Controller\ActionClass']);
-        $matches = $route->matches(\Request::with(['uri' => 'foo/action-class']));
+        $matches = $route->matches(Request::with(['uri' => 'foo/action-class']));
         $this->assertArrayNotHasKey('directory', $matches);
     }
 
-    /**
-     * @testWith [["Action\\Entity\\DoThings"], "do-things", "\\Action\\Entity\\DoThings"]
-     *           [["\\Action\\Entity\\DoThings"], "do-things", "\\Action\\Entity\\DoThings"]
-     *           [["\\Controller\\Entity\\DoThings"], "do-things", "\\Controller\\Entity\\DoThings"]
-     *           [["\\Action\\Entity\\DoThingsController"], "do-things", "\\Action\\Entity\\DoThingsController"]
-     *           [["Action\\Entity\\DoThings", "Other\\ControllerAction"], "controller-action", "\\Other\\ControllerAction"]
-     */
+    #[TestWith([['Action\Entity\DoThings'], 'do-things', '\Action\Entity\DoThings'])]
+    #[TestWith([['\Action\Entity\DoThings'], 'do-things', '\Action\Entity\DoThings'])]
+    #[TestWith([['\Controller\Entity\DoThings'], 'do-things', '\Controller\Entity\DoThings'])]
+    #[TestWith([['\Action\Entity\DoThingsController'], 'do-things', '\Action\Entity\DoThingsController'])]
+    #[TestWith([['Action\Entity\DoThings', 'Other\ControllerAction'], 'controller-action', '\Other\ControllerAction'])]
     public function test_it_returns_fully_qualified_controller_name_as_controller(
         $actions,
         $url,
         $expect
     ) {
         $route   = new HttpMethodRoute('<controller>', $actions);
-        $matches = $route->matches(\Request::with(['uri' => $url]));
+        $matches = $route->matches(Request::with(['uri' => $url]));
         $this->assertSame($expect, $matches['controller']);
     }
 
@@ -151,24 +149,20 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @testWith ["HEAD", "get"]
-     *           ["GET", "get"]
-     *           ["POST", "post"]
-     *           ["PUT", "put"]
-     */
+    #[TestWith(['HEAD', 'get'])]
+    #[TestWith(['GET', 'get'])]
+    #[TestWith(['POST', 'post'])]
+    #[TestWith(['PUT', 'put'])]
     public function test_it_returns_http_method_as_action($method, $expect)
     {
         $route   = new HttpMethodRoute('<controller>', ['Some\\ThingController']);
-        $request = \Request::with(['uri' => 'thing', 'method' => $method]);
+        $request = Request::with(['uri' => 'thing', 'method' => $method]);
         $this->assertSame($expect, $route->matches($request)['action']);
     }
 
-    /**
-     * @testWith ["foo/<id>/<controller>", "foo/12/thing", true, "12"]
-     *           ["foo/<controller>/<id>", "foo/thing/93", true, "93"]
-     *           ["foo/<controller>/<id>", "foo/thing/abc", false, null]
-     */
+    #[TestWith(['foo/<id>/<controller>', 'foo/12/thing', true, '12'])]
+    #[TestWith(['foo/<controller>/<id>', 'foo/thing/93', true, '93'])]
+    #[TestWith(['foo/<controller>/<id>', 'foo/thing/abc', false, null])]
     public function test_it_optionally_matches_id_param_as_decimal_string_by_default(
         $uri_pattern,
         $url,
@@ -176,7 +170,7 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
         $expect_id
     ) {
         $route   = new HttpMethodRoute($uri_pattern, ['Some\\ThingController']);
-        $matches = $route->matches(\Request::with(['uri' => $url]));
+        $matches = $route->matches(Request::with(['uri' => $url]));
 
         if ($expect_match) {
             $this->assertSame($expect_id, $matches['id']);
@@ -190,16 +184,14 @@ class HttpMethodRouteTest extends \PHPUnit\Framework\TestCase
         $route   = new HttpMethodRoute(
             'foo/<id>/<controller>', ['Some\\ThingController'], ['id' => '.+']
         );
-        $matches = $route->matches(\Request::with(['uri' => 'foo/an/id/thing']));
+        $matches = $route->matches(Request::with(['uri' => 'foo/an/id/thing']));
         $this->assertSame('an/id', $matches['id']);
     }
 
-    /**
-     * @testWith ["foo/<controller>/bar", ["Some\\ActionClass"], {"controller" : "action-class"}, "foo/action-class/bar"]
-     *           ["foo/<controller>/<id>", ["Some\\ActionClass"], {"controller" : "action-class", "id": "12"}, "foo/action-class/12"]
-     *           ["foo/<controller>/<id>", ["Some\\ActionClassController"], {"controller" : "action-class", "id": "12"}, "foo/action-class/12"]
-     *           ["foo/<controller>/<id>", ["Some\\ActionPDF"], {"controller" : "action-pdf", "id": "12"}, "foo/action-pdf/12"]
-     */
+    #[TestWith(['foo/<controller>/bar', ['Some\ActionClass'], ['controller' => 'action-class'], 'foo/action-class/bar'])]
+    #[TestWith(['foo/<controller>/<id>', ['Some\ActionClass'], ['controller' => 'action-class', 'id' => '12'], 'foo/action-class/12'])]
+    #[TestWith(['foo/<controller>/<id>', ['Some\ActionClassController'], ['controller' => 'action-class', 'id' => '12'], 'foo/action-class/12'])]
+    #[TestWith(['foo/<controller>/<id>', ['Some\ActionPDF'], ['controller' => 'action-pdf', 'id' => '12'], 'foo/action-pdf/12'])]
     public function test_it_generates_correct_uri_with_valid_controller_url_part(
         $url,
         $actions,

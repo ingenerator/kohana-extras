@@ -4,6 +4,13 @@
 namespace test\unit\KohanaExtras\GarbageCollector;
 
 
+use Request;
+use Response;
+use PHPUnit\Framework\Attributes\TestWith;
+use HTTP_Exception_404;
+use HTTP_Exception_501;
+use PHPUnit\Framework\Attributes\DataProvider;
+use HTTP_Header;
 use Ingenerator\KohanaExtras\GarbageCollector\GarbageCollectionController;
 use Ingenerator\KohanaExtras\GarbageCollector\GarbageCollector;
 use PHPUnit\Framework\Assert;
@@ -12,8 +19,8 @@ use PHPUnit\Framework\TestCase;
 class GarbageCollectionControllerTest extends TestCase
 {
     private string    $expect_token = 'sesame';
-    private \Request  $request;
-    private \Response $response;
+    private Request  $request;
+    private Response $response;
     private array     $collectors;
 
     public function test_it_is_initialisable()
@@ -21,15 +28,13 @@ class GarbageCollectionControllerTest extends TestCase
         $this->assertInstanceOf(GarbageCollectionController::class, $this->newSubject());
     }
 
-    /**
-     * @testWith [[]]
-     *           [{"Authorization": "Bearer badguy"}]
-     */
+    #[TestWith([[]])]
+    #[TestWith([['Authorization' => 'Bearer badguy']])]
     public function test_it_throws_404_if_token_not_provided_or_does_not_match_config($headers)
     {
         $this->request = $this->stubRequestWithHeaders($headers);
         $subject       = $this->newSubject();
-        $this->expectException(\HTTP_Exception_404::class);
+        $this->expectException(HTTP_Exception_404::class);
         $this->expectExceptionMessage(GarbageCollectionController::MSG_AUTH_FAILED);
         $subject->execute();
     }
@@ -38,12 +43,12 @@ class GarbageCollectionControllerTest extends TestCase
     {
         $this->collectors = [];
         $subject          = $this->newSubject();
-        $this->expectException(\HTTP_Exception_501::class);
+        $this->expectException(HTTP_Exception_501::class);
         $this->expectExceptionMessage(GarbageCollectionController::MSG_NO_COLLECTORS);
         $subject->execute();
     }
 
-    public function provider_garbage_collectors()
+    public static function provider_garbage_collectors()
     {
         return [
             [
@@ -60,9 +65,7 @@ class GarbageCollectionControllerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provider_garbage_collectors
-     */
+    #[DataProvider('provider_garbage_collectors')]
     public function test_it_executes_all_configured_garbage_collectors_and_returns_200_on_success(
         GarbageCollectorStub ...$collectors
     ) {
@@ -82,7 +85,7 @@ class GarbageCollectionControllerTest extends TestCase
     {
         parent::setUp();
         $this->request    = $this->stubRequestWithHeaders(['Authorization' => 'Bearer '.$this->expect_token]);
-        $this->response   = new \Response;
+        $this->response   = new Response;
         $this->collectors = [new GarbageCollectorStub];
     }
 
@@ -99,13 +102,13 @@ class GarbageCollectionControllerTest extends TestCase
      *
      * @return \Request
      */
-    protected function stubRequestWithHeaders($headers): \Request
+    protected function stubRequestWithHeaders($headers): Request
     {
-        return \Request::with(
+        return Request::with(
             [
                 'action' => 'post',
-                'header' => new \HTTP_Header($headers),
-                'method' => \Request::POST,
+                'header' => new HTTP_Header($headers),
+                'method' => Request::POST,
             ]
         );
     }

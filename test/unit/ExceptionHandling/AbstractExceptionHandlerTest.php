@@ -4,6 +4,9 @@
 namespace test\unit\Ingenerator\KohanaExtras\ExceptionHandling;
 
 
+use Response;
+use Throwable;
+use Kohana_Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use Psr\Log\Test\TestLogger;
@@ -23,7 +26,7 @@ abstract class AbstractExceptionHandlerTest extends TestCase
      */
     protected function assertReturnsResponseStatus($expect_status, $response)
     {
-        $this->assertInstanceOf(\Response::class, $response);
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertSame($expect_status, $response->status());
 
         return $response;
@@ -32,7 +35,7 @@ abstract class AbstractExceptionHandlerTest extends TestCase
     /**
      * @param \Response $response
      */
-    protected function assertResponseIsMaintenance503(\Response $response): void
+    protected function assertResponseIsMaintenance503(Response $response): void
     {
         $this->assertReturnsResponseStatus(503, $response);
         $this->assertSame('text/html;charset=utf8', $response->headers('Content-Type'));
@@ -42,7 +45,7 @@ abstract class AbstractExceptionHandlerTest extends TestCase
     /**
      * @param \Response $response
      */
-    protected function assertResponseIsGeneric500(\Response $response): void
+    protected function assertResponseIsGeneric500(Response $response): void
     {
         $this->assertReturnsResponseStatus(500, $response);
         $this->assertSame('text/html;charset=utf8', $response->headers('Content-Type'));
@@ -51,11 +54,11 @@ abstract class AbstractExceptionHandlerTest extends TestCase
 
 
     /**
-     * @param \Throwable $exception
+     * @param Throwable $exception
      */
-    protected function assertLoggedException(\Throwable $exception)
+    protected function assertLoggedException(Throwable $exception)
     {
-        $expect_msg = \Kohana_Exception::text($exception);
+        $expect_msg = Kohana_Exception::text($exception);
         $this->assertCount(1, $this->log->records);
         $this->assertSame(
             [

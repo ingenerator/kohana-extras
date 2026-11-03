@@ -7,6 +7,14 @@
 namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 
+use InvalidArgumentException;
+use RuntimeException;
+use My\InvalidArgumentHandler;
+use My\RuntimeHandler;
+use Session_Exception;
+use My\OwnConnectionExceptionHandler;
+use InvalidArgumentExceptionHandler;
+use My\OtherExceptionHandler;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Ingenerator\KohanaExtras\DependencyFactory\ExceptionHandlerFactory;
 use Ingenerator\KohanaExtras\ExceptionHandling\DBALConnectionExceptionHandler;
@@ -47,14 +55,14 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         $definitions = ExceptionHandlerFactory::definitions(
             [
                 [
-                    'type'    => \InvalidArgumentException::class,
+                    'type'    => InvalidArgumentException::class,
                     'handler' => [
                         'class'     => 'My\InvalidArgumentHandler',
                         'arguments' => ['%kohana.log%'],
                     ],
                 ],
                 [
-                    'type'    => \RuntimeException::class,
+                    'type'    => RuntimeException::class,
                     'handler' => [
                         'class'     => 'My\RuntimeHandler',
                         'arguments' => ['%kohana.request%'],
@@ -64,16 +72,16 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         );
 
         $this->assertDefinesExceptionHandlerMappingAndServiceAtIndex(
-            \InvalidArgumentException::class,
-            \My\InvalidArgumentHandler::class,
+            InvalidArgumentException::class,
+            InvalidArgumentHandler::class,
             ['%kohana.log%'],
             0,
             $definitions
         );
 
         $this->assertDefinesExceptionHandlerMappingAndServiceAtIndex(
-            \RuntimeException::class,
-            \My\RuntimeHandler::class,
+            RuntimeException::class,
+            RuntimeHandler::class,
             ['%kohana.request%'],
             1,
             $definitions
@@ -124,7 +132,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         );
 
         $this->assertDefinesExceptionHandlerMappingAndServiceAtIndex(
-            \Session_Exception::class,
+            Session_Exception::class,
             SessionExceptionHandler::class,
             ['%kohana.psr_log%'],
             1,
@@ -161,7 +169,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
                 [
                     'type'    => ConnectionException::class,
                     'handler' => [
-                        'class'     => \My\OwnConnectionExceptionHandler::class,
+                        'class'     => OwnConnectionExceptionHandler::class,
                         'arguments' => ['%custom.service%'],
                     ],
                 ],
@@ -170,7 +178,7 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
 
         $this->assertDefinesExceptionHandlerMappingAndServiceAtIndex(
             ConnectionException::class,
-            \My\OwnConnectionExceptionHandler::class,
+            OwnConnectionExceptionHandler::class,
             ['%custom.service%'],
             0,
             $definitions
@@ -187,23 +195,23 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
         $definitions = ExceptionHandlerFactory::definitions(
             [
                 [
-                    'type'    => \InvalidArgumentException::class,
+                    'type'    => InvalidArgumentException::class,
                     'handler' => [
-                        'class'     => \InvalidArgumentExceptionHandler::class,
+                        'class'     => InvalidArgumentExceptionHandler::class,
                         'arguments' => ['%kohana.log'],
                     ],
                 ],
                 [
                     'type'    => ConnectionException::class,
                     'handler' => [
-                        'class'     => \My\OwnConnectionExceptionHandler::class,
+                        'class'     => OwnConnectionExceptionHandler::class,
                         'arguments' => ['%custom.service%'],
                     ],
                 ],
                 [
                     'type'    => OtherException::class,
                     'handler' => [
-                        'class'     => \My\OtherExceptionHandler::class,
+                        'class'     => OtherExceptionHandler::class,
                         'arguments' => ['%kohana.request%'],
                     ],
                 ],
@@ -212,11 +220,11 @@ class ExceptionHandlerFactoryTest extends AbstractDependencyFactoryTest
 
         $this->assertDefinesExactHandlerMapping(
             [
-                \InvalidArgumentException::class => \InvalidArgumentExceptionHandler::class,
-                ConnectionException::class       => \My\OwnConnectionExceptionHandler::class,
-                OtherException::class            => \My\OtherExceptionHandler::class,
+                InvalidArgumentException::class => InvalidArgumentExceptionHandler::class,
+                ConnectionException::class       => OwnConnectionExceptionHandler::class,
+                OtherException::class            => OtherExceptionHandler::class,
                 // Note that only Session_Exception gets appended from defaults, connection is handled above
-                \Session_Exception::class        => SessionExceptionHandler::class,
+                Session_Exception::class        => SessionExceptionHandler::class,
             ],
             $definitions
         );

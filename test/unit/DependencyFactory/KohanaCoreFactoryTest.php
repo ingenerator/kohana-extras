@@ -7,6 +7,10 @@
 namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 
+use Kohana;
+use Session;
+use Request;
+use Route;
 use Ingenerator\KohanaExtras\DependencyFactory\KohanaCoreFactory;
 use Ingenerator\KohanaExtras\Message\KohanaMessageProvider;
 use Ingenerator\PHPUtils\Logging\StackdriverApplicationLogger;
@@ -17,7 +21,7 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
     public function test_it_provides_log()
     {
         $service = $this->assertDefinesService('kohana.log', KohanaCoreFactory::definitions());
-        $this->assertSame(\Kohana::$log, $service);
+        $this->assertSame(Kohana::$log, $service);
     }
 
     public function test_it_provides_stackdriver_application_logger_as_default_psr_log()
@@ -30,18 +34,18 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
     public function test_it_provides_session()
     {
         $service = $this->assertDefinesService('kohana.session', KohanaCoreFactory::definitions());
-        $this->assertSame(\Session::instance(), $service);
+        $this->assertSame(Session::instance(), $service);
     }
 
     public function test_it_provides_kohana_initial_request()
     {
-        $original_request = \Request::$initial;
+        $original_request = Request::$initial;
         try {
-            \Request::$initial = \Request::with(['uri' => 'anything']);
+            Request::$initial = Request::with(['uri' => 'anything']);
             $service           = $this->assertDefinesService('kohana.request', KohanaCoreFactory::definitions());
-            $this->assertSame(\Request::initial(), $service);
+            $this->assertSame(Request::initial(), $service);
         } finally {
-            \Request::$initial = $original_request;
+            Request::$initial = $original_request;
         }
     }
 
@@ -53,7 +57,7 @@ class KohanaCoreFactoryTest extends AbstractDependencyFactoryTest
 
     public function test_it_provides_routes()
     {
-        $route  = \Route::set('test-factory-route', '/path/to/factory/test/to/not/match/anything');
+        $route  = Route::set('test-factory-route', '/path/to/factory/test/to/not/match/anything');
         $routes = $this->assertDefinesService('kohana.routes', KohanaCoreFactory::definitions());
         $this->assertSame($route, $routes['test-factory-route']);
     }

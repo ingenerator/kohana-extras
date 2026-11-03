@@ -7,17 +7,25 @@
 namespace test\unit\Ingenerator\KohanaExtras\ExceptionHandling;
 
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use InvalidArgumentException;
+use LogicException;
+use DomainException;
+use Arr;
+use RuntimeException;
+use Throwable;
+use Response;
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 use Ingenerator\KohanaExtras\ExceptionHandling\ExceptionHandler;
 use Ingenerator\KohanaExtras\ExceptionHandling\RequestExceptionDispatcher;
-use Ingenerator\PHPUtils\Logging\StackdriverApplicationLogger;
 use Ingenerator\PHPUtils\StringEncoding\JSON;
 use Psr\Log\LogLevel;
 use Psr\Log\NullLogger;
 use Psr\Log\Test\TestLogger;
 use Symfony\Component\Process\Process;
 
-class RequestExceptionDispatcherTest extends \PHPUnit\Framework\TestCase
+class RequestExceptionDispatcherTest extends TestCase
 {
     protected $default_handler;
 
@@ -40,7 +48,7 @@ class RequestExceptionDispatcherTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function provider_broken_constructor_args()
+    public static function provider_broken_constructor_args()
     {
         return [
             [
@@ -67,9 +75,7 @@ class RequestExceptionDispatcherTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider provider_broken_constructor_args
-     */
+    #[DataProvider('provider_broken_constructor_args')]
     public function test_its_static_constructor_gets_basic_working_instance_when_container_not_initialised_or_invalid(
         $args
     ) {
@@ -157,84 +163,82 @@ PHP
         $this->assertSame('from-test', $log['custom_context']);
     }
 
-    public function provider_handler_map()
+    public static function provider_handler_map()
     {
         return [
             [
                 // No handlers : expect default
                 [],
-                new \InvalidArgumentException('Anything'),
+                new InvalidArgumentException('Anything'),
                 'default: Anything',
             ],
             [
                 // Single handler matches
                 [
                     [
-                        'type'    => \InvalidArgumentException::class,
+                        'type'    => InvalidArgumentException::class,
                         'handler' => 'invalid_argument_handler',
                         'prefix'  => 'Invalid',
                     ],
                 ],
-                new \InvalidArgumentException('Whatever'),
+                new InvalidArgumentException('Whatever'),
                 'Invalid: Whatever',
             ],
             [
                 // First handler skips
                 [
                     [
-                        'type'    => \InvalidArgumentException::class,
+                        'type'    => InvalidArgumentException::class,
                         'handler' => 'picky_handler',
                         'prefix'  => NULL,
                     ],
                     [
-                        'type'    => \InvalidArgumentException::class,
+                        'type'    => InvalidArgumentException::class,
                         'handler' => 'promiscuous_handler',
                         'prefix'  => 'Promiscuous',
                     ],
                 ],
-                new \InvalidArgumentException('Whatever'),
+                new InvalidArgumentException('Whatever'),
                 'Promiscuous: Whatever',
             ],
             [
                 // All handlers skip
                 [
                     [
-                        'type'    => \InvalidArgumentException::class,
+                        'type'    => InvalidArgumentException::class,
                         'handler' => 'picky_handler',
                         'prefix'  => NULL,
                     ],
                     [
-                        'type'    => \LogicException::class,
+                        'type'    => LogicException::class,
                         'handler' => 'still_picky_handler',
                         'prefix'  => NULL,
                     ],
                 ],
-                new \InvalidArgumentException('Whatever'),
+                new InvalidArgumentException('Whatever'),
                 'default: Whatever',
             ],
             [
                 // Class-specific handlers
                 [
                     [
-                        'type'    => \InvalidArgumentException::class,
+                        'type'    => InvalidArgumentException::class,
                         'handler' => 'any_invalid',
                         'prefix'  => 'Invalid',
                     ],
                     [
-                        'type'    => \LogicException::class,
+                        'type'    => LogicException::class,
                         'handler' => 'any_logic',
                         'prefix'  => 'Logic',
                     ],
                 ],
-                new \DomainException('Whatever'),
+                new DomainException('Whatever'),
                 'Logic: Whatever',
             ],
         ];
     }
 
-    /**
-     * @dataProvider provider_handler_map
-     */
+    #[DataProvider('provider_handler_map')]
     public function test_it_returns_response_from_first_matching_handler_that_returns_a_response_or_the_default(
         $handlers,
         $e,
@@ -244,7 +248,7 @@ PHP
         $handler_map           = [];
         $services              = [];
         foreach ($handlers as $handler_def) {
-            $handler_map[]                     = \Arr::extract($handler_def, ['type', 'handler']);
+            $handler_map[]                     = Arr::extract($handler_def, ['type', 'handler']);
             $services[$handler_def['handler']] = [
                 '_settings' => [
                     'class'     => DummyHandler::class,
@@ -261,20 +265,20 @@ PHP
 
     public function test_it_logs_handler_exceptions_and_returns_generic_error()
     {
-        $handler_e             = new \RuntimeException('The handler broke');
+        $handler_e             = new RuntimeException('The handler broke');
         $this->logger          = new TestLogger;
         $this->default_handler = new class($handler_e) implements ExceptionHandler {
             private $e;
 
             public function __construct($e) { $this->e = $e; }
 
-            public function handle(\Throwable $e): ?\Response
+            public function handle(Throwable $e): ?Response
             {
                 throw $this->e;
             }
         };
 
-        $app_e = new \InvalidArgumentException('The app broke');
+        $app_e = new InvalidArgumentException('The app broke');
 
         $response = $this->newSubject()->handle($app_e);
         $this->assertGenericErrorResponse($response);
@@ -297,7 +301,7 @@ PHP
 
     public function test_it_logs_and_returns_generic_error_with_missing_dependencies()
     {
-        $exception = new \InvalidArgumentException('I broke');
+        $exception = new InvalidArgumentException('I broke');
         $logged    = $this->withFakeFallbackLogger(
             function () use ($exception) {
                 $response = RequestExceptionDispatcher::factoryFallback()->handle($exception);
@@ -321,7 +325,7 @@ PHP
         $logged = $this->withFakeFallbackLogger(
             function () {
                 $response = RequestExceptionDispatcher::factory('No\Such\Class', 'anything', 'anything')
-                    ->handle(new \LogicException('No logic!'));
+                    ->handle(new LogicException('No logic!'));
                 $this->assertGenericErrorResponse($response);
             }
         );
@@ -336,7 +340,7 @@ PHP
     {
         $this->expectOutputString(':sadface:');
         RequestExceptionDispatcher::send(
-            \Response::factory()
+            Response::factory()
                 ->status(400)
                 ->headers('Content-Type', 'text/plain;charset=emoji')
                 ->body(':sadface:')
@@ -453,10 +457,10 @@ class DummyHandler implements ExceptionHandler
         $this->response_prefix = $response_prefix;
     }
 
-    public function handle(\Throwable $e): ?\Response
+    public function handle(Throwable $e): ?Response
     {
         if ($this->response_prefix) {
-            return \Response::factory()->body($this->response_prefix.': '.$e->getMessage());
+            return Response::factory()->body($this->response_prefix.': '.$e->getMessage());
         }
 
         return NULL;
@@ -475,7 +479,7 @@ class DummyContainerProvider
         if ($key === 'dispatcher') {
             return $this;
         }
-        throw new \LogicException('No service '.$key);
+        throw new LogicException('No service '.$key);
     }
 
 

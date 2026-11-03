@@ -35,10 +35,7 @@ class MysqlSessionGarbageCollectorTest extends TestCase
     {
         parent::setUp();
         $this->logger          = new TestLogger;
-        $this->session_handler = $this
-            ->getMockBuilder(MysqlSession::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->session_handler = $this->createMock(MysqlSession::class);
     }
 
     protected function newSubject(): MysqlSessionGarbageCollector

@@ -4,6 +4,12 @@
 namespace test\unit\Ingenerator\KohanaExtras\Logger;
 
 
+use Log_Writer;
+use Kohana_Log;
+use PHPUnit\Framework\Attributes\DataProvider;
+use InvalidArgumentException;
+use Log;
+use DateTimeImmutable;
 use Ingenerator\KohanaExtras\Logger\KohanaPsrLogWriter;
 use Ingenerator\PHPUtils\Logging\StackdriverApplicationLogger;
 use Ingenerator\PHPUtils\Object\ConstantDirectory;
@@ -23,13 +29,13 @@ class KohanaPsrLogWriterTest extends TestCase
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf(KohanaPsrLogWriter::class, $subject);
-        $this->assertInstanceOf(\Log_Writer::class, $subject);
+        $this->assertInstanceOf(Log_Writer::class, $subject);
     }
 
-    public function provider_kohana_level_psr_level()
+    public static function provider_kohana_level_psr_level()
     {
         $psr_levels    = ConstantDirectory::forClass(LogLevel::class)->listConstants();
-        $kohana_levels = ConstantDirectory::forClass(\Kohana_Log::class)->listConstants();
+        $kohana_levels = ConstantDirectory::forClass(Kohana_Log::class)->listConstants();
         $cases         = [];
         foreach ($kohana_levels as $level_name => $ko_level) {
             $cases[] = [$ko_level, $psr_levels[$level_name]];
@@ -38,9 +44,7 @@ class KohanaPsrLogWriterTest extends TestCase
         return $cases;
     }
 
-    /**
-     * @dataProvider provider_kohana_level_psr_level
-     */
+    #[DataProvider('provider_kohana_level_psr_level')]
     public function test_it_converts_kohana_log_levels_to_psr_levels($kohana_level, $expect_psr_level)
     {
         $this->newLogWithSubject()->add($kohana_level, 'I am a message');
@@ -53,45 +57,43 @@ class KohanaPsrLogWriterTest extends TestCase
     public function test_it_throws_on_unknown_level()
     {
         $log = $this->newLogWithSubject();
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $log->add('I am not a level', 'I am a message');
     }
 
     public function test_it_passes_through_log_time_in_context_params()
     {
-        $this->newLogWithSubject()->add(\Log::INFO, 'This message at time');
+        $this->newLogWithSubject()->add(Log::INFO, 'This message at time');
         $record = $this->assertLoggedExactlyOnce();
 
         // Have to do it like this as php doesn't support createFromFormat with the RFC3339 format yet
-        $at = new \DateTimeImmutable($record['context']['time']);
+        $at = new DateTimeImmutable($record['context']['time']);
         $this->assertSame(
-            $at->format(\DateTimeImmutable::RFC3339_EXTENDED),
+            $at->format(DateTimeImmutable::RFC3339_EXTENDED),
             $record['context']['time'],
             'Expected RFC3339_EXTENDED date format'
         );
         $this->assertEqualsWithDelta(
-            new \DateTimeImmutable,
+            new DateTimeImmutable,
             $at,
             1,
             'Expected log time to be just now'
         );
     }
 
-    public function provider_context_params()
+    public static function provider_context_params()
     {
         return [
-            [['exception' => new \InvalidArgumentException('Anything')]],
-            [['date' => new \DateTimeImmutable()]],
+            [['exception' => new InvalidArgumentException('Anything')]],
+            [['date' => new DateTimeImmutable()]],
             [['custom_data' => ['user' => 'any', 'things' => TRUE]]],
         ];
     }
 
-    /**
-     * @dataProvider provider_context_params
-     */
+    #[DataProvider('provider_context_params')]
     public function test_it_passes_through_additional_context_in_context_params($additional)
     {
-        $this->newLogWithSubject()->add(\Log::INFO, 'This is the message', [], $additional);
+        $this->newLogWithSubject()->add(Log::INFO, 'This is the message', [], $additional);
 
         $record = $this->assertLoggedExactlyOnce();
         $this->assertSame('This is the message', $record['message'], 'Does not modify message');
@@ -102,7 +104,7 @@ class KohanaPsrLogWriterTest extends TestCase
 
     public function test_it_passes_through_source_location_as_external_call_to_kohana_log()
     {
-        $this->newLogWithSubject()->add(\Log::INFO, 'This is the message', [], []);
+        $this->newLogWithSubject()->add(Log::INFO, 'This is the message', [], []);
         $expect_line = __LINE__ - 1;
 
         $record = $this->assertLoggedExactlyOnce();
@@ -120,7 +122,7 @@ class KohanaPsrLogWriterTest extends TestCase
     {
         parent::setUp();
         $this->logger       = new TestLogger;
-        \Log::$write_on_add = TRUE;
+        Log::$write_on_add = TRUE;
     }
 
     private function newSubject(): KohanaPsrLogWriter
@@ -131,9 +133,9 @@ class KohanaPsrLogWriterTest extends TestCase
     /**
      * @return \Kohana_Log
      */
-    protected function newLogWithSubject(): \Kohana_Log
+    protected function newLogWithSubject(): Kohana_Log
     {
-        $log = new \Kohana_Log;
+        $log = new Kohana_Log;
         $log->attach($this->newSubject());
 
         return $log;

@@ -2,7 +2,9 @@
 
 namespace Doctrine\DBAL\Exception;
 
-class ConnectionException extends \Exception
+use Exception;
+
+class ConnectionException extends Exception
 {
 
 }

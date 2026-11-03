@@ -3,6 +3,7 @@
 namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 
+use Arr;
 use Ingenerator\KohanaExtras\DependencyFactory\KohanaCoreFactory;
 use Ingenerator\KohanaExtras\DependencyFactory\UrlReverseRouterFactory;
 use Ingenerator\KohanaExtras\Routing\HttpMethodRouteReverseRouter;
@@ -14,7 +15,7 @@ class UrlReverseRouterFactoryTest extends AbstractDependencyFactoryTest
 
         $service = $this->assertDefinesService(
             'util.url_reverse_router',
-            \Arr::merge(
+            Arr::merge(
                 KohanaCoreFactory::definitions(),
                 UrlReverseRouterFactory::definitions()
             )

@@ -5,12 +5,15 @@
 
 namespace test\unit\Ingenerator\KohanaExtras\RequestExecutor;
 
+use PHPUnit\Framework\TestCase;
+use Request_Executor;
+use Route;
+use Controller;
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 use Ingenerator\KohanaExtras\RequestExecutor\ContainerAwareRequestExecutor;
 use Request;
-use Response;
 
-class ContainerAwareRequestExecutorTest extends \PHPUnit\Framework\TestCase
+class ContainerAwareRequestExecutorTest extends TestCase
 {
     /**
      * @var \Route[]
@@ -26,26 +29,26 @@ class ContainerAwareRequestExecutorTest extends \PHPUnit\Framework\TestCase
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf(ContainerAwareRequestExecutor::class, $subject);
-        $this->assertInstanceOf(\Request_Executor::class, $subject);
+        $this->assertInstanceOf(Request_Executor::class, $subject);
     }
 
     public function test_it_executes_default_controller_if_nothing_registered_in_container()
     {
         $this->routes = [
-            (new \Route(''))->defaults(
+            (new Route(''))->defaults(
                 ['controller' => '\\'.ArbitraryController::class]
             )
         ];
         $this->assertSame(
             'actual: '.ArbitraryController::class.' rq: \\'.ArbitraryController::class,
-            $this->newSubject()->execute(\Request::with(['uri' => '']))->body()
+            $this->newSubject()->execute(Request::with(['uri' => '']))->body()
         );
     }
 
     public function test_it_executes_controller_from_container_if_registered()
     {
         $this->routes = [
-            (new \Route(''))->defaults(['controller' => '\Any\Controller\Class'])
+            (new Route(''))->defaults(['controller' => '\Any\Controller\Class'])
         ];
 
         $this->dependencies = new DependencyContainer(
@@ -59,7 +62,7 @@ class ContainerAwareRequestExecutorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'actual: '.ArbitraryController::class.' rq: \Any\Controller\Class',
-            $this->newSubject()->execute(\Request::with(['uri' => '']))->body()
+            $this->newSubject()->execute(Request::with(['uri' => '']))->body()
         );
     }
 
@@ -76,7 +79,7 @@ class ContainerAwareRequestExecutorTest extends \PHPUnit\Framework\TestCase
 
 }
 
-class ArbitraryController extends \Controller
+class ArbitraryController extends Controller
 {
     public function execute()
     {

@@ -6,6 +6,7 @@
 namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
 
+use Arr;
 use Ingenerator\KohanaExtras\DependencyFactory\KohanaCoreFactory;
 use Ingenerator\KohanaExtras\DependencyFactory\RequestExecutorFactory;
 use Ingenerator\KohanaExtras\RequestExecutor\ContainerAwareRequestExecutor;
@@ -20,7 +21,7 @@ class RequestExecutorFactoryTest extends AbstractDependencyFactoryTest
     {
         $service = $this->assertDefinesService(
             'kohana.request_executor',
-            \Arr::merge(
+            Arr::merge(
                 KohanaCoreFactory::definitions(),
                 RequestExecutorFactory::definitions()
             )
