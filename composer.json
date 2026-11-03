@@ -57,7 +57,7 @@
       "composer/installers": false
     }
   },
-  "minimum-stability": "beta",
+  "minimum-stability": "stable",
   "scripts": {
     "rector": "rector --dry-run",
     "rector-fix": "rector"
