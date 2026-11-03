@@ -5,6 +5,7 @@
          colors="true"
          failOnDeprecation="true"
          failOnPhpunitDeprecation="true"
+         failOnPhpunitNotice="true"
          failOnNotice="true"
          failOnWarning="true"
          failOnRisky="true"
