@@ -1,6 +1,10 @@
 
 ### Unreleased
 
+* BREAKING: Drop MetricsAgentFactory
+* Support PHP 8.5 and PHP 8.6
+* Drop support for PHP 8.2 and PHP 8.3
+
 ## v3.3.1 (2025-07-23)
 
 * Fix deprecated implicit nullable parameters in deprecated SpyingLoggerStub

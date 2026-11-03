@@ -17,19 +17,20 @@
     }
   ],
   "require": {
-    "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+    "php": "~8.4.0 || ~8.5.0 || ~8.6.0",
     "ingenerator/kohana-core": "^4.9",
     "ingenerator/kohana-dependencies": "^1.2",
-    "ingenerator/php-utils": "^1.9.0 || ^2.0",
+    "ingenerator/php-utils": "^1.9.0 || ^2.0 || ^3.0",
     "psr/log": "^1.0 || ^2.0 || ^3.0"
   },
   "require-dev": {
     "ext-mbstring": "*",
-    "johnkary/phpunit-speedtrap": "^3.3",
-    "phpunit/phpunit": "^9.6.23",
+    "ergebnis/phpunit-slow-test-detector": "^2.15",
+    "phpunit/phpunit": "^13.0",
     "symfony/process": "^7.1",
     "mikey179/vfsstream": "^1.6.12",
-    "fig/log-test": "^1.1"
+    "fig/log-test": "^1.1",
+    "rector/rector": "^2.8"
   },
   "suggest": {
     "maximebf/debugbar": "^1.14 to use the debug bar in development environments",
@@ -61,5 +62,9 @@
         "type:kohana-module"
       ]
     }
+  },
+  "scripts": {
+    "rector": "rector --dry-run",
+    "rector-fix": "rector"
   }
 }
