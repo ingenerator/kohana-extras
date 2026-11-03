@@ -3,6 +3,7 @@
 Thumbs.db
 thumbs.db
 /composer.lock
+/patches.lock.json
 /koharness_bootstrap.php
 .phpunit.result.cache
 /.phpunit.cache

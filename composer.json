@@ -29,6 +29,7 @@
     "phpunit/phpunit": "^13.0",
     "symfony/process": "^7.1",
     "mikey179/vfsstream": "^1.6.12",
+    "cweagans/composer-patches": "~2.0",
     "fig/log-test": "^1.1",
     "rector/rector": "^2.8"
   },
@@ -52,7 +53,8 @@
   "config": {
     "preferred-install": "dist",
     "allow-plugins": {
-      "composer/installers": true
+      "composer/installers": true,
+      "cweagans/composer-patches": true
     }
   },
   "minimum-stability": "beta",
