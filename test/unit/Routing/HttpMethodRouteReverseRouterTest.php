@@ -3,17 +3,24 @@
 
 namespace test\unit\Ingenerator\KohanaExtras\Routing;
 
+use InvalidArgumentException;
+use Route;
+use URL;
+use PHPUnit\Framework\Attributes\TestWith;
+use DateTimeImmutable;
+use stdClass;
 use Ingenerator\KohanaExtras\Routing\HttpMethodRoute;
 use Ingenerator\KohanaExtras\Routing\HttpMethodRouteReverseRouter;
 use Ingenerator\KohanaExtras\Routing\ReverseRoutingException;
 use Ingenerator\KohanaExtras\Routing\UrlReverseRouter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use test\mock\Ingenerator\KohanaExtras\Routing\UrlIdentifiableStringStub;
 
 
 class HttpMethodRouteReverseRouterTest extends TestCase
 {
-    protected $routes = [];
+    protected array $routes = [];
 
     public function test_it_is_initialisable()
     {
@@ -25,7 +32,7 @@ class HttpMethodRouteReverseRouterTest extends TestCase
     public function test_it_throws_if_any_routes_provided_are_not_routes()
     {
         $this->routes = ['junk'];
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->newSubject();
     }
 
@@ -49,7 +56,7 @@ class HttpMethodRouteReverseRouterTest extends TestCase
         // to do the runtime parsing to work out which route would actually match due to wildcard
         // and order-of-definition matching. You want the new behaviour, define new HTTPMethodRoutes
         $this->routes = [
-            (new \Route('home/<controller>'))->defaults(['controller' => 'Controller\DoStuff']),
+            (new Route('home/<controller>'))->defaults(['controller' => 'Controller\DoStuff']),
         ];
         $subject      = $this->newSubject();
         $this->expectException(ReverseRoutingException::class);
@@ -76,7 +83,7 @@ class HttpMethodRouteReverseRouterTest extends TestCase
         $subject->getURL('Controller\MyController');
     }
 
-    public function provider_controllers_with_no_params()
+    public static function provider_controllers_with_no_params(): array
     {
         return [
             [
@@ -87,7 +94,7 @@ class HttpMethodRouteReverseRouterTest extends TestCase
                     ),
                 ],
                 'Controller\ExplicitDoSomething',
-                \URL::site('home/explicit-controller'),
+                URL::site('home/explicit-controller'),
             ],
             [
                 [
@@ -100,7 +107,7 @@ class HttpMethodRouteReverseRouterTest extends TestCase
                     ),
                 ],
                 'Controller\Whatever\WelcomeController',
-                \URL::site('anywhere/welcome'),
+                URL::site('anywhere/welcome'),
             ],
             [
                 [
@@ -121,18 +128,16 @@ class HttpMethodRouteReverseRouterTest extends TestCase
                     ),
                 ],
                 'Controller\Whatever\RootControllerTwo',
-                \URL::site('root-controller-two'),
+                URL::site('root-controller-two'),
             ],
         ];
     }
 
-    /**
-     * @dataProvider provider_controllers_with_no_params
-     */
+    #[DataProvider('provider_controllers_with_no_params')]
     public function test_its_get_url_method_returns_url_for_controller_with_no_params(
-        $routes,
-        $controller,
-        $expect_url
+        array $routes,
+        string $controller,
+        string $expect_url
     ) {
         $this->routes = $routes;
         $this->assertSame($expect_url, $this->newSubject()->getUrl($controller));
@@ -149,16 +154,14 @@ class HttpMethodRouteReverseRouterTest extends TestCase
             ),
         ];
         $this->assertSame(
-            \URL::site('anywhere/explicit-do-something/1939'),
+            URL::site('anywhere/explicit-do-something/1939'),
             $this->newSubject()->getUrl('Controller\ExplicitDoSomethingController', ['id' => 1939])
         );
     }
 
-    /**
-     * @testWith [{"slug": "my-file"}, "any/file/my-file-current"]
-     *           [{"slug": "my-file", "format": "png"}, "any/file/my-file-current.png"]
-     *           [{"slug": "my-file", "format": "png", "version": "custom"}, "any/file/my-file-custom.png"]
-     */
+    #[TestWith([['slug' => 'my-file'], 'any/file/my-file-current'])]
+    #[TestWith([['slug' => 'my-file', 'format' => 'png'], 'any/file/my-file-current.png'])]
+    #[TestWith([['slug' => 'my-file', 'format' => 'png', 'version' => 'custom'], 'any/file/my-file-custom.png'])]
     public function test_its_get_url_method_returns_url_with_or_without_optional_params(
         $params,
         $expect
@@ -173,35 +176,33 @@ class HttpMethodRouteReverseRouterTest extends TestCase
         ];
 
         $this->assertSame(
-            \URL::site($expect),
+            URL::site($expect),
             $this->newSubject()->getUrl('Controller\Download\FileController', $params)
         );
     }
 
-    public function provider_url_identifiable_entities()
+    public static function provider_url_identifiable_entities(): array
     {
         return [
             [
                 ['slug' => 'hardcoded', 'id' => new UrlIdentifiableStringStub(19238)],
-                \URL::site('do-thing/19238-hardcoded'),
+                URL::site('do-thing/19238-hardcoded'),
             ],
             [
                 ['slug' => new UrlIdentifiableStringStub('this-is-the-slug'), 'id' => 19482],
-                \URL::site('do-thing/19482-this-is-the-slug'),
+                URL::site('do-thing/19482-this-is-the-slug'),
             ],
             [
                 [
                     'slug' => new UrlIdentifiableStringStub('this-is-the-slug'),
                     'id'   => new UrlIdentifiableStringStub('this-is-id'),
                 ],
-                \URL::site('do-thing/this-is-id-this-is-the-slug'),
+                URL::site('do-thing/this-is-id-this-is-the-slug'),
             ],
         ];
     }
 
-    /**
-     * @dataProvider provider_url_identifiable_entities
-     */
+    #[DataProvider('provider_url_identifiable_entities')]
     public function test_its_get_url_method_can_convert_url_identifiable_identity_param_to_id(
         array $params,
         string $expect
@@ -221,18 +222,16 @@ class HttpMethodRouteReverseRouterTest extends TestCase
         );
     }
 
-    public function provider_invalid_params()
+    public static function provider_invalid_params(): array
     {
         return [
-            [new \DateTimeImmutable],
-            [new \stdClass],
+            [new DateTimeImmutable],
+            [new stdClass],
             [TRUE],
         ];
     }
 
-    /**
-     * @dataProvider provider_invalid_params
-     */
+    #[DataProvider('provider_invalid_params')]
     public function test_its_get_url_method_throws_if_any_param_not_scalar_or_url_identifiable(
         $invalid
     ) {
@@ -261,7 +260,7 @@ class HttpMethodRouteReverseRouterTest extends TestCase
             ),
         ];
         $this->assertSame(
-            \URL::site('anywhere/explicit-do-something/1939?filter_by=date&filter=today'),
+            URL::site('anywhere/explicit-do-something/1939?filter_by=date&filter=today'),
             $this->newSubject()->getUrl(
                 'Controller\ExplicitDoSomethingController',
                 ['id' => 1939],
@@ -270,7 +269,7 @@ class HttpMethodRouteReverseRouterTest extends TestCase
         );
     }
 
-    protected function newSubject()
+    private function newSubject(): HttpMethodRouteReverseRouter
     {
         return new HttpMethodRouteReverseRouter($this->routes);
     }

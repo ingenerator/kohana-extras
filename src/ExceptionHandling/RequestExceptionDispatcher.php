@@ -141,15 +141,17 @@ class RequestExceptionDispatcher
             echo $response->body();
         } elseif (\is_array($response)) {
             if ( ! \headers_sent()) {
-                \http_response_code($response['code']);
+                // Setting content length as a means of using header() method to set response code
+                // as http_response_code() can no longer be reliably used to set the code
+                \header('Content-Length: '.\strlen($response['body']), response_code: $response['code']);
                 foreach ($response['headers'] as $header => $value) {
-                    \header($header.': '.$value, TRUE);
+                    \header($header.': '.$value);
                 }
             }
             echo $response['body'];
         } else {
             // This is really bad. WTF did we get?
-            \http_response_code(500);
+            \header('Content-Type: text/plain', response_code: 500);
             echo static::class.' - Unexpected response type';
         }
     }

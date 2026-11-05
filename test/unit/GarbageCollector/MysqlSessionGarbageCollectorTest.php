@@ -6,6 +6,7 @@ namespace test\unit\KohanaExtras\GarbageCollector;
 
 use Ingenerator\KohanaExtras\GarbageCollector\MysqlSessionGarbageCollector;
 use Ingenerator\PHPUtils\Session\MysqlSession;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\Test\TestLogger;
 
@@ -14,6 +15,7 @@ class MysqlSessionGarbageCollectorTest extends TestCase
     private TestLogger   $logger;
     private MysqlSession $session_handler;
 
+    #[AllowMockObjectsWithoutExpectations]
     public function test_it_is_initialisable()
     {
         $this->assertInstanceOf(MysqlSessionGarbageCollector::class, $this->newSubject());
@@ -35,10 +37,7 @@ class MysqlSessionGarbageCollectorTest extends TestCase
     {
         parent::setUp();
         $this->logger          = new TestLogger;
-        $this->session_handler = $this
-            ->getMockBuilder(MysqlSession::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->session_handler = $this->createMock(MysqlSession::class);
     }
 
     protected function newSubject(): MysqlSessionGarbageCollector

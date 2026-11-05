@@ -4,6 +4,7 @@
 namespace test\unit\Ingenerator\KohanaExtras\ExceptionHandling;
 
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Ingenerator\KohanaExtras\ExceptionHandling\FallbackLogger;
 use Ingenerator\PHPUtils\StringEncoding\JSON;
 use InvalidArgumentException;
@@ -18,7 +19,7 @@ use function uniqid;
 class FallbackLoggerTest extends TestCase
 {
 
-    public function provider_factory_providers()
+    public static function provider_factory_providers()
     {
         $valid = new class {
             public static function make()
@@ -107,16 +108,14 @@ class FallbackLoggerTest extends TestCase
 
     }
 
-    /**
-     * @dataProvider provider_factory_providers
-     */
+    #[DataProvider('provider_factory_providers')]
     public function test_its_factory_returns_first_object_that_does_not_fail(array $factories, string $expect_class)
     {
         $logger = FallbackLogger::makeBestLogger($factories);
         $this->assertInstanceOf($expect_class, $logger);
     }
 
-    public function provider_invalid_factories()
+    public static function provider_invalid_factories()
     {
         return [
             [NULL],
@@ -126,16 +125,14 @@ class FallbackLoggerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provider_invalid_factories
-     */
+    #[DataProvider('provider_invalid_factories')]
     public function test_its_factory_returns_instance_of_fallback_logger_if_all_else_fails($factories)
     {
         $logger = FallbackLogger::makeBestLogger($factories);
         $this->assertInstanceOf(FallbackLogger::class, $logger);
     }
 
-    public function provider_log_entries()
+    public static function provider_log_entries()
     {
         $e  = new InvalidArgumentException('Stuff went wrong');
         $e2 = new RuntimeException('Other stuff happened', 15, $e);
@@ -200,9 +197,7 @@ class FallbackLoggerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provider_log_entries
-     */
+    #[DataProvider('provider_log_entries')]
     public function test_it_logs_emergency_as_basic_json_to_provided_stream($msg, $context, $expect)
     {
         $vfs        = vfsStream::setup();

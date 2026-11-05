@@ -3,11 +3,12 @@
 
 namespace test\unit\Ingenerator\KohanaExtras\ExceptionHandling;
 
+use Kohana_Exception;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Ingenerator\KohanaExtras\ExceptionHandling\DBALConnectionExceptionHandler;
 use Psr\Log\LogLevel;
 
-class DBALConnectionExceptionHandlerTest extends AbstractExceptionHandlerTest
+class DBALConnectionExceptionHandlerTest extends AbstractExceptionHandlerTestcase
 {
 
     public function test_it_is_initialisable()
@@ -23,7 +24,7 @@ class DBALConnectionExceptionHandlerTest extends AbstractExceptionHandlerTest
             [
                 [
                     'level'   => LogLevel::WARNING,
-                    'message' => 'DB connection error: '.\Kohana_Exception::text($e),
+                    'message' => 'DB connection error: '.Kohana_Exception::text($e),
                     'context' => [
                         'exception' => $e
                     ],

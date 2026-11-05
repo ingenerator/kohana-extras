@@ -16,7 +16,7 @@ use Symfony\Component\Mailer\Bridge\Sendgrid\Transport\SendgridApiTransport;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 
 
-class SymfonyMailerFactoryTest extends AbstractDependencyFactoryTest
+class SymfonyMailerFactoryTest extends AbstractDependencyFactoryTestcase
 {
     public function test_it_defines_symfonymailer_mailer_smtp()
     {

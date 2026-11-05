@@ -6,10 +6,11 @@
 
 namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
+use PDO;
 use Ingenerator\KohanaExtras\DependencyFactory\SessionHandlerFactory;
 use Ingenerator\PHPUtils\Session\MysqlSession;
 
-class SessionHandlerFactoryTest extends AbstractDependencyFactoryTest
+class SessionHandlerFactoryTest extends AbstractDependencyFactoryTestcase
 {
     protected array $stub_services = [
         'doctrine.pdo_connection' => PDOStub::class,
@@ -50,7 +51,7 @@ class SessionHandlerFactoryTest extends AbstractDependencyFactoryTest
 
 }
 
-class PDOStub extends \PDO
+class PDOStub extends PDO
 {
     public function __construct()
     {

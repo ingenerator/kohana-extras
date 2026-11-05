@@ -9,7 +9,7 @@ namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 use Ingenerator\KohanaExtras\DebugBar\DebugBar;
 use Ingenerator\KohanaExtras\DependencyFactory\DebugBarFactory;
 
-class DebugBarFactoryTest extends AbstractDependencyFactoryTest
+class DebugBarFactoryTest extends AbstractDependencyFactoryTestcase
 {
 
     public function test_it_defines_debug_bar()

@@ -7,11 +7,16 @@
 namespace test\unit\Ingenerator\KohanaExtras\Validation;
 
 
+use PHPUnit\Framework\TestCase;
+use Validation;
+use PHPUnit\Framework\Attributes\DataProvider;
+use DateTimeImmutable;
+use stdClass;
 use BadMethodCallException;
 use Ingenerator\KohanaExtras\Validation\ImmutableKohanaValidation;
 use Ingenerator\KohanaExtras\Validation\ValidationResult;
 
-class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
+class ImmutableKohanaValidationTest extends TestCase
 {
 
     public function test_it_is_initialisable()
@@ -19,7 +24,7 @@ class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
         $subject = $this->newSubject();
         $this->assertInstanceOf(ImmutableKohanaValidation::class, $subject);
         $this->assertInstanceOf(ValidationResult::class, $subject);
-        $this->assertInstanceOf(\Validation::class, $subject);
+        $this->assertInstanceOf(Validation::class, $subject);
     }
 
     public function test_it_is_valid_when_validation_succeeds()
@@ -66,7 +71,7 @@ class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('anything', $subject->errors());
     }
 
-    public function provider_immutable_method_calls()
+    public static function provider_immutable_method_calls()
     {
         return [
             ['check', []],
@@ -79,9 +84,7 @@ class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider provider_immutable_method_calls
-     */
+    #[DataProvider('provider_immutable_method_calls')]
     public function test_it_throws_for_any_attempted_modification_after_check($method, $args)
     {
         $subject = $this->newSubject();
@@ -90,9 +93,7 @@ class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
         \call_user_func_array([$subject, $method], $args);
     }
 
-    /**
-     * @dataProvider provider_immutable_method_calls
-     */
+    #[DataProvider('provider_immutable_method_calls')]
     public function test_it_does_not_throw_for_modification_before_check($method, $args)
     {
         $subject = $this->newSubject();
@@ -100,17 +101,15 @@ class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(TRUE, 'Did not throw exception');
     }
 
-    public function provider_object_values()
+    public static function provider_object_values()
     {
         return [
-            [new \DateTimeImmutable],
-            [new \stdClass],
+            [new DateTimeImmutable],
+            [new stdClass],
         ];
     }
 
-    /**
-     * @dataProvider provider_object_values
-     */
+    #[DataProvider('provider_object_values')]
     public function test_it_can_provide_error_messages_when_data_includes_object_values($value)
     {
         $subject = $this->newSubject(['field' => new $value]);
@@ -121,7 +120,7 @@ class ImmutableKohanaValidationTest extends \PHPUnit\Framework\TestCase
 
     public function newSubject($data = [])
     {
-        return new \Ingenerator\KohanaExtras\Validation\ImmutableKohanaValidation($data);
+        return new ImmutableKohanaValidation($data);
     }
 
 }

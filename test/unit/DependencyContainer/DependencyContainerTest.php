@@ -7,10 +7,18 @@
 namespace test\unit\Ingenerator\KohanaExtras\DependencyContainer;
 
 
+use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
+use Dependency_Container;
+use DateTime;
+use DateTimeImmutable;
+use LogicException;
+use PHPUnit\Framework\Attributes\TestWith;
+use Closure;
 use Ingenerator\KohanaExtras\DependencyContainer\DependencyContainer;
 use Ingenerator\PHPUtils\Object\SingletonNotInitialisedException;
 
-class DependencyContainerTest extends \PHPUnit\Framework\TestCase
+class DependencyContainerTest extends TestCase
 {
     protected $old_instance;
 
@@ -22,7 +30,7 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
 
     public function test_it_throws_on_initialise_if_no_config_file()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         DependencyContainer::fromFile('/no/file/here.php');
     }
 
@@ -30,7 +38,7 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
     {
         $container= $this->withConfigFile([], function ($tmp_file) { return DependencyContainer::fromFile($tmp_file); });
         $this->assertInstanceOf(DependencyContainer::class, $container);
-        $this->assertInstanceOf(\Dependency_Container::class, $container);
+        $this->assertInstanceOf(Dependency_Container::class, $container);
     }
 
     public function test_it_loads_config_directly_from_dependencies_config_file()
@@ -46,7 +54,7 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
             function ($tmp_file) { return DependencyContainer::fromFile($tmp_file); }
         );
         $date      = $container->get('date.time');
-        $this->assertInstanceOf(\DateTime::class, $date);
+        $this->assertInstanceOf(DateTime::class, $date);
         $this->assertEquals('2018-01-10 10:00:00', $date->format('Y-m-d H:i:s'));
     }
 
@@ -71,8 +79,8 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->assertInstanceOf(\DateTime::class, $container->get('date.time'));
-        $this->assertInstanceOf(\DateTimeImmutable::class, $container->get('date.immutable'));
+        $this->assertInstanceOf(DateTime::class, $container->get('date.time'));
+        $this->assertInstanceOf(DateTimeImmutable::class, $container->get('date.immutable'));
     }
 
     public function test_it_provides_itself_as_dependencies_key()
@@ -104,10 +112,10 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
         $e = NULL;
         try {
             $container = $this->withConfigFile([], function ($f) { return DependencyContainer::initialiseFromFile($f); });
-        } catch (\LogicException $e) {
+        } catch (LogicException $e) {
             // Expected
         }
-        $this->assertInstanceOf(\LogicException::class, $e, 'Should have thrown LogicException');
+        $this->assertInstanceOf(LogicException::class, $e, 'Should have thrown LogicException');
     }
 
     public function test_it_lists_all_defined_services()
@@ -142,13 +150,11 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @testWith ["dependencies", true]
-     *           ["included", true]
-     *           ["any.thing", true]
-     *           ["any.other.thing", false]
-     *           ["no.thing", false]
-     */
+    #[TestWith(['dependencies', true])]
+    #[TestWith(['included', true])]
+    #[TestWith(['any.thing', true])]
+    #[TestWith(['any.other.thing', false])]
+    #[TestWith(['no.thing', false])]
     public function test_it_has_service_if_defined_or_cached($service, $expect)
     {
         $container = $this->newSubjectWithConfig(
@@ -181,7 +187,7 @@ class DependencyContainerTest extends \PHPUnit\Framework\TestCase
 
     protected function resetSingleton($new_instance)
     {
-        $fn = \Closure::bind(
+        $fn = Closure::bind(
             function ($new) {
                 $old                           = DependencyContainer::$instance;
                 DependencyContainer::$instance = $new;

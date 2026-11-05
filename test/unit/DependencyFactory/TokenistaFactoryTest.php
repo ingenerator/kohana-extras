@@ -6,9 +6,10 @@
 
 namespace test\unit\Ingenerator\KohanaExtras\DependencyFactory;
 
+use Tokenista;
 use Ingenerator\KohanaExtras\DependencyFactory\TokenistaFactory;
 
-class TokenistaFactoryTest extends AbstractDependencyFactoryTest
+class TokenistaFactoryTest extends AbstractDependencyFactoryTestcase
 {
 
     public function test_it_defines_tokenista_factory()
@@ -16,7 +17,7 @@ class TokenistaFactoryTest extends AbstractDependencyFactoryTest
         $this->assertOptionalService(
             function () {
                 $this->assertInstanceOf(
-                    \Tokenista::class,
+                    Tokenista::class,
                     $this->assertDefinesService('tokenista.tokenista', TokenistaFactory::definitions())
                 );
             }

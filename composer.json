@@ -17,19 +17,21 @@
     }
   ],
   "require": {
-    "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+    "php": "~8.4.0 || ~8.5.0 || ~8.6.0",
     "ingenerator/kohana-core": "^4.9",
-    "ingenerator/kohana-dependencies": "^1.2",
-    "ingenerator/php-utils": "^1.9.0 || ^2.0",
+    "ingenerator/kohana-dependencies": "^1.6",
+    "ingenerator/php-utils": "^1.9.0 || ^2.0 || ^3.0",
     "psr/log": "^1.0 || ^2.0 || ^3.0"
   },
   "require-dev": {
-    "johnkary/phpunit-speedtrap": "^3.3",
-    "kohana/koharness": "dev-master",
-    "phpunit/phpunit": "^9.6.23",
+    "ext-mbstring": "*",
+    "ergebnis/phpunit-slow-test-detector": "^2.15",
+    "phpunit/phpunit": "^13.0",
     "symfony/process": "^7.1",
     "mikey179/vfsstream": "^1.6.12",
-    "fig/log-test": "^1.1"
+    "cweagans/composer-patches": "~2.0",
+    "fig/log-test": "^1.1",
+    "rector/rector": "^2.8"
   },
   "suggest": {
     "maximebf/debugbar": "^1.14 to use the debug bar in development environments",
@@ -51,15 +53,13 @@
   "config": {
     "preferred-install": "dist",
     "allow-plugins": {
-      "composer/installers": true
+      "cweagans/composer-patches": true,
+      "composer/installers": false
     }
   },
-  "minimum-stability": "beta",
-  "extra": {
-    "installer-paths": {
-      "vendor/{$vendor}/{$name}": [
-        "type:kohana-module"
-      ]
-    }
+  "minimum-stability": "stable",
+  "scripts": {
+    "rector": "rector --dry-run",
+    "rector-fix": "rector"
   }
 }

@@ -12,7 +12,7 @@ use Ingenerator\PHPUtils\Object\ObjectPropertyRipper;
 use Psr\Log\NullLogger;
 use test\mock\Ingenerator\KohanaExtras\Session\MysqlSessionStub;
 
-class GarbageCollectorFactoryTest extends AbstractDependencyFactoryTest
+class GarbageCollectorFactoryTest extends AbstractDependencyFactoryTestcase
 {
     protected array $stub_services = [
         'kohana.psr_log'  => NullLogger::class,
